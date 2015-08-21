@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url('../fonts/Mark Simonson - Proxima Nova Alt Light.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham Bold';
+  src: url('../fonts/Gotham-Bold_21010.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+h1 {
+	font-family: 'Gotham Bold';
+}
+
+h2 {
+	margin-bottom: 40px;
+	font-family: 'Gotham Bold';
+}
+
+p {
+	font-family: 'Proxima Nova';
+	font-weight: 300;
+}
