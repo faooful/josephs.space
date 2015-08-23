@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: 'Proxima Nova bold';
+  src: url('../fonts/Mark Simonson - Proxima Nova Alt Bold.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'Gotham Bold';
   src: url('../fonts/Gotham-Bold_21010.ttf') format('truetype');
   font-weight: normal;
@@ -39,6 +46,9 @@
 
 .icon-design:before {
   content: "\64";
+  font-size: 25px;
+  display: inline;
+  margin-right: 10px;
 }
 .icon-linkedin:before {
   content: "\69";
@@ -63,6 +73,9 @@
 }
 .icon-file-xml:before {
   content: "\63";
+  font-size: 25px;
+  display: inline;
+  margin-right: 10px;
 }
 
 h1 {
@@ -74,7 +87,28 @@ h2 {
 	font-family: 'Gotham Bold';
 }
 
+.work-title-wrapper {
+  margin-bottom: 20px;
+}
+
+.work-title {
+  display: inline;
+}
+
 p {
 	font-family: 'Proxima Nova';
 	font-weight: 300;
+}
+
+a {
+  font-family: 'Gotham Bold';
+  font-weight: 300;
+  font-size: 1.875rem;
+}
+
+.inline-link {
+  font-family: 'Proxima Nova bold';
+  font-weight: 900;
+  font-size: 1.3rem;
+  color: $black;
 }

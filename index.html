@@ -9,8 +9,21 @@
   </head>
   <body>
 
-  <nav>
+<div class="button_container" id="toggle">
+  <span class="top"></span>
+  <span class="middle"></span>
+  <span class="bottom"></span>
+</div>
+<div class="overlay" id="overlay">
+  <nav class="overlay-menu">
+    <ul>
+      <li ><a href="#">HOME</a></li>
+      <li><a href="#">ABOUT</a></li>
+      <li><a href="#">WORK</a></li>
+      <li><a href="#">CONTACT</a></li>
+    </ul>
   </nav>
+</div>
 
   <div id="wrapper">
     <header class="row">
@@ -24,8 +37,8 @@
       <div class="small-12 medium-6 columns">
         <h2>ABOUT</h2>
         <p>I'm a fanatic of design and web development. I'm incredibly passionate about what I do and I love to be able to follow briefs or contribute creatively.</p>
-        <p>I am currently working for Canonical as a designer and something for Precise Pixels.</p>
-        <p>You can check out my CV here.</p>
+        <p>I am currently working for <a class="inline-link" href="">Canonical</a> as a designer and something for <a class="inline-link" href="">Precise Pixels.</a></p>
+        <p>You can check out my <a class="inline-link" href="">CV here.</a></p>
       </div>
       <div class="small-12 medium-6 columns">
         <img src="img/self.png">
@@ -34,15 +47,18 @@
 
     <section class="row section-padding">
       <div class="medium-6 columns work-container">
-        <div class="work-container-background"></div>
-        <h2>DEVELOPMENT</h2>
-        <p>I develop 'em apps with Ruby on Rails and everything that comes with it. I also like fiddling around with Angular.js.</p>
-        <a href="http://www.last.fm/user/faooful" target="_blank"><i class="lastfm">l</i></a>
-        <i class="icon-file-xml"></i>
+        <!-- <div class="work-title-wrapper">
+          <div class="work-container-background"></div>
+          <i class="icon-file-xml"></i><h2 class="work-title">DEVELOPMENT</h2>
+        </div>
+        <p>I develop 'em apps with Ruby on Rails and everything that comes with it. I also like fiddling around with Angular.js.</p> -->
+        
       </div>
       <div class="medium-6 columns work-container">
         <div class="work-container-background"></div>
-        <h2>DESIGN</h2>
+          <div class="work-title-wrapper">
+          <i class="icon-design"></i><h2 class="work-title">DESIGN</h2>
+        </div>
         <p>When I'm in the mood I also fancy doing some styling, ideally responsive and minimalistic.</p>
       </div>
     </section>
@@ -51,7 +67,7 @@
       <div class="medium-6 columns">
         <h2>CONTACT</h2>
         <p>Got an idea or what to chat?</p>
-        <p>You can reach me on contact@josephs.space or through my twitter handle, @faooful</p>
+        <p>You can reach me on <a class="inline-link" href="">contact@josephs.space</a> or through my twitter handle, <a class="inline-link" href="">@faooful</a></p>
       </div>
     </section>
   </div>
@@ -59,5 +75,13 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/foundation/js/foundation.min.js"></script>
     <script src="js/app.js"></script>
+
+    <script>
+      $('#toggle').click(function() {
+       $(this).toggleClass('active');
+       $('#overlay').toggleClass('open');
+      });
+    </script>
+
   </body>
 </html>
