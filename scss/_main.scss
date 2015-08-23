@@ -1,6 +1,6 @@
 #wrapper {
     // border: 20px solid #F5F5F5;
-    border-left: 6px solid $yellow;
+    // border-left: 6px solid $yellow;
 }
 
 .row {
@@ -59,11 +59,13 @@ nav {
 }
 
 .work-container {
+    cursor: pointer;
     &:hover {
         .work-container-background {
             background: $lgrey;
+            // border: 1px solid #ebebeb;
             opacity: 1;
-            transform: scaleX(1.05) scaleY(1.05);
+            transform: scaleX(1.02) scaleY(1.8);
         }
     }
 }
