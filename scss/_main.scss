@@ -1,3 +1,8 @@
+#wrapper {
+    // border: 20px solid #F5F5F5;
+    border-left: 6px solid $yellow;
+}
+
 .row {
     max-width: 1200px;
 }
@@ -37,33 +42,12 @@ nav {
     margin: 0 auto;
 }
 
-// .work-container-background {
-//     height: 100%;
-//     width: 100%;
-//     position: absolute;
-//     display: inline-block;
-//     background: white;
-//     z-index: -1;
-//     transform: scaleX(1) scaleY(1);
-    
-//     -webkit-transition: transform .2s ease-out;
-//     transition: transform .2s ease-in-out;
-// }
-
-// .work-container {
-//     &:hover {
-//         .work-container-background {
-//             background: $lgrey;
-//             opacity: 1;
-//             transform: scaleX(1.05) scaleY(1.05);
-//         }
-//     }
-// }
-
 .work-container-background {
     height: 100%;
     width: 100%;
     position: absolute;
+    top: 0;
+    left: 0;
     display: inline-block;
     background: white;
     z-index: -1;
