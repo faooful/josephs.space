@@ -1,7 +1,8 @@
 $button-height: 27px;
 $button-width: 35px;
 
-body {
+.scrollLock {
+  overflow-y: hidden !important;
 }
 
 .container {
