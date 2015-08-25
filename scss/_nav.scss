@@ -18,7 +18,7 @@ $button-width: 35px;
     display: inline-block;
     position: relative;
     text-align: center;
-    color: $yellow;
+    color: $lblue;
     text-decoration: none;
     font-size: 20px;
     overflow: hidden;
@@ -27,7 +27,7 @@ $button-width: 35px;
     &:after {
       content: '';
       position: absolute;
-      background: $yellow;
+      background: $lblue;
       height: 2px;
       width: 0%;
       transform: translateX(-50%);
@@ -96,7 +96,7 @@ $button-width: 35px;
 
 .overlay {
   position: fixed;
-  background: $yellow;
+  background: $lblue;
   top: 0;
   left: 0;
   width: 100%;

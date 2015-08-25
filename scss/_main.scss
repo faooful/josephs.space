@@ -34,6 +34,10 @@ nav {
     }
 }
 
+header {
+    padding: 0 20px;
+}
+
 .section-padding {
     padding: 120px 20px;
 }
@@ -69,3 +73,5 @@ nav {
         }
     }
 }
+
+@media only screen and (min-width: 40.063em) { .work-container {margin-bottom: 40px;} }
