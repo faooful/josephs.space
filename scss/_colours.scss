@@ -4,6 +4,11 @@ $black: #222222;
 $lblue: #F3F4F5;
 $yellow: #FEE78C;
 
+.full-yellow {
+	width: 100%;
+	background: $yellow;
+}
+
 .lblue {
 	background: $lblue;
 }

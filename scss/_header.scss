@@ -12,6 +12,38 @@
     background: #F3F4F5;
 }
 
+.inner-box {
+    /* transform: skewX(-20deg); */
+    width: 930px;
+    /* position: absolute; */
+    height: 900px;
+    /* position: fixed; */
+    position: absolute;
+    /* left: 0; */
+    margin: 0 auto;
+    left: 100px;
+    height: 520px;
+    top: 70px;
+    /* right: 0px; */
+    border: 30px solid #f3f4f5;
+}
+
+.inner-box2 {
+    /* transform: skewX(-20deg); */
+    width: 930px;
+    /* position: absolute; */
+    height: 900px;
+    /* position: fixed; */
+    position: absolute;
+    /* left: 0; */
+    margin: 0 auto;
+    left: 200px;
+    height: 520px;
+    top: 160px;
+    /* right: 0px; */
+    border: 30px solid #f3f4f5;
+}
+
 .stripe1 {
 	right: 160px;
 }
