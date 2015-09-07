@@ -6,9 +6,12 @@ $yellow: #FEE78C;
 
 .full-yellow {
 	width: 100%;
+	// background: url('../img/self-header.jpg');
+	// background-size: cover;
 	background: $yellow;
 }
 
-.lblue {
+.full-lblue {
+	width: 100%;
 	background: $lblue;
 }

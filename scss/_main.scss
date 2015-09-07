@@ -42,32 +42,4 @@ header {
     margin: 0 auto;
 }
 
-.work-container-background {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: inline-block;
-    background: white;
-    z-index: -1;
-    transform: scaleX(1) scaleY(1);
-    opacity: 0;
-        
-    -webkit-transition: all .2s ease-out;
-    transition: all .2s ease-in-out;
-}
-
-.work-container {
-    cursor: pointer;
-    &:hover {
-        .work-container-background {
-            background: $lgrey;
-            // border: 1px solid #ebebeb;
-            opacity: 1;
-            transform: scaleX(1.02) scaleY(1.8);
-        }
-    }
-}
-
-@media only screen and (min-width: 40.063em) { .work-container {margin-bottom: 40px;} }
+@media only screen and (min-width: 40.063em) {  }

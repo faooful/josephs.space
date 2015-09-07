@@ -1,3 +1,4 @@
+// burger menu
 $button-height: 27px;
 $button-width: 35px;
 
@@ -45,7 +46,7 @@ $button-width: 35px;
 
 .button_container {
   position: fixed;
-  top: 5%;
+  top: 2%;
   right: 2%;
   height: $button-height;
   width: $button-width;
@@ -189,5 +190,40 @@ $button-width: 35px;
   100% {
     opacity: 1;
     left: 0;
+  }
+}
+
+
+// regular menu
+nav {
+  z-index: 9;
+}
+
+.nav-title {
+  float: left;
+  margin: 0 0 0 20px !important;
+  font-family: 'Gotham Bold';
+  line-height: 2.8;
+}
+
+.nav-items {
+  margin-left: 60px;
+  p {
+    margin-right: 40px;
+    float: left;
+    font-family: 'Gotham Bold';
+    line-height: 2.8;
+  }
+}
+
+.social-items {
+  margin-left: 60px;
+  font-style: normal !important;
+  i {
+    margin-right: 40px;
+    float: left;
+    line-height: 2.8;
+    font-size: 20px;
+    font-style: normal !important;
   }
 }
