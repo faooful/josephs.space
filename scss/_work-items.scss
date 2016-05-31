@@ -1,23 +1,382 @@
-.work-item-hover {
-	height: 20px;
-    width: 20px;
-    margin: 80px auto 0;
-    background: $yellow;
-    border-radius: 50%;
+.project {
+  width: 100%;
+  height: 110px;
+  padding: 0 15px;
+  display: table;
+  &:hover {
+    .project-hover {
+      width: 100%;
+    }
+  }
 }
 
-.recent-work-item {
-	height: 200px;
-	background: $lblue;
-		&:hover {
-		.work-item-hover {
-			height: 50px;
-			width: 50px;
+.content {
+  display: table-cell;
+  vertical-align: middle;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.project-hover {
+  background-color: $black;
+  position: absolute;
+  left: 0%;
+  height: 100px;
+  width: 0%;
+  -webkit-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  -moz-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  -o-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  -ms-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+  z-index: -1;
+  &:hover {
+    cursor: pointer;
+    .color-hover {
+      width: 100%;
+    }
+  }
+}
+
+.color-hover {
+    background-color: blue;
+    position: absolute;
+    top: 0;
+    height: 130px;
+    width: 0%;
+    -webkit-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+    -moz-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+    -o-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+    -ms-transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+    transition: background-color 300ms ease, width 400ms cubic-bezier(0.86, 0, 0.07, 1);
+    z-index: -1;
+}
+
+.contact-text {
+  img {
+    padding: 20px;
+    background: $lgrey;
+  }
+}
+
+.white-strip {
+  width: 100%;
+  height: 270px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: white;
+  z-index: 1;
+}
+
+.white-strip {
+  width: 100%;
+  height: 270px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: white;
+  z-index: 1;
+}
+
+.hearthstone-features {
+  img {
+    padding-bottom: 20px;
+  }
+}
+
+.work-laptop {
+  position: relative;
+  z-index: 1;
+}
+
+.projects {
+  padding: 120px 20px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+
+.project-laptop {
+  position: relative;
+}
+
+
+.imgwrap {
+    // display: inline-block;
+    -webkit-transform: scale(1);
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    transition: all 200ms ease-in-out;
+}
+
+.work-item-img {
+  transition: opacity .4s ease-in-out;
+}
+
+// invstr
+.work-title {
+    color: #FFF;
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    margin-top: -14.5px;
+    z-index: 2;
+    opacity: 0;
+    transition: all 200ms ease-in-out;
+}
+
+.work-item-invstr {
+	margin-bottom: 60px;
+    &:hover {
+    	.imgwrap {
+	   		background-color: $invstr;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
 		}
-	}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
 }
 
-.cell {
-	background: url('../img/cell-industries.jpg') center no-repeat;
-	background-size: cover;
+.invstr-full {
+  background: $invstr;
+}
+
+.invstr-full-alt {
+  background: $lgrey;
+}
+
+.ubuntu-full {
+  background: $ubuntu;
+}
+
+// portfoliov2
+.work-item-portfoliov2 {
+	margin-bottom: 60px;
+    &:hover {
+
+    	.imgwrap {
+	   		background-color: $portfoliov2;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+		}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
+}
+
+.work-description {
+  text-align: left !important;
+  padding-bottom: 20px;
+}
+
+// cell
+.work-item-cell {
+	margin-bottom: 60px;
+    &:hover {
+    	.imgwrap {
+	   		background-color: $cell;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+		}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
+}
+
+// maas
+.work-item-maas {
+  margin-bottom: 60px;
+    &:hover {
+      .imgwrap {
+        background-color: $ubuntu;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+    }
+    .work-title {
+      opacity: 1;
+    }
+      .work-item-img {
+        opacity: .1;
+      }
+    }
+}
+
+.cell-full {
+  background: $cell;
+}
+
+.cell-full-alt {
+  background: $cell-alt;
+}
+
+// dota
+.work-item-dota {
+	margin-bottom: 60px;
+    &:hover {
+    	.imgwrap {
+	   		background-color: $dota;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+		}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
+}
+
+// hearthstone-cards
+.work-item-hearthstone-cards {
+  margin-bottom: 60px;
+    &:hover {
+      .imgwrap {
+        background-color: $hearthstone;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+    }
+    .work-title {
+      opacity: 1;
+    }
+      .work-item-img {
+        opacity: .1;
+      }
+    }
+}
+
+// peter
+.work-item-peter {
+	margin-bottom: 60px;
+    &:hover {
+    	.imgwrap {
+	   		background-color: $peter;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+		}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
+}
+
+// lego
+.work-item-legoweb {
+	margin-bottom: 60px;
+  z-index: 1;
+    &:hover {
+    	.imgwrap {
+	   		background-color: $legoland;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+		}
+		.work-title {
+			opacity: 1;
+		}
+   		.work-item-img {
+   			opacity: .1;
+   		}
+    }
+}
+
+// lego
+.work-item-ubuntu {
+  margin-bottom: 60px;
+  padding: 0;
+    &:hover {
+      .imgwrap {
+        background-color: $ubuntu;
+        -webkit-transform: scale(1.05);
+        -ms-transform: scale(1.05);
+        transform: scale(1.05);
+        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
+    }
+    .work-title {
+      opacity: 1;
+    }
+      .work-item-img {
+        opacity: .1;
+      }
+    }
+}
+
+.spacing-bottom {
+	padding-bottom: 60px;
+}
+
+@media (max-width: 450px) {
+    .white-strip {
+      height: 90px;
+    }
+}
+
+@media (max-width: 700px) {
+
+}
+
+@media (max-width: 700px) {
+    .projects {
+      padding: 50px 20px;
+    }
+    .contact-text {
+      img {
+        padding: 20px;
+        background: $lgrey;
+      }
+    }
+    .white-strip {
+      height: 120px;
+    }
 }

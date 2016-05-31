@@ -79,13 +79,21 @@
 }
 
 h1 {
-  font-size: 3.5rem;
-	font-family: 'Gotham Bold';
+  font-size: 30px;
+  line-height: 1.8;
+  font-family: 'Proxima Nova bold';
+  color: white;
 }
 
 h2 {
-	margin-bottom: 40px;
-	font-family: 'Gotham Bold';
+  font-size: 20px;
+	font-family: 'Proxima Nova bold';
+  color: white;
+}
+
+h3 {
+  font-size: 1.3rem;
+  font-family: 'Proxima Nova';
 }
 
 .work-title-wrapper {
@@ -97,19 +105,122 @@ h2 {
 }
 
 p {
+  font-size: 18px;
 	font-family: 'Proxima Nova';
 	font-weight: 300;
+  line-height: 32px;
+  color: white;
+}
+
+.note {
+  font-size: 13px;
+  line-height: 0;
+  color: $notegrey;
 }
 
 a {
-  font-family: 'Gotham Bold';
-  font-weight: 300;
-  font-size: 1.875rem;
+  font-family: 'Proxima Nova bold';
+  // font-weight: 300;
+  text-decoration: none;
+  // color: $yellow;
+  &:hover {
+    // text-decoration: line-through;
+  }
 }
 
-.inline-link {
+a p {
+  font-family: 'Proxima Nova';
+  font-weight: 300;
+  font-size: 1.875rem;
+  text-decoration: none;
+  // &:hover {
+  //   text-decoration: line-through;
+  // }
+}
+
+.bold {
+  font-family: 'Proxima Nova bold';
+}
+
+.overlay ul li a {
+  font-family: 'Proxima Nova';
+  font-weight: 300;
+  font-size: 1.875rem;
+  text-decoration: none;
+  &:hover {
+    text-decoration: line-through;
+  }
+}
+
+.inline-link, .external-link {
   font-family: 'Proxima Nova bold';
   font-weight: 900;
-  font-size: 1.3rem;
+  font-size: 30px;
   color: $black;
+}
+
+.external-link {
+  margin-bottom: 20px;
+  display: block;
+}
+
+.social-link {
+  font-size: 1.3rem;
+  margin-right: 5px;
+}
+
+.body-text {
+    padding: 120px 20px;
+}
+
+.body-link {
+  font-size: 1.3rem;
+}
+
+.contact-text {
+    padding: 120px 20px 100px 20px;
+}
+
+// .header-link {
+//     font-size: 30px;
+// }
+
+.invstr { color: $invstr !important; }
+.dribbble { color: $dribbble !important; }
+.twitter { color: $twitter !important; }
+.linkedin { color: $linkedin !important; }
+.lastfm { color: $lastfm !important; }
+.canonical { color: $canonical !important; }
+.ppixel { color: $ppixel !important; }
+.ubuntu { color: $ubuntu !important; }
+.portfoliov2 { color: $portfoliov2 !important; }
+.cell { color: $cell-alt !important;}
+.peter { color: $peter !important;}
+.black { color: $black !important; }
+
+@media (max-width: 700px) {
+  h2 {
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-size: 1rem;
+  }
+  p {
+    font-size: 16px;
+  }
+  .body-link {
+    font-size: 16px;
+  }
+  .social-link {
+    font-size: 16px;
+  }
+  .inline-link, .external-link {
+    font-size: 16px;
+  }
+  .external-link {
+    margin-bottom: 10px;
+  }
+  .body-text {
+    padding: 60px 20px;
+  }
 }

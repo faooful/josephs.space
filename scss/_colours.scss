@@ -1,8 +1,26 @@
-$lgrey: #F8F8F8;
-$black: #222222;
+$lgrey: #F6F6F6;
+$notegrey: #A3A3A3;
+$black: #141414;
 
 $lblue: #F3F4F5;
-$yellow: #FEE78C;
+$yellow: #FCB500;
+
+$dribbble: #EB6699;
+$linkedin: #0177B5;
+$twitter: #61AADB;
+$lastfm: #B90000;
+$canonical: #2C001E;
+$ppixel: #4DBACF;
+$ubuntu: #DD4814;
+
+$invstr: #07CCE0;
+$portfoliov2: #62AAFF;
+$cell: #333333;
+$cell-alt: #369;
+$dota: #FA3434;
+$peter: #888888;
+$legoland: #F6C300;
+$hearthstone: #FF9E42;
 
 .full-yellow {
 	width: 100%;
@@ -13,5 +31,44 @@ $yellow: #FEE78C;
 
 .full-lblue {
 	width: 100%;
+	overflow: hidden;
 	background: $lblue;
+}
+
+.black {
+	color: $black;
+	&:hover {
+		color: $black;
+	}
+}
+
+.yellow {
+	color: $yellow;
+	&:hover {
+		color: $yellow;
+	}
+}
+
+.ubuntu-bg {
+	background: $ubuntu !important;
+}
+
+.maas-bg {
+	background: $lgrey !important;
+}
+
+.cell-bg {
+	background: $cell-alt !important;
+}
+
+.invstr-bg {
+	background: $invstr !important;
+}
+
+.hearthstone-bg {
+	background: $hearthstone !important;
+}
+
+.dota-bg {
+	background: $dota !important;
 }

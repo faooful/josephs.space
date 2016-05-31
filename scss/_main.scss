@@ -1,22 +1,13 @@
-#wrapper {
-    // border: 20px solid #F5F5F5;
-    // border-left: 6px solid $yellow;
+body {
+  padding: 160px 0 80px 0;
+  background: $black;
 }
 
-nav {
-	height: 60px;
-	width: 100%;
-	position: fixed;
-	top: 0;
-	left: 0;
-	// background: red;
+.row {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-// #header-text {
-// 	// header: 100vh;
-// }
-
-// Vertically Centre Column Content
 .valign-middle {
     display: table;
 
@@ -30,16 +21,52 @@ nav {
     }
 }
 
-header {
-    padding: 0 20px;
+.now-playing {
+    font-size: 18px;
+    color: $notegrey;
+}
+
+.center {
+    text-align: center;
+    margin: 0 auto;
 }
 
 .section-padding {
-    padding: 120px 20px;
+    padding: 0 20px 60px 20px;
+}
+
+.section-padding-no-bottom {
+    padding: 0 20px 0 20px;
+}
+
+.padding-bottom {
+    padding-bottom: 40px;
+}
+
+.margin-bottom {
+    margin-bottom: 40px;
+}
+
+.work-item {
+    padding: 120px 20px 0 20px;
+}
+
+.work-item-inner {
+    padding: 0 20px;
 }
 
 .align-center {
     margin: 0 auto;
 }
 
-@media only screen and (min-width: 40.063em) {  }
+.left-line {
+    margin-left: -20px;
+    padding-left: 16px;
+    border-left: rgba(29, 29, 29, 0.1) 4px solid;
+}
+
+.left-line-invstr {
+    margin-left: -20px;
+    padding-left: 16px;
+    border-left: 4px solid $invstr;
+}

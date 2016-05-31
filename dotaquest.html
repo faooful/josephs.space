@@ -1,0 +1,94 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dota Quest</title>
+    <link rel="stylesheet" href="stylesheets/app.css" />
+    <script src="bower_components/modernizr/modernizr.js"></script>
+  </head>
+  <body>
+
+  <!-- Burger menu -->
+<div class="button_container" id="toggle">
+  <span class="top"></span>
+  <span class="middle"></span>
+  <span class="bottom"></span>
+</div>
+<div class="overlay" id="overlay">
+  <nav class="overlay-menu">
+    <ul>
+      <li><a href="/">HOME</a></li>
+      <li><a href="/design.html">DESIGN</a></li>
+      <li><a href="/development.html">DEVELOPMENT</a></li>
+      <li><a href="/contact.html">CONTACT</a></li>
+    </ul>
+  </nav>
+</div>
+
+
+<nav>
+  <div class="nav-items">
+    <img class="logo" src="img/jlogo.png"/>
+    <a href="/contact.html"><p>CONTACT</p></a>
+    <a href="/development.html"><p>DEVELOPMENT</p></a>
+    <a href="/design.html"><p>DESIGN</p></a>
+    <a href="/"><p>HOME</p></a>
+  </div>
+<!--   <div class="social-items icon-">
+    <i class="linkedin">i</i>
+    <i class="twitter">t</i>
+    <i class="github">g</i>
+    <i class="lastfm">l</i>
+  </div> -->
+</nav>
+
+    <div id="wrapper">
+    <header class="row">
+<!--       <div class="stripe stripe1"></div>
+      <div class="stripe"></div> -->
+<!--       <div class="inner-box"></div>
+      <div class="inner-box2"></div> -->
+      <div id="header-text" class="large-12 columns">
+        <h1>DotA Quest</h1>
+        <!-- <p><i class="icon-headphones listening-icon"></i>I am currently listening to</p> -->
+      </div>
+    </header>
+  </div>
+
+    <section class="row section-padding">
+      <div class="large-8 columns spacing-bottom">
+        <h3>Project</h3>
+        <p class="left-line">A side project to experement with JSON strings and calling them. It randomises the selection from the string and makes sure that if a selection has already been chosen, it can't pick it again.</p>
+        <h3>Skills</h3>
+        <p class="left-line">HTML, CSS, Mobile first, Responsive, JavaScript, JSON</p>
+        <a class="inline-link" href="http://invstr.com">www.invstr.com</a>
+      </div>
+      <div class="large-12 columns">
+        <img class="spacing-bottom" src="img/dota-full.jpg"/>
+        <a class="inline-link" href="http://www.josephs.space/development.html">< back to projects</a>
+      </div>
+    </section>
+
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/foundation/js/foundation.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/velocity.min.js"></script>
+    <script src="js/jquery.blast.js"></script>
+
+    <script>
+      $('.header-text').css("opacity",1)
+      .find('h1').blast()
+      .css("opacity",0)
+      .velocity("fadeIn", {
+        duration: 600,
+        stagger: 50,
+        drag: true,
+        complete: function() {
+          $('.header-text').find('h1').eq(0).blast(false);
+        }
+      });
+    </script>
+
+  </body>
+</html>
