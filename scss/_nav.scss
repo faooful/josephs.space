@@ -1,65 +1,13 @@
-//normal menu
-nav {
-  height: 60px;
-  width: 100%;
+.home-button {
+  padding: 10px 20px;
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 40px;
+  left: 0px;
   background: white;
-  z-index: 100;
+  color: $text-black;
+  font-size: 13px;
+  -ms-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  z-index: 99;
 }
-
-.nav-title {
-  float: left;
-  margin: 0 0 0 20px !important;
-  font-family: 'Proxima Nova';
-  line-height: 2.8;
-}
-
-.nav-items {
-  margin-left: 60px;
-  margin-top: 0;
-  p {
-    margin-top: 6px;
-    margin-right: 40px;
-    float: right;
-    font-family: 'Proxima Nova bold';
-    line-height: 2.8;
-    font-size: 1rem !important;
-    display: visible;
-  }
-}
-
-.overlay ul li a {
-  color: $yellow;
-}
-
-.logo {
-  width: 35px;
-  margin: 6px 30px 0 -20px;
-  float: left;
-  z-index: 100 !important;
-}
-
-.social-items {
-  float: left;
-  font-style: normal !important;
-  i {
-    margin-right: 40px;
-    float: left;
-    line-height: 2.8;
-    font-size: 20px;
-    font-style: normal !important;
-  }
-}
-
-// @media (max-width: 820px) {
-//   .nav-items {
-//     p {
-//       display: none !important;
-//     }
-//   }
-//   .button_container {
-//     display: block;
-//   }
-// }

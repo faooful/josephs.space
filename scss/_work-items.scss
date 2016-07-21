@@ -1,9 +1,17 @@
 .project {
   width: 100%;
   height: 110px;
-  padding: 0 15px;
   display: table;
+  h2, p {
+    -webkit-transition-delay: 2s; /* Safari */
+    transition-delay: 2s;
+    -webkit-transition: color 300ms ease;
+    transition: color 300ms ease;
+  }
   &:hover {
+    h2, p {
+      color: $text-black;
+    }
     .project-hover {
       width: 100%;
     }
@@ -59,23 +67,13 @@
   }
 }
 
-.white-strip {
+.yellow-strip {
   width: 100%;
   height: 270px;
   position: absolute;
   bottom: 0;
   left: 0;
-  background: white;
-  z-index: 1;
-}
-
-.white-strip {
-  width: 100%;
-  height: 270px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  background: white;
+  background: $yellow;
   z-index: 1;
 }
 
@@ -91,10 +89,11 @@
 }
 
 .projects {
+  max-width: 1200px;
   padding: 120px 20px;
+  margin: 0 auto;
   overflow: hidden;
   position: relative;
-  text-align: center;
 }
 
 .project-laptop {
@@ -127,27 +126,6 @@
     transition: all 200ms ease-in-out;
 }
 
-.work-item-invstr {
-	margin-bottom: 60px;
-    &:hover {
-    	.imgwrap {
-	   		background-color: $invstr;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
 .invstr-full {
   background: $invstr;
 }
@@ -160,76 +138,19 @@
   background: $ubuntu;
 }
 
-// portfoliov2
-.work-item-portfoliov2 {
-	margin-bottom: 60px;
-    &:hover {
-
-    	.imgwrap {
-	   		background-color: $portfoliov2;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
 .work-description {
   text-align: left !important;
   padding-bottom: 20px;
 }
 
-// cell
-.work-item-cell {
-	margin-bottom: 60px;
-    &:hover {
-    	.imgwrap {
-	   		background-color: $cell;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
-// maas
-.work-item-maas {
-  margin-bottom: 60px;
-    &:hover {
-      .imgwrap {
-        background-color: $ubuntu;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-    }
-    .work-title {
-      opacity: 1;
-    }
-      .work-item-img {
-        opacity: .1;
-      }
-    }
+.maas-ui-gif {
+  width: 69.8%;
+  position: absolute;
+  top: 24.5%;
+  left: 15.4%;
+  box-shadow: 0 5px 30px 3px rgba(102,102,102,0.08);
+  border-radius: 2px;
+  border: 1px solid rgba(54,54,54,0.09);
 }
 
 .cell-full {
@@ -238,118 +159,6 @@
 
 .cell-full-alt {
   background: $cell-alt;
-}
-
-// dota
-.work-item-dota {
-	margin-bottom: 60px;
-    &:hover {
-    	.imgwrap {
-	   		background-color: $dota;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
-// hearthstone-cards
-.work-item-hearthstone-cards {
-  margin-bottom: 60px;
-    &:hover {
-      .imgwrap {
-        background-color: $hearthstone;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-    }
-    .work-title {
-      opacity: 1;
-    }
-      .work-item-img {
-        opacity: .1;
-      }
-    }
-}
-
-// peter
-.work-item-peter {
-	margin-bottom: 60px;
-    &:hover {
-    	.imgwrap {
-	   		background-color: $peter;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
-// lego
-.work-item-legoweb {
-	margin-bottom: 60px;
-  z-index: 1;
-    &:hover {
-    	.imgwrap {
-	   		background-color: $legoland;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-		}
-		.work-title {
-			opacity: 1;
-		}
-   		.work-item-img {
-   			opacity: .1;
-   		}
-    }
-}
-
-// lego
-.work-item-ubuntu {
-  margin-bottom: 60px;
-  padding: 0;
-    &:hover {
-      .imgwrap {
-        background-color: $ubuntu;
-        -webkit-transform: scale(1.05);
-        -ms-transform: scale(1.05);
-        transform: scale(1.05);
-        -webkit-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        -moz-box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-        box-shadow: 0 10px 18px -5px rgba(0,0,0,0.2);
-    }
-    .work-title {
-      opacity: 1;
-    }
-      .work-item-img {
-        opacity: .1;
-      }
-    }
 }
 
 .spacing-bottom {

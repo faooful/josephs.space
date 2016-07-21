@@ -6,114 +6,99 @@
     <title>Cell Industries | Web project</title>
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link rel="stylesheet" href="stylesheets/app.css" />
+    <link rel="stylesheet" href="stylesheets/animate.css">
     <script src="bower_components/modernizr/modernizr.js"></script>
   </head>
   <body>
-  
-<nav>
-  <div class="nav-items">
-    <a href="/"><img class="logo" src="img/jlogo.png"/></a>
-    <a class="linkedin" target="_blank" href="https://uk.linkedin.com/pub/joseph-williams/52/39a/3a9"><p>Linkedin</p></a>
-    <a class="dribbble" target="_blank" href="http://www.dribbble.com/faooful"><p>Dribbble</p></a>
-    <!-- <a href="/development.html"><p>Projects</p></a> -->
-    <a class="yellow" href="/cv/cv.pdf"><p>CV</p></a>
-  </div>
-</nav>
-  
-  <div class="header-img cell-header-img"><img src="img/cell-imgs/cell-logo.png"/></div>
-  <div id="wrapper">
-    <header class="row">
-      <div class="body-text large-10 columns">
-        <p><a class="body-link cell" target="_blank" href="http://www.cell-industries.co.uk">Cell Industries </a>was created as my Final Year Project in my final year of university with <a class="body-link cell" target="_blank" href="http://jalproductions.co.uk">James Alexander Lee</a> and <a class="body-link cell" target="_blank" href="http://jacobhammond.co.uk">Jacob Hammond.</a></p> 
-        <p>We wanted to use the latest web technologies and industry practices to create a unique web experience as well as to further our own knowledge of web development.</p>
-      </div>
-    </header>
 
-    <div class="cell-full">
-      <section class="projects" class="row">
-        <div class="large-12 columns">
-          <img src="img/cell-imgs/cell-home-full.png"/>
+  <a href="index.html"><div class="home-button">HOME</div></a>
+
+    <progress class="cell-bg-progress" value="0"></progress>
+    <div id="wrapper">
+      <header class="row">
+        <div class="large-12 columns padding-bottom">
+          <h1>Cell Industries</h1>
         </div>
-      </section>
-    </div>
+        <div class="large-6 columns">
+          <p class="note">DESCRIPTION —</p>
+          <p><a class="body-link cell" target="_blank" href="http://www.cell-industries.co.uk">Cell Industries </a>was created as my Final Year Project at the University of Kent with <a class="body-link cell" target="_blank" href="http://jalproductions.co.uk">James Alexander Lee</a> and <a class="body-link cell" target="_blank" href="http://jacobhammond.co.uk">Jacob Hammond.</a></p>
+          <p>We wanted to use the latest web technologies and industry practices to create a unique web experience involving 3D visuals. We created a fictional company (Cell Industries) to achieve this and to further our own knowledge of web development</p>
+        </div>
+        <div class="large-5 columns">
+          <p class="note">ROLE —</p>
+          <p class="padding-bottom">Visual designer and front-end developer</p>
+          <p class="note">DATE —</p>
+          <p>2014</p>
+        </div>
+      </header>
 
-    <div class="cell-full-alt">
-      <section class="projects" class="row">
-        <div class="center large-12 columns">
+      <section class="row projects wow fadeIn">
+        <div class="large-12 center columns">
           <img src="img/cell-imgs/cell-poster-full.png"/>
         </div>
       </section>
-    </div>
 
-    <section class="row projects">
-      <div class="large-10 columns">
-        <p>The key feature was the 'cloning process'. By combining Google Elevation API, Google Static Maps API and ThreeJS, we automatically generate and display 3D topographical representations of real-world areas using only code.</p> 
-      </div>
-    </section>
-
-    <div class="cell-full">
-      <section class="projects" class="row">
-      <div class="white-strip"></div>
-        <div class="large-12 columns">
-          <img class="work-laptop" src="img/cell-imgs/cell-clone-full.png"/>
+      <section class="row projects wow fadeIn">
+        <div class="large-12 center columns">
+          <img src="img/cell-imgs/cell-home-full.png"/>
         </div>
       </section>
-    </div>
 
-    <section class="row">
-      <div class="contact-text large-12 columns">
-        <a href="http://josephs.space#projects"><h1>Back to projects</a></h1></a>
+      <section class="row">
+        <div class="large-12 columns">
+          <p> The key feature was the 'cloning process'. By combining Google Elevation API, Google Static Maps API and ThreeJS, we automatically generate and display 3D topographical representations of real-world areas using only code.</p>
+        </div>
+      </section>
+
+      <section class="row projects wow fadeIn">
+        <div class="large-12 columns">
+          <img src="img/cell-imgs/profile.png"/>
+        </div>
+      </section>
+
+      <section class="row projects wow fadeIn">
+        <div class="large-12 columns">
+          <img src="img/cell-imgs/cloning-screen.png"/>
+        </div>
+      </section>
+
+      <section class="row projects wow fadeIn">
+        <div class="large-12 columns">
+          <img src="img/cell-imgs/cloned-env.png"/>
+        </div>
+      </section>
+
+      <div class="lblack">
+        <a href="http://www.ubuntu.com">
+          <section class="large-6 columns footer-nav footer-nav-ubuntu">
+              <p class="note">PREVIOUS PROJECT —</p>
+              <h2>Ubuntu</h2>
+          </section>
+        </a>
+        <a href="hearthstone.html">
+          <section class="large-6 columns next-item footer-nav footer-nav-hearthstone">
+              <p class="note">NEXT PROJECT —</p>
+              <h2>Hearthstone</h2>
+          </section>
+        </a>
       </div>
-    </section>
 
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/jribbble/dist/jribbble.min.js"></script>
-    <script type="text/javascript">
-    function get_spotify() {
-        $.ajax({
-            type: 'POST',
-            url: 'includes/lastfm.php',
-            data: { request: 'true' },
-            success: function(reply) {
-                $('.now-playing').html("<p>" + reply + "</p>");
-            }
-        });
-    }
-    window.onload = get_spotify;
-  </script>
-    <script>
-      $.jribbble.setToken('03158e302f61ad88d87a367d4c0080f56c7cd15cc2631346f1f0d7e947caf238');
-
-      $.jribbble.users('faooful').shots({per_page: 1000}).then(function(shots) {
-        var html = [];
-        
-        shots.forEach(function(shot) {
-          html.push('<li class="shots--shot">');
-          html.push('<a href="' + shot.html_url + '" target="_blank">');
-          html.push('<img src="' + shot.images.normal + '">');
-          html.push('</a></li>');
-        });
-        
-        $('.shots').html(html.join(''));
-      });
-    </script>
-    <script src="js/app.js"></script>
-    <script src="js/velocity.min.js"></script>
-    <script src="js/jquery.blast.js"></script>
-
-    <script>
-      $('.header-text').css("opacity",1)
-      .find('h1').blast()
-      .css("opacity",0)
-      .velocity("fadeIn", {
-        duration: 600,
-        stagger: 50,
-        drag: true,
-        complete: function() {
-          $('.header-text').find('h1').eq(0).blast(false);
-        }
-      });
-    </script>
+      <script src="bower_components/jquery/dist/jquery.min.js"></script>
+      <script src="js/app.js"></script>
+      <script src="js/progress.js"></script>
+      <script src="js/wow.min.js"></script>
+      <script>
+      wow = new WOW(
+                        {
+                        boxClass:     'wow',      // default
+                        animateClass: 'animated', // default
+                        offset:       200,          // default
+                        mobile:       false,       // default
+                        live:         true        // default
+                      }
+                      )
+                      wow.init();
+      </script>
 
   </body>
 </html>

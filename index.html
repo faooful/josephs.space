@@ -10,52 +10,40 @@
   </head>
   <body>
 
-<!-- <nav>
-  <div class="nav-items">
-    <a href="/"><img class="logo" src="img/jlogo.png"/></a>
-    <a class="linkedin" target="_blank" href="https://uk.linkedin.com/pub/joseph-williams/52/39a/3a9"><p>Linkedin</p></a>
-    <a class="dribbble" target="_blank" href="http://www.dribbble.com/faooful"><p>Dribbble</p></a>
-    <a href="/development.html"><p>Projects</p></a>
-    <a class="yellow" href="/cv/cv.pdf"><p>CV</p></a>
-  </div>
-</nav> -->
-
-  <div class="strip"></div>
-  <div class="home-icon"></div>
-
   <div id="wrapper">
-    <header class="row section-padding">
-      <div class="header-text large-7 columns">
+    <header class="row">
+      <div class="header-text large-12 columns padding-bottom">
         <h1 class="test">Joseph Williams, multimedia designer.</h1>
         <p class="now-playing"><i class="icon-headphones listening-icon"></i>It's all so quiet...</p>
       </div>
-    </header>
 
-    <section class="row section-padding">
-      <div class="large-6 columns">
+      <div class="large-8 columns float-left"><!-- FIX ME  -->
         <p class="note">ABOUT —</p>
         <p>I work towards creating what works well and looks good for a long lasting solution. I'm currently working for <a class="ubuntu" href="http://www.ubuntu.com" target="_blank">Ubuntu</a> and <a class="ppixel" href="http://www.precisepixels.co.uk" target="_blank">Precise Pixels.</a><p>
-        <p>I sometimes submit work to <a class="dribbble" href="#">Dribbble</a> and you can follow me on <a class="twitter" href="#">Twitter</a>. You can get in touch via <a class="linkedin" href="#">LinkedIn</a> or <a class="yellow" href="#">email</a> and check out my <a class="yellow" href="#">CV</a>.</p>
+        <p>I sometimes submit work to <a class="dribbble" href="http://www.dribbble.com/faooful">Dribbble</a> and you can follow me on <a class="twitter" href="http://www.twitter.com/faooful">Twitter</a>. You can get in touch via <a class="linkedin" href="#">LinkedIn</a> or <a class="yellow" href="#">email</a> and check out my <a class="yellow" href="#">CV</a>.</p>
       </div>
-    </section>
+    </header>
 
-    <section class="row section-padding-no-bottom">
-      <div class="large-12 columns">
-        <p class="note">PROJECTS —</p>
-      </div>
-    </section>
+    <section class="row padding-left">
+      <p class="note">PROJECTS —</p>
 
-    <section class="row section-padding">
-
-      <a class="project" href="http://www.ubuntu.com" target="_blank">
+      <a class="project no-border-bottom" href="/maas.html">
         <div class="content">
-          <h2>Ubuntu.com</h2>
+          <h2>Juju</h2>
           <p class="note">Web design — Visual designer</p>
         </div>
-        <div class="project-hover ubuntu-bg"></div>
+        <div class="project-hover juju-bg"></div>
       </a>
 
-      <a class="project" href="/maas.html">
+      <a class="project no-border-bottom" href="/landscape.html">
+        <div class="content">
+          <h2>Landscape</h2>
+          <p class="note">Web design — Visual designer</p>
+        </div>
+        <div class="project-hover landscape-bg"></div>
+      </a>
+
+      <a class="project no-border-bottom" href="/maas.html">
         <div class="content">
           <h2>MAAS</h2>
           <p class="note">Web design — Visual designer</p>
@@ -63,7 +51,15 @@
         <div class="project-hover maas-bg"></div>
       </a>
 
-      <a class="project" href="/cell.html">
+      <a class="project no-border-bottom" href="http://www.ubuntu.com" target="_blank">
+        <div class="content">
+          <h2>Ubuntu.com</h2>
+          <p class="note">Web design — Visual designer</p>
+        </div>
+        <div class="project-hover ubuntu-bg"></div>
+      </a>
+
+      <a class="project no-border-bottom" href="/cell.html">
         <div class="content">
           <h2>Cell Industries</h2>
           <p class="note">Web design, development — Visual designer</p>
@@ -71,7 +67,15 @@
         <div class="project-hover cell-bg"></div>
       </a>
 
-      <a class="project" href="/invstr.html">
+      <a class="project no-border-bottom" href="/hearthstone-card.html">
+        <div class="content">
+          <h2>Hearthstone cards exploration</h2>
+          <p class="note">Design — Personal project</p>
+        </div>
+        <div class="project-hover hearthstone-bg"></div>
+      </a>
+
+      <a class="project no-border-bottom" href="/invstr.html">
         <div class="content">
           <h2>Invstr</h2>
           <p class="note">Web design, development — Web and graphic designer</p>
@@ -79,15 +83,7 @@
         <div class="project-hover invstr-bg"></div>
       </a>
 
-      <a class="project" href="/hearthstone-card.html">
-        <div class="content">
-          <h2>Hearthstone cards</h2>
-          <p class="note">Design — Personal project</p>
-        </div>
-        <div class="project-hover hearthstone-bg"></div>
-      </a>
-
-      <a class="project" href="http://www.faooful.com/dotaquest/index2.html" target="_blank">
+      <a class="project no-border-bottom" href="http://www.faooful.com/dotaquest/index2.html" target="_blank">
         <div class="content">
           <h2>DotA quest</h2>
           <p class="note">Development — Personal project</p>
@@ -96,12 +92,6 @@
       </a>
 
     </section>
-
-    <!-- <section class="row">
-      <div class="contact-text large-12 columns">
-        <h1>Want to get in touch? <a class="header-link yellow" href="mailto:contact@josephs.space">email me</a></br> or contact me through <a class="header-link twitter" href="http://twitter.com/faooful">twitter.</a></h1>
-      </div>
-    </section> -->
 
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/jribbble/dist/jribbble.min.js"></script>
@@ -140,7 +130,7 @@
 
     <script>
       $('.header-text').css("opacity",1)
-      .find('h1').blast()
+      .find('h1, p').blast()
       .css("opacity",0)
       .velocity("fadeIn", {
         duration: 600,

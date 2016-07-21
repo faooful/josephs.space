@@ -123,9 +123,14 @@ a {
   // font-weight: 300;
   text-decoration: none;
   // color: $yellow;
+  border-bottom: 1px solid;
   &:hover {
     // text-decoration: line-through;
   }
+}
+
+.no-border-bottom {
+  border-bottom: none;
 }
 
 a p {
@@ -167,10 +172,6 @@ a p {
 .social-link {
   font-size: 1.3rem;
   margin-right: 5px;
-}
-
-.body-text {
-    padding: 120px 20px;
 }
 
 .body-link {

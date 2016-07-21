@@ -1,17 +1,24 @@
 $lgrey: #F6F6F6;
 $notegrey: #A3A3A3;
 $black: #141414;
+$lblack: #1E1E1E;
+$text-black: #222;
 
 $lblue: #F3F4F5;
-$yellow: #FCB500;
+
+$yellow: #518698;
+// $yellow: #5976A1;
+// $yellow: #FCB500;
 
 $dribbble: #EB6699;
 $linkedin: #0177B5;
 $twitter: #61AADB;
 $lastfm: #B90000;
 $canonical: #2C001E;
+$landscape: #89476B;
 $ppixel: #4DBACF;
 $ubuntu: #DD4814;
+$juju: #002835;
 
 $invstr: #07CCE0;
 $portfoliov2: #62AAFF;
@@ -26,6 +33,10 @@ $hearthstone: #FF9E42;
 	width: 100%;
 	// background: url('../img/self-header.jpg');
 	// background-size: cover;
+	background: $yellow;
+}
+
+.yellow-bg {
 	background: $yellow;
 }
 
@@ -49,6 +60,11 @@ $hearthstone: #FF9E42;
 	}
 }
 
+.lblack {
+	background: $lblack;
+	overflow: hidden;
+}
+
 .ubuntu-bg {
 	background: $ubuntu !important;
 }
@@ -57,12 +73,20 @@ $hearthstone: #FF9E42;
 	background: $lgrey !important;
 }
 
+.landscape-bg {
+	background: $landscape !important;
+}
+
 .cell-bg {
 	background: $cell-alt !important;
 }
 
 .invstr-bg {
 	background: $invstr !important;
+}
+
+.juju-bg {
+	background: $juju !important;
 }
 
 .hearthstone-bg {
