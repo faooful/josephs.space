@@ -79,16 +79,16 @@
 }
 
 h1 {
-  font-size: 30px;
+  font-size: 50px;
   line-height: 1.8;
   font-family: 'Proxima Nova bold';
-  color: white;
+  color: $text-black;
 }
 
 h2 {
   font-size: 20px;
 	font-family: 'Proxima Nova bold';
-  color: white;
+  color: $text-black;
 }
 
 h3 {
@@ -109,7 +109,7 @@ p {
 	font-family: 'Proxima Nova';
 	font-weight: 300;
   line-height: 32px;
-  color: white;
+  color: $text-black;
 }
 
 .note {

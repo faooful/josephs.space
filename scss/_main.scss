@@ -1,5 +1,23 @@
 body {
-  background: $black;
+}
+
+img {
+  border-radius: 8px;
+}
+
+.box-shadow {
+  box-shadow: 0px 3px 30px 0px rgba(0, 0, 0, 0.2);
+}
+
+.img-shadow {
+  width: 99%;
+  height: 99%;
+  position: absolute;
+  top: -30px;
+  right: -20px;
+  background: #F1F3F8;
+  border-radius: 8px;
+  z-index: -1;
 }
 
 .row {
@@ -21,8 +39,6 @@ header {
     text-align: center;
     margin: 0 auto;
 }
-
-
 
 
 .float-left {

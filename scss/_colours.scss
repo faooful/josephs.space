@@ -60,8 +60,20 @@ $hearthstone: #FF9E42;
 	}
 }
 
+.text-black {
+	color: $text-black;
+	&:hover {
+		color: $text-black;
+	}
+}
+
 .lblack {
 	background: $lblack;
+	overflow: hidden;
+}
+
+.lgrey {
+	background: #F1F3F8;
 	overflow: hidden;
 }
 
