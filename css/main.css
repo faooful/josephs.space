@@ -109,7 +109,7 @@ button {
 
 .project:hover:after {
 	top: 0;
-	height: 97%;
+	height: 100%;
 	border: 1px solid #fff;
 }
 
@@ -185,4 +185,17 @@ button {
 	.project {
 		flex: 0 100%;
 	}
+
+	.project:after {
+		content: "";
+	    position: absolute;
+	    width: 100%;
+	    height: 0px;
+	    background: transparent;
+	    border: 1px solid transparent;
+	    top: 50%;
+	    left: -2%;
+	    border-radius: 4px;
+	    transition: 0.2s ease;
+}
 }
