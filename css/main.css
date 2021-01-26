@@ -1,5 +1,85 @@
+* {
+	box-sizing: border-box;
+}
+
 body {
-	height: 100px;
-	width: 100px;
-	background: blue;
+	max-width: 1100px;
+	margin: 0 auto;
+}
+
+h1, h2, h3 {
+	color: #333;
+}
+
+h1 {
+	font-size: 36px;
+}
+
+h2 {
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+p {
+	font-size: 18px;
+	color: #808080;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+button {
+	padding: 16px 24px;
+	margin-right: 16px;
+	border-radius: 4px;
+	font-size: 16px;
+	color: white;
+	background: #414141;
+}
+
+.container {
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	width: 50%;
+	padding: 24px;
+}
+
+.projects {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+}
+
+.project {
+	flex: 0 50%;
+}
+
+#buttons {
+	float: left;
+}
+
+@media only screen and (max-width: 960px) {
+	.container {
+		flex-direction: column;
+	}
+
+	.column {
+		width: 100%;
+	}
+
+	.projects {
+		flex-direction: column;
+	}
+
+	.project {
+		flex: 0 100%;
+	}
 }
