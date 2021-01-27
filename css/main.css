@@ -111,7 +111,7 @@ button {
     top: 50%;
     left: -4%;
     border-radius: 4px;
-    transition: 0.2s ease;
+    transition: 0.4s ease;
 }
 
 .project:hover:after {
