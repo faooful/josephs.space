@@ -197,5 +197,20 @@ button {
 	    left: -2%;
 	    border-radius: 4px;
 	    transition: 0.2s ease;
+	}
 }
+
+@media only screen and (max-width: 500px) {
+	.hero {
+		display: block;
+	}
+
+	button {
+		margin-top: 16px;
+		display: block;
+	}
+
+	#buttons {
+		margin-top: 0;
+	}
 }
