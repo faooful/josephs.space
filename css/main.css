@@ -200,7 +200,7 @@ button {
 	}
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 502px) {
 	.hero {
 		display: block;
 	}
