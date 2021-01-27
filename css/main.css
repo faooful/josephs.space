@@ -94,6 +94,7 @@ button {
 }
 
 .project {
+	padding-right: 16px;
 	position: relative;
 	display: block;
 	cursor: pointer;
