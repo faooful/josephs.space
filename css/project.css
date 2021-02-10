@@ -191,4 +191,8 @@ a {
 	.row {
 		margin-left: 0px;
 	}
+
+	.container {
+		padding-left: 24px;
+	}
 }
