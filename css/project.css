@@ -1,0 +1,177 @@
+@font-face {
+	font-family: Walsheim;
+	src: url(../fonts/GT-Walsheim-Thin-Trial.otf);
+}
+
+@font-face {
+	font-family: Walsheim-bold;
+	src: url(../fonts/GT-Walsheim-Bold-Trial.otf);
+	font-weight: bold;
+}
+
+* {
+	box-sizing: border-box;
+	font-family: Walsheim;
+	line-height: 1.3;
+}
+
+body {
+	margin: 0;
+}
+
+header {
+	background: #201F3F;
+	margin: 0;
+	padding: 80px 0 0 0;
+}
+
+h4 {
+	margin-top: 16px 0;
+}
+
+figure {
+	margin-top: 24px;
+    margin-bottom: 24px;
+}
+
+img {
+	width: 100%;
+	vertical-align: middle;
+	border-style: none;
+}
+
+.project-header {
+	background: #fff;
+}
+
+.container {
+	max-width: 1200px;
+	padding: 64px 48px;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.extra-padding {
+	padding-top: 94px;
+}
+
+.center {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 auto;
+}
+
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	margin-right: -15px;
+	margin-left: 15px;
+}
+
+.work-p {
+	margin-top: 16px;
+	margin-bottom: 16px;
+	margin-left: 24px;
+}
+
+.block {
+	width: 100%;
+}
+
+.block-full {
+	flex: 0 0 100%;
+    max-width: 100%;
+    padding-right: 24px;
+    text-align: center;
+}
+
+.block-half {
+    padding-right: 110px;
+}
+
+h1 {
+	font-size: 94px;
+	margin-top: 24px;
+	font-family: Walsheim-bold;
+}
+
+h2 {
+	font-size: 28px;
+	font-family: Walsheim-bold;
+}
+
+h3 {
+	margin: 0;
+}
+
+p {
+	font-size: 20px;
+	line-height: 1.75;
+}
+
+.uppercase {
+	text-transform: uppercase;
+	font-size: 18px;
+	letter-spacing: 4px;
+	opacity: .7;
+}
+
+.bold {
+	font-family: Walsheim-bold;
+	color: #fff;
+}
+
+a {
+	text-decoration: none;
+}
+
+.back {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+	padding-left: 48px;
+	transition: padding .3s;
+	cursor: pointer;
+	color: #201F3F;
+	text-decoration: none;
+}
+
+.back:hover {
+	padding-left: 40px;
+}
+
+.back-arrow {
+	height: 24px;
+	width: 24px;
+	padding-right: 28px;
+	background: url(../img/arrow-left.svg);
+	background-repeat: no-repeat;
+	fill: #fff;
+	display: inline-block;
+}
+
+@media only screen and (max-width: 720px) {
+	h1 {
+		font-size: 64px;
+	}
+
+	.block-full {
+		text-align: left;
+	}
+
+	.block-half {
+		flex: 0 0 100%;
+    	max-width: 100%;
+	}
+
+	.work-p {
+		margin-left: 0;
+	}
+
+	.row {
+		margin-left: 0px;
+	}
+}
