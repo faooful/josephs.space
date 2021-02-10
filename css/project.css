@@ -63,6 +63,10 @@ img {
 	margin: 0 auto;
 }
 
+.img-center {
+    margin: 24px auto;
+}
+
 .row {
 	display: flex;
 	flex-wrap: wrap;
@@ -71,6 +75,7 @@ img {
 }
 
 .work-p {
+	width: 80%;
 	margin-top: 16px;
 	margin-bottom: 16px;
 	margin-left: 24px;
@@ -109,6 +114,13 @@ h3 {
 p {
 	font-size: 20px;
 	line-height: 1.75;
+}
+
+blockquote {
+	width: 80%;
+    font-size: 32px;
+    text-align: center;
+    margin: 90px auto;
 }
 
 .uppercase {
@@ -158,6 +170,10 @@ a {
 		font-size: 64px;
 	}
 
+	blockquote {
+		width: 100%;
+	}
+
 	.block-full {
 		text-align: left;
 	}
@@ -169,6 +185,7 @@ a {
 
 	.work-p {
 		margin-left: 0;
+		width: 100%;
 	}
 
 	.row {
