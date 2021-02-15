@@ -104,7 +104,7 @@ h1 {
 }
 
 h2 {
-	font-size: 22px;
+	font-size: 28px;
 	font-family: Walsheim-bold;
 }
 
@@ -171,6 +171,11 @@ a {
 }
 
 @media only screen and (max-width: 720px) {
+
+	figure {
+		margin-left: 0;
+		margin-right: 0;
+	}
 
 	blockquote {
 		width: 100%;

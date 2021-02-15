@@ -33,60 +33,89 @@
     <div class="container">
         <div class="work-content row">
     		<h2 class="work-p">Overview</h2>
-            <p class="work-p">SLO stands for Service Level Objective and is a way to measure the performance of a service. These measurements give insights into what areas of the service need to be focused on (reliability or functionality) and provide a window into the customers experience. While working at Google within an internal tooling organization, I was asked to look into improving the landscape of how SLOs were created, interpreted. I worked as a solo designer, working closely with the product owner and the engineering lead to understand the current landscape, create development strategy and refresh the experience.</p>
-
-            <h2 class="work-p">Challenge</h2>
-            <p class="work-p">Investigating this space uncovered that there are a lot of dashboards and satellite products that have been created. Teams would create their own home grown solutions which in turn meant different configurations fidelity of SLO information. These existing solutions have been building up on legacy, in some situations for years, making it difficult for new engineers joining the team and creates toil when reporting on the performance of these SLOs. The desire was to move towards a unified platform and to expand the personas of who could interact with SLOs. Not only do the engineers need to be creating, configuring and monitoring their SLOs, but team leads and directors need to get an overview of how the services they are responsible for are performing.</p>
-
-            <h2 class="work-p">Outcome</h2>
-            <p class="work-p">The team surveyed over 300 engineers and directors across Google at all levels of seniority and responsibility to get a sentiment of how SLOs were being used. This fueled a week long alignment workshop to plot out what features and functionality should be focused on to ease the adoption of a coherent platform. Based on this high level roadmap and mapping out the lifecycle of an SLO we focused on an iterative production cycle. Creating interactive prototypes and working closely with teams of varying levels of service criticality (from Google Cloud to Google Keep) to build out our solution in the open to insure its usefulness for any service size. Along side creating our early access program (EAP) which focused on getting a quick snap shot of service health, the north star was being designed. This showed the next phase which focused on helping directors better consume SLO data.</p>
-
-            <h2 class="work-p">Credits</h2>
-            <p class="work-p">As the lead designer, I was heavily involved with all aspects of the product from research to visual design. However, this work was a collaborative effort with the talent of Diane Faidy, Kevin Miller, Akhilesh Pant and the entire engineering team.</p>
+            <p class="work-p">SLO stands for Service Level Objective and is a way to measure the performance of a service. These measurements give insights into what areas of the service need to be focused on (reliability or functionality) and provide a window into the customers experience of using the service.</p>
+            <p class="work-p">While working at Google within an internal tooling organization, I was asked to look into improving the landscape of how SLOs were created, interrupted and measured at Google.</p>
+            <p class="work-p">I worked as a solo designer, working closely with the product owner and the engineering lead to understand the current landscape, create development strategy and refresh the experience.</p>
 
             <figure>
                 <img src="../img/slo/slo_1.png">
             </figure>
 
-            <figure>
-                <img src="../img/slo/slo_2.png">
-            </figure>
-
-            <figure>
-                <img src="../img/slo/slo_3.png">
-            </figure>
+            <p class="work-p">This initiative was kicked off by a one week sprint with the core stakeholders with daily read outs to the wider team. We explored the north start experience and areas of focus to align a roadmap.</p>
 
             <figure>
                 <img src="../img/slo/slo_4.png">
             </figure>
 
+            <p class="work-p">Based on the current journeys that occur in the existing tools segmented by persona, we plotted CUJs and functionality along a timeline to understand how best we were servicing our customers.</p>
+
             <figure>
                 <img src="../img/slo/slo_5.png">
             </figure>
 
+            <h2 class="work-p">Foundational research</h2>
+            <p class="work-p">The team surveyed over 300 people (spanning software engineers, site reliability engineers and key stakeholders) to understand satisfaction across all user journeys related to working with SLOs. Here are the top issues related to the four phases of working with SLOs:</p>
+
             <figure>
-                <img src="../img/slo/slo_6.png">
+                <img src="../img/slo/slo_2.png">
             </figure>
+
+            <h2 class="work-p">Audience</h2>
+            <figure>
+                <img src="../img/slo/slo_3.png">
+            </figure>
+
+            <h2 class="work-p">Understanding the SLO Landscape</h2>
+            <p class="work-p">The existing landscape is filled with products which directly plays a hand in the fragmentation of the SLO experience at Google. Each product is homegrown and built on legacy software which makes updating them a challenge.</p>
+
+            <figure>
+                <img src="../img/slo/sattelite.png">
+            </figure>
+
+            <p class="work-p">Below are screenshots from the most popular SLO management tools. Their shortcomings primarily come from legacy that has built up from many engineers working to many different SLO mandates over many years.</p>
+
+            <p class="work-p">Two core friction points are traversing the information and filtering to the data to get to what is most relevant as well as the visual style that hasn't kept up with Google's design language.</p>
 
             <figure>
                 <img src="../img/slo/slo_7.png">
             </figure>
 
+            <p class="work-p">Based on the satellite products that exist and their cross functionality, the list of functionality to reach parity was created and grouped by the core areas of dealing with SLOs. The team then chose where we felt we could make the most impact for our EAP. This was in an effort to ensure this solution gracefully evolved into the next generation SLO tool.</p>
+
+            <figure>
+                <img src="../img/slo/slo_6.png">
+            </figure>
+
+            <h2 class="work-p">Journeys and interactions</h2>
+            <p class="work-p">This solution is a part of a much wider suite of tools (P2020) and because of the nature of dealing with SLOs, there are a lot of touch points to those other suites. Mapping out where this fits into not only the Monitoring world, but also the wider universe helped place journeys that exited this solution.</p>
+
             <figure>
                 <img src="../img/slo/slo_8.png">
             </figure>
 
+            <p class="work-p">Within the SLO life cycle, there are a lot of touch points and hand offs within the team. Building up context of what in the system is being measured and why is communicated around a configuration document and acts as a living artifact to communicate tweaks and refinements to the SLOs.</p>
+
             <figure>
                 <img src="../img/slo/slo_9.png">
+            </figure>
+
+            <p class="work-p">Improving strategic decision making and reporting was the focus for the EAP. The new dashboard needed to better delineate between different altitudes of information for each of the outlined personas. Tailoring each level of the dashboard was vital to that audience gathering their necessary information.</p>
+
+            <figure>
+                <img src="../img/slo/levels.png">
             </figure>
 
             <figure>
                 <img src="../img/slo/slo_10.png">
             </figure>
 
-            <figure>
-                <img src="../img/slo/slo_11.png">
+            <p class="work-p">While iterating on the designs we did continuous testing using interactive prototypes to progressively test how we were representing the data. This also allowed for a bottom up approach for adoption as members of the research sessions would then tell their team.</p>
+
+            <figure class="img-center">
+                <img src="../img/slo/prototype.gif">
             </figure>
+
+            <h2 class="work-p">Solution</h2>
 
             <figure>
                 <img src="../img/slo/slo_12.png">
@@ -99,6 +128,9 @@
             <figure>
                 <img src="../img/slo/slo_14.png">
             </figure>
+
+            <h2 class="work-p">Credits</h2>
+            <p class="work-p">As the lead designer, I was heavily involved with all aspects of the product from research to visual design. However, this work was a collaborative effort with the talent of Diane Faidy, Kevin Miller, Akhilesh Pant and the entire engineering team.</p>
     	</div>
     </div>
   </body>
