@@ -30,8 +30,8 @@ h4 {
 }
 
 figure {
-	margin-top: 24px;
-    margin-bottom: 24px;
+	margin-top: 32px;
+    margin-bottom: 32px;
 }
 
 img {
@@ -53,14 +53,15 @@ img {
 }
 
 .extra-padding {
-	padding-top: 94px;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 
 .center {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	margin: 0 auto;
+    margin-left: 39px;
 }
 
 .img-center {
@@ -89,7 +90,7 @@ img {
 	flex: 0 0 100%;
     max-width: 100%;
     padding-right: 24px;
-    text-align: center;
+    margin-left: 39px;
 }
 
 .block-half {
@@ -97,18 +98,18 @@ img {
 }
 
 h1 {
-	font-size: 94px;
+	font-size: 40px;
 	margin-top: 24px;
 	font-family: Walsheim-bold;
 }
 
 h2 {
-	font-size: 28px;
+	font-size: 22px;
 	font-family: Walsheim-bold;
 }
 
 h3 {
-	margin: 0;
+	font-size: 22px;
 }
 
 p {
@@ -121,6 +122,10 @@ blockquote {
     font-size: 32px;
     text-align: center;
     margin: 90px auto;
+}
+
+.margin-top {
+	margin-top: 8px;
 }
 
 .uppercase {
@@ -166,9 +171,6 @@ a {
 }
 
 @media only screen and (max-width: 720px) {
-	h1 {
-		font-size: 64px;
-	}
 
 	blockquote {
 		width: 100%;
@@ -176,6 +178,11 @@ a {
 
 	.block-full {
 		text-align: left;
+		margin-left: 0;
+	}
+
+	.center {
+		margin-left: 0;
 	}
 
 	.block-half {
