@@ -44,6 +44,10 @@ p {
 	font-size: 18px;
 }
 
+a {
+	text-decoration: none;
+}
+
 .uppercase {
 	margin-top: 105px;
 	text-transform: uppercase;
@@ -94,7 +98,7 @@ button {
 }
 
 .project {
-	padding-right: 16px;
+	padding: 8px 16px 8px 0;
 	position: relative;
 	display: block;
 	cursor: pointer;
