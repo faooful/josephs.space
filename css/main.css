@@ -40,16 +40,13 @@ h3 {
 	opacity: .6;
 	text-transform: uppercase;
 	letter-spacing: 6px;
+	padding-bottom: 16px;
 }
 
 p {
 	margin-top: 4px;
 	font-size: 18px;
 	line-height: 1.5;
-}
-
-a {
-	font-family: Walsheim-bold;
 }
 
 .margin-bottom {
@@ -98,6 +95,19 @@ button {
 	grid-gap: 24px;
 }
 
+.project-link {
+	opacity: 1 !important;
+}
+
+.des, .expereince {
+	opacity: .7;
+	margin-bottom: 32px;
+}
+
+.project {
+	margin-bottom: 32px;
+}
+
 .hat {
 	height: 75px;
 }
@@ -120,6 +130,11 @@ button {
 
 .social {
 	padding-top: 16px;
+}
+
+.social-link {
+	opacity: 1;
+	margin-bottom: 8px;
 }
 
 @media only screen and (max-width: 960px) {
