@@ -229,6 +229,16 @@ button {
   height: 2px;
 }
 
+.gelatine {
+  animation: gelatine 8s infinite;
+}
+@keyframes gelatine {
+  from, to { transform: scale(1, 1); }
+  2%, 18% { transform: scale(0.9, 1.1); }
+  4%, 16% { transform: scale(1.1, 0.9); }
+  6%, 10%, 14% { transform: scale(0.95, 1.05); }
+}
+
 
 @media only screen and (max-width: 960px) {
 	.container {
