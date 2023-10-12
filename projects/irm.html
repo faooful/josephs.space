@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Joseph Williams — Product Designer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/main.css" type="text/css">
+    <link rel="stylesheet" href="../css/project-style.css" type="text/css">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Martian+Mono:wght@200;400;800&display=swap');
+    </style>
+  </head>
+  <a class="top" href="#start">Back to top ⤴</a>
+
+  <body class="grey-bg project-border">
+    <div id="start" class="header">
+        <div class="left-side">
+            <div class="navigation">
+                <img class="hat gelatine" src="../img/hat.png">
+                <a href="../index.html">Joseph</a>
+                <a class="selected" href="projects.html">Projects</a>
+                <a href="https://faooful.github.io/book-club/">Reading ↗</a>
+            </div>
+        </div>
+        <div class="links">
+            <a class="dark" href="../cv/Joseph Williams - cv.pdf" target="_blank">CV</a>
+            <a class="dark" href="https://www.linkedin.com/in/-jmw-/" target="_blank">LinkedIn</a>
+            <a class="dark" href="mailto:contact@josephwilliams.design">Email</a>
+            <a class="dark" href="https://twitter.com/_jmw_" target="_blank">Twitter / X</a>
+        </div>
+    </div>  
+
+    <div class="project-container">
+        <h1 class="dark bold">IRM — Incident Response and Management</h1>
+        <h2>Create a cohesive incident response tool to be used across the entirety of Google</h2>
+        
+        <div class="project-info">
+            <div class="info-container">
+                <div class="info-row">
+                    <label>Company</label>
+                    <span>Google</span>
+                </div>
+                <div class="info-row">
+                    <label>Timeline</label>
+                    <span>2017 - 2019</span>
+                </div>
+                <div class="info-row">
+                    <label>Role</label>
+                    <span>Lead Product Designer</span>
+                </div>
+                <div class="info-row">
+                    <label>Visit</label>
+                    <span><a href="https://cloud.google.com/blog/products/management-tools/introducing-personalized-service-health" target="_blank" rel="noopener noreferrer"></a>Service health blog post</span>
+                </div>
+                <div class="info-row">
+                    <label>About</label>
+                    <span>Led the design for an incident response tool to support production engineering respond to incidents affecting production systems. Creating design cohesion, product integration across existing tools, reducing context shifting, and users’ cognitive load.</span>
+                </div>
+            </div>
+
+            <div class="contents">
+                <h3>Contents</h3>
+                <a class="dark" href="#overview">Overview ↴</a>
+                <a class="dark" href="#understanding">Understanding the problem ↴</a>
+                <a class="dark" href="#testing">Testing ↴</a>
+                <a class="dark" href="#interface">Interface design ↴</a>
+                <a class="dark" href="#looking">Looking externally ↴</a>
+                <a class="dark" href="#premortem">Premortem ↴</a>
+            </div>
+        </div>
+        
+        <section>
+            <h2 id="overview" class="dark">Overview</h2>
+            <p>IRM was an initiative to improve the fragmented process of responding to incidents. I lead the design of this initiative and supported three engineering squads across there different time zones.</p>
+            <p>Google's incident response tools lacked design cohesion and cross product integration. This required context shifts and sustained cognitive load during stressful scenarios for the engineers responding to the incident. IRM replaced and combined the collection of tools previously used and unified the incident triage process.</p>
+            <div class="image-container">
+                <img class="project-img" src="../img/irm/outalator.png" alt="">
+                <img class="project-img" src="../img/irm/omg.png" alt="">
+                <img class="project-img" src="../img/irm/premortem.png" alt="">
+            </div>
+        </section>
+
+        <section>
+            <h2 id="understanding" class="dark">Understanding the problem</h2>
+            <p>During the whole process of designing IRM, we needed to be open and transparent. It was critical  that we got buy in as this would become the tool used at Google for dealing with incidents.</p>
+            <p>Understanding how engineers moved through the incident response process and aligning that to the existing landscape of tools uncovered just how much toil there was in the process. It also highlighted how complicated it was to get a true picture after resolution as information was scattered.</p>
+            <img class="project-img" src="../img/irm/1.png" alt="">
+            <img class="project-img" src="../img/irm/2.png" alt="">
+            <img class="project-img" src="../img/irm/3.png" alt="">
+            <p>With a focus to distilling down the process and tackling the major issues uncovered during the discovery phase, there were four key elements that would help improve the mitigation of incidents. Actioning the initial signal, assigning roles to tackle the issue, escalating if needed, and building up context with additional signals.</p>
+            <img class="project-img" src="../img/irm/4.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="testing" class="dark">Testing</h2>
+            <p>The teams hypotheses going into testing was that there was going to be a clear divide between the two main types of engineers at Google, SREs (site reliability engineers) and SWEs (software engineers).</p>
+            <p>However it turns out there is a lot more variety based on the types of services a SRE and SWE work on and are on call for.</p>
+            <div class="image-container">
+                <img class="project-img" src="../img/irm/5.png" alt="">
+                <img class="project-img" src="../img/irm/6.png" alt="">
+                <img class="project-img" src="../img/irm/7.png" alt="">
+            </div>
+            <p>The team focused on rapid iterative test cycles to maximize transparency and to ensure we were building the right tool. This helped keep engineers at Google aware of what we were up to, and involved in the process.</p>
+            <img class="project-img" src="../img/irm/8.png" alt="">
+            <img class="project-img" src="../img/irm/9.png" alt="">
+            <p>To share out with the IRM team, I would create clear testing protocols which highlighted what we were testing this cycle, why we were testing it and what we hoped to understand.</p>
+            <img class="project-img" src="../img/irm/10.png" alt="">
+            <p>After every user testing cycle, the team would get together to affinity sort the findings.</p>
+            <img class="project-img" src="../img/irm/11.png" alt="">
+            <p>An interesting finding from the research was insuring that we kept the topology of the IA low. This helped traversing the various different signals of an incident easier and allowed IRM to be easily learned by both SREs and SWEs.</p>
+            <img class="project-img" src="../img/irm/12.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="interface" class="dark">Interface design</h2>
+            <p>IRM went through a lot of iteration as emphasized from the user research. The first few major milestones ended up focusing on the wrong thing. Initially it was just a redesign and mash up of the existing tools which just exacerbated the problems by having a fragmented incident response process. </p>
+            <p>Another good example of the designs taking us in the wrong direction was essentially creating a form for engineers to fill out, which is no what someone on call wants to be doing in the middle of an incident. </p>
+            <img class="project-img" src="../img/irm/13.png" alt="">
+            <p>Where we arrived was an action based workflow similar to how someone would action their emails. Signals that allude to potential issues would arrive in IRM, then these would be reviewed and actioned in a linear fashion to help keep the current state of the product you're on call for clean. Additional signals can be added to either existing or new incidents and all the findings and communication lives in one place.</p>
+            <img class="project-img" src="../img/irm/14.png" alt="">
+            <img class="project-img" src="../img/irm/20.png" alt="">
+            <p>The IRM UI was built using the GME design system, which was built and designed by Darren Head. As a wider team, looking into the components that Google Material had available, and adding the lens of how they should live in an enterprise setting. Focusing on density, and technical information helped create a design system that worked for our context.</p>
+            <img class="project-img" src="../img/irm/15.png" alt="">
+            <p>I worked on IRM through the entirety of its adoption at Google. Working from 0% to it being the standard tool at Google for incident response. Adoption will never reach true 100% due to issues being resolved before they are seen in IRM.</p>
+            <img class="project-img" src="../img/irm/16.png" alt="">
+        </section>
+
+        <section>
+            <h2  id="looking" class="dark">Looking externally</h2>
+            <p>IRM went through a lot of iteration as emphasized from the user research. The first few major milestones ended up focusing on the wrong thing. Initially it was just a redesign and mash up of the existing tools which just exacerbated the problems by having a fragmented incident response process. </p>
+            <p>Another good example of the designs taking us in the wrong direction was essentially creating a form for engineers to fill out, which is no what someone on call wants to be doing in the middle of an incident. </p>
+            <img class="project-img" src="../img/irm/17.png" alt="">
+            <img class="project-img" src="../img/irm/18.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="premortem" class="dark">Premortem</h2>
+            <p>Early on in the process, the team got together to run a premortem. The goal was to alleviate potential risks ahead of time. The main topic that came out of the session was there was too much knowledge within a select few individuals. This sparked off lunch and learns to help share this knowledge.</p>
+            <img class="project-img" src="../img/irm/19.png" alt="">
+        </section>
+    </div>
+  </body>
+</html>

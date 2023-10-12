@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Joseph Williams — Product Designer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../css/main.css" type="text/css">
+    <link rel="stylesheet" href="../css/project-style.css" type="text/css">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Martian+Mono:wght@200;400;800&display=swap');
+    </style>
+  </head>
+  <a class="top" href="#start">Back to top ⤴</a>
+
+  <body class="grey-bg project-border">
+    <div id="start" class="header">
+        <div class="left-side">
+            <div class="navigation">
+                <img class="hat gelatine" src="../img/hat.png">
+                <a href="../index.html">Joseph</a>
+                <a class="selected" href="projects.html">Projects</a>
+                <a href="https://faooful.github.io/book-club/">Reading ↗</a>
+            </div>
+        </div>
+        <div class="links">
+            <a class="dark" href="../cv/Joseph Williams - cv.pdf" target="_blank">CV</a>
+            <a class="dark" href="https://www.linkedin.com/in/-jmw-/" target="_blank">LinkedIn</a>
+            <a class="dark" href="mailto:contact@josephwilliams.design">Email</a>
+            <a class="dark" href="https://twitter.com/_jmw_" target="_blank">Twitter / X</a>
+        </div>
+    </div>  
+
+    <div class="project-container">
+        <h1 class="dark bold">SLO Repository — Building an extensible system for monitoring services</h1>
+        <h2>Improving the landscape of how SLOs were created, interrupted and measured at Google.</h2>
+        
+        <div class="project-info">
+            <div class="info-container">
+                <div class="info-row">
+                    <label>Company</label>
+                    <span>Google</span>
+                </div>
+                <div class="info-row">
+                    <label>Timeline</label>
+                    <span>2019 - 2020</span>
+                </div>
+                <div class="info-row">
+                    <label>Role</label>
+                    <span>Lead Product Designer</span>
+                </div>
+                <div class="info-row">
+                    <label>Visit</label>
+                    <span><a href="https://cloud.google.com/blog/products/management-tools/introducing-personalized-service-health" target="_blank" rel="noopener noreferrer">Service health blog post</a></span>
+                </div>
+                <div class="info-row">
+                    <label>About</label>
+                    <span>UX lead for a service monitoring initiative to meet the diverse needs of all development teams at Google. Focusing on simple configuration, robust alerting for effective decisions making, and in-depth analysis.</span>
+                </div>
+            </div>
+
+            <div class="contents">
+                <h3>Contents</h3>
+                <a class="dark" href="#overview">Overview ↴</a>
+                <a class="dark" href="#foundational">Foundational research ↴</a>
+                <a class="dark" href="#audience">Audience ↴</a>
+                <a class="dark" href="#understanding">Understanding the SLO landscape ↴</a>
+                <a class="dark" href="#journey">Journeys and interactions ↴</a>
+                <a class="dark" href="#solution">Solution ↴</a>
+            </div>
+        </div>
+        
+        <section>
+            <h2 id="overview" class="dark">Overview</h2>
+            <p>SLO stands for Service Level Objective and is a way to measure the performance of a service. These measurements give insights into what areas of the service need to be focused on (reliability or functionality) and provide a window into the customers experience of using the service.</p>
+            <p>While working at Google within an internal tooling organization, I was asked to look into improving the landscape of how SLOs were created, interrupted and measured at Google.</p>
+            <p>I worked as a solo designer, working closely with the product owner and the engineering lead to understand the current landscape, create development strategy and refresh the experience.</p>
+            <img class="project-img" src="../img/slo/1.png" alt="">
+            <p>This initiative was kicked off by a one week sprint with the core stakeholders with daily read outs to the wider team. We explored the north start experience and areas of focus to align a roadmap.</p>
+            <img class="project-img" src="../img/slo/2.png" alt="">
+            <img class="project-img" src="../img/slo/3.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="foundational" class="dark">Foundational research</h2>
+            <p>The team surveyed over 300 people (spanning software engineers, site reliability engineers and key stakeholders) to understand satisfaction across all user journeys related to working with SLOs. Here are the top issues related to the four phases of working with SLOs:</p>
+            <img class="project-img" src="../img/slo/4.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="audience" class="dark">Audience</h2>
+            <img class="project-img" src="../img/slo/5.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="understanding" class="dark">Understanding the SLO landscape</h2>
+            <p>The existing landscape is filled with products which directly plays a hand in the fragmentation of the SLO experience at Google. Each product is homegrown and built on legacy software which makes updating them a challenge.</p>
+            <img class="project-img" src="../img/slo/6.png" alt="">
+            <p>Below are screenshots from the most popular SLO management tools. Their shortcomings primarily come from legacy that has built up from many engineers working to many different SLO mandates over many years. Two core friction points are traversing the information and filtering to the data to get to what is most relevant as well as the visual style that hasn't kept up with Google's design language.</p>
+            <img class="project-img" src="../img/slo/7.png" alt="">
+            <p>Based on the satellite products that exist and their cross functionality, the list of functionality to reach parity was created and grouped by the core areas of dealing with SLOs. The team then chose where we felt we could make the most impact for our EAP. This was in an effort to ensure SLO Repo gracefully evolved into the next generation SLO tool.</p>
+            <img class="project-img" src="../img/slo/8.png" alt="">
+        </section>
+
+        <section>
+            <h2 id="journey" class="dark">Journeys and interactions</h2>
+            <p>This solution is a part of a much wider suite of tools (P2020) and because of the nature of dealing with SLOs, there are a lot of touch points to those other suites. Mapping out where SLO repo fit into not only the Monitoring world, but also the wider universe helped place journeys that left SLO repo into context. </p>
+            <img class="project-img" src="../img/slo/9.png" alt="">
+            <img class="project-img" src="../img/slo/10.png" alt="">
+            <img class="project-img" src="../img/slo/11.png" alt="">
+            <img class="project-img" src="../img/slo/12.png" alt="">
+            <img class="project-img" src="../img/slo/13.gif" alt="">
+        </section>
+
+        <section>
+            <h2 id="solution" class="dark">Solution</h2>
+            <img class="project-img" src="../img/slo/14.png" alt="">
+            <img class="project-img" src="../img/slo/15.png" alt="">
+            <img class="project-img" src="../img/slo/16.png" alt="">
+            <p>As the lead designer, I was heavily involved with all aspects of the product from research to visual design. However, this work was a collaborative effort with the talent of Diane Faidy, Kevin Miller, Akhilesh Pant and the entire engineering team.</p>
+        </section>
+    </div>
+  </body>
+</html>
