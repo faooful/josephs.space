@@ -1,14 +1,14 @@
 * {
 	box-sizing: border-box;
-	font-family: 'Martian Mono', monospace;
+	font-family: 'Inter', sans-serif;
 	font-weight: 200;
 	line-height: 1.5;
-	color: #30353a;
+	color: #fff;
 }
 
 html {
-	/* background: #201F3F; */
-	background-color: #E0DDD3;
+	background-color: #1A1818;
+	color: #fff;
 }
 
 body {
@@ -35,7 +35,7 @@ h3 {
 
 a {
 	text-decoration-style: wavy;
-	text-decoration-color: #a3a3a3;
+	text-decoration-color: #fff;
 }
 
 .links a {
@@ -43,7 +43,8 @@ a {
 }
 
 a:hover {
-	text-decoration-color: #0D0D0C;
+	color: #fff;
+	text-decoration-color: #FCF150;
 }
 
 p {
@@ -58,11 +59,11 @@ p {
 
 .bold {
 	font-weight: 800 !important;
-	color: #0D0D0C;
+	color: #fff;
 }
 
 .dark {
-	color: #0D0D0C;
+	color: #fff;
 	font-weight: 400;
 }
 
@@ -72,7 +73,7 @@ button {
 	border-radius: 4px;
 	font-weight: 800;
 	font-size: 16px;
-	color: #201F3F;
+	color: #fff;
 	background: #fff;
 	border: none;
 	cursor: pointer;
@@ -124,6 +125,19 @@ button {
 	margin-bottom: 32px;
 }
 
+.expereince p {
+    background: #2e2a2a;
+	margin-bottom: 8px;
+    padding: 8px;
+}
+
+.expereince p:first-child {
+	border-radius: 8px 8px 0 0;
+}
+.expereince p:last-child {
+	border-radius: 0 0 8px 8px;
+}
+
 .project {
 	margin-bottom: 32px;
 }
@@ -155,33 +169,33 @@ button {
 
 .navigation {
 	padding: 4px;
-	background-color: #fff;
+	background-color: #2e2a2a;
 	border-radius: 4px;
 	display: flex;
 	align-items: center;
-	border: 1px solid #a3a3a3;
 	box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
 }
 
 .navigation a {
 	padding: 8px 8px;
 	margin: 0 8px;
-	color: #a3a3a3;
+	color: #fff;
 	text-decoration: none;
 	border-radius: 8px;
 }
 
 .selected {
-	color: #0D0D0C !important;
+	color: #000 !important;
+	background: #FCF150;
 	font-weight: 800;
 }
 
 .selected:hover {
-	color: #0D0D0C;
+	color: #fff;
 }
 
 .navigation a:hover {
-	background: #f1f1f1;
+	background: #404040;
 }
 
 .hat {
@@ -275,8 +289,8 @@ button {
 	}
 
 	.column {
-		width: 100%;
-		padding-top: 0;
+		width: 100% !important;
+		padding-top: 0 !important;
 	}
 
 	.projects {

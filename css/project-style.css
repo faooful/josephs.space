@@ -1,14 +1,17 @@
 .top {
 	padding: 4px;
-	background-color: #cfccc3;
+	background-color: #2e2a2a;
 	border-radius: 4px;
 	display: flex;
 	align-items: center;
-	border: 1px solid #a3a3a3;
 	box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
     position: fixed;
     bottom: 40px;
     right: 40px;
+}
+
+.top:hover {
+    background: #404040;
 }
 
 .project-container {
@@ -73,7 +76,7 @@ label {
     display: flex;
     gap: 24px;
     justify-content: space-between;
-    background: #cfccc3;
+    background: #2e2a2a;
 }
 
 .contents a {
@@ -90,11 +93,10 @@ label {
 .case-study {
     height: 500px;
     position: relative;
-    background: #cfccc3;
+    background: #2e2a2a;
     padding: 16px;
     border-radius: 8px;
     cursor: pointer;
-    border: 1px solid #a3a3a3;
     overflow: hidden;
     transition: box-shadow 0.3s ease-in-out;
     transition: background 0.3s ease-in-out;
@@ -116,13 +118,11 @@ label {
     width: 100%;
     z-index: 1;
     box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
-    border-top: 1px solid #a3a3a3;
-    border-left: 1px solid #a3a3a3;
     border-top-left-radius: 8px;
 }
 
 .case-study:hover {
-    background: #ddd9cd;
+    background: #404040;
     box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
 }
 
