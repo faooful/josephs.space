@@ -1,3 +1,65 @@
+
+/* Hide cursor and name-title section on project pages */
+.cursor-container {
+	display: none !important;
+}
+
+.name-title {
+	display: none !important;
+}
+
+/* Left-align h2 elements on project pages */
+h2 {
+	text-align: left !important;
+}
+
+/* Adjust font sizes for project pages */
+h1 {
+	font-size: 60px !important;
+	line-height: 1em !important;
+}
+
+h2 {
+	font-size: 24px !important;
+}
+
+/* Project page header adjustments */
+header {
+	gap: 40px !important;
+}
+
+/* Style the back home button */
+.pill-link {
+	background-color: transparent !important;
+	border: none !important;
+	font-family: 'EB Garamond', serif !important;
+	font-size: 22px !important;
+	text-align: center !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.pill-link::before {
+	content: '';
+	display: inline-block;
+	width: 24px;
+	height: 24px;
+	background-image: url('../img/icons/arrow-right.svg');
+	background-size: contain;
+	background-repeat: no-repeat;
+	transform: rotate(180deg);
+	margin-right: 8px;
+	vertical-align: middle;
+}
+
+/* Align bottom link to bottom of column in last section */
+section:last-of-type .section-col1 {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
 .top {
 	padding: 4px;
 	background-color: #2e2a2a;
