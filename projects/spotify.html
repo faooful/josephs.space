@@ -1,76 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Joseph Williams — Product Designer</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="../css/main.css" type="text/css">
-    <link rel="stylesheet" href="../css/project-style.css" type="text/css">
-    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Martian+Mono:wght@200;400;800&display=swap');
-    </style>
+    <title>Spotify Case Study - Joseph Williams</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css">
+    <script src="../js/helix.js"></script>
   </head>
-  <a class="top" href="#start">Back to top ⤴</a>
+  <body>
+    <div class="container">
 
-  <body class="grey-bg project-border">
-    <div id="start" class="header">
-        <div class="left-side">
-            <div class="navigation">
-                <img class="hat gelatine" src="../img/hat.png">
-                <a href="../index.html">Joseph</a>
-                <a class="selected" href="projects.html">Projects</a>
-                <a href="https://faooful.github.io/book-club/">Reading ↗</a>
-            </div>
+      <section class="name-title">
+        <div class="section-col1">
+          <!-- Example: could be a label, icon, or left margin -->
         </div>
-        <div class="links">
-            <!-- <a class="dark" href="../cv/Joseph Williams - Product Designer Resume.pdf" target="_blank">Resume</a> -->
-            <a class="dark" href="https://www.linkedin.com/in/-jmw-/" target="_blank">LinkedIn</a>
-            <a class="dark" href="mailto:contact@josephwilliams.design">Email</a>
-            <a class="dark" href="https://twitter.com/_jmw_" target="_blank">Twitter / X</a>
+        <div class="section-col2 top">
+          <p class="bold">Joseph Korol</p>
+          <p>Product Designer</p>
         </div>
-    </div>  
+      </section>
 
-    <div class="project-container">
-        <h1 class="dark bold">Identiy for creators in the Spotify ecosystem - Building the future of having one account across the entire Spotify universe</h1>
-        
-        <div class="project-info">
-            <div class="info-container">
-                <div class="info-row">
-                    <label>Company</label>
-                    <span>Spotify</span>
-                </div>
-                <div class="info-row">
-                    <label>Timeline</label>
-                    <span>2020 - 2021</span>
-                </div>
-                <div class="info-row">
-                    <label>Role</label>
-                    <span>Product Designer Lead</span>
-                </div>
-                <div class="info-row">
-                    <label>Visit</label>
-                    <span><a href="https://artists.spotify.com/home" target="_blank" rel="noopener noreferrer">Spotify for Artists</a></span>
-                </div>
-                <div class="info-row">
-                    <label>About</label>
-                    <span>Led the design for Building the future of having one account across the entire Spotify universe</span>
-                </div>
-            </div>
-
-            <div class="contents">
-                <h3>Contents</h3>
-                <a class="dark" href="#context">Context ↴</a>
-                <a class="dark" href="#starting">Starting out ↴</a>
-                <a class="dark" href="#goal">Goal ↴</a>
-                <a class="dark" href="#approach">Approach ↴</a>
-                <a class="dark" href="#alpha">Alpha launch ↴</a>
-                <a class="dark" href="#moving">Moving forward ↴</a>
-            </div>
+      <header>
+        <div class="space-container">
+          <div class="space">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+          </div>
         </div>
-        
+        <div class="cursor-container">
+          <svg class="header-shape" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.464 16.929c.448.894-.55 1.819-1.409 1.304l-6.54-3.924a1 1 0 0 0-1.03 0l-6.54 3.924c-.858.515-1.857-.41-1.41-1.305l7.57-15.14a1 1 0 0 1 1.79 0z" fill="#45A329"/>
+          </svg>
+          <div class="cursor-label">Online</div>
+        </div>
+        <span><a href="../index.html" class="pill-link">Back home</a></span>
+        <h1>Identity for creators in the Spotify ecosystem - Building the future of having one account across the entire Spotify universe</h1>
+      </header>
+      
+      <main>
         <section>
-            <h2 id="context" class="dark">Context</h2>
+          <div class="section-col1">
+            <h2 id="context">Context</h2>
+          </div>
+          <div class="section-col2">
             <p>Hack week problem statement: Customers have to manage their user and team settings in multiple places.</p>
             <p>As you can see, there is a lot of fragmentation right now. Each product offers different identity management options, security requirements and so on. And this problem tends to be accentuated with new products, integrations and acquisitions.</p>
             <img class="project-img" src="../img/spotify/1.png" alt="">
@@ -78,31 +56,47 @@
             <img class="project-img" src="../img/spotify/3.png" alt="">
             <p>Prototype that was used to illustrate the value but focused on doing everything with a lot of style that exists outside of Spotify. Created a bedrock of sudo wireframes/concept. Code name: Holy Grail</p>
             <img class="project-img" src="../img/spotify/4.gif" alt="">
+          </div>
         </section>
 
         <section>
-            <h2 id="starting" class="dark">Starting out</h2>
-            <p>Because we’re a platform team targeting  enterprise use cases, user accounts, authentication and authorization are important concepts that should be paired with security and identity management. What should a centralized account experience look like?</p>
+          <div class="section-col1">
+            <h2 id="starting">Starting out</h2>
+          </div>
+          <div class="section-col2">
+            <p>Because we're a platform team targeting  enterprise use cases, user accounts, authentication and authorization are important concepts that should be paired with security and identity management. What should a centralized account experience look like?</p>
             <img class="project-img" src="../img/spotify/5.png" alt="">
             <img class="project-img" src="../img/spotify/6.png" alt="">
             <img class="project-img" src="../img/spotify/7.png" alt="">
             <img class="project-img" src="../img/spotify/8.png" alt="">
+          </div>
         </section>
 
         <section>
-            <h2 id="goal" class="dark">Goal</h2>
-            <p>A stand alone application with the vision of: <span class="dark">Consolidating Music offerings in a single destination to decouple shared capabilities and enable creators and enterprise users to thrive.</span></p>
-                <img class="project-img" src="../img/spotify/9.png" alt="">
+          <div class="section-col1">
+            <h2 id="goal">Goal</h2>
+          </div>
+          <div class="section-col2">
+            <p>A stand alone application with the vision of: <strong>Consolidating Music offerings in a single destination to decouple shared capabilities and enable creators and enterprise users to thrive.</strong></p>
+            <img class="project-img" src="../img/spotify/9.png" alt="">
+          </div>
         </section>
 
         <section>
-            <h2 id="approach" class="dark">Approach</h2>
+          <div class="section-col1">
+            <h2 id="approach">Approach</h2>
+          </div>
+          <div class="section-col2">
             <img class="project-img" src="../img/spotify/10.png" alt="">
             <img class="project-img" src="../img/spotify/11.png" alt="">
+          </div>
         </section>
 
         <section>
-            <h2  id="alpha" class="dark">Alpha launch</h2>
+          <div class="section-col1">
+            <h2 id="alpha">Alpha launch</h2>
+          </div>
+          <div class="section-col2">
             <img class="project-img" src="../img/spotify/12.png" alt="">
             <img class="project-img" src="../img/spotify/13.png" alt="">
             <img class="project-img" src="../img/spotify/14.png" alt="">
@@ -112,18 +106,33 @@
             <img class="project-img" src="../img/spotify/17.png" alt="">
             <img class="project-img" src="../img/spotify/18.png" alt="">
             <img class="project-img" src="../img/spotify/19.png" alt="">
-            <p>Success metrics: <span class="dark">34% reduction in customer requests</span> to CrS. <span class="dark">$1.7m cost saving</span> by minimizing CrS input</p>
+            <p>Success metrics: <strong>34% reduction in customer requests</strong> to CrS. <strong>$1.7m cost saving</strong> by minimizing CrS input</p>
+          </div>
         </section>
 
         <section>
-            <h2 id="moving" class="dark">Moving forward</h2>
+          <div class="section-col1">
+            <h2 id="moving">Moving forward</h2>
+          </div>
+          <div class="section-col2">
             <p>Global search: Being able to search across all content types from anywhere in the chrome empowers users to find what they need faster.</p>
             <img class="project-img" src="../img/spotify/20.gif" alt="">
             <p>Notification center: Central hub for all actions that can happen across the products that the users account is connected to.</p>
             <img class="project-img" src="../img/spotify/21.gif" alt="">
             <p>Areas of ownership: Highlighting areas of ownership within the chrome.</p>
             <img class="project-img" src="../img/spotify/22.gif" alt="">
+          </div>
         </section>
+
+        <section>
+          <div class="section-col1">
+            <a href="../index.html" class="pill-link">Back home</a>
+          </div>
+          <div class="section-col2">
+            <!-- Empty column -->
+          </div>
+        </section>
+      </main>
     </div>
   </body>
 </html>
