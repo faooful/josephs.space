@@ -84,11 +84,78 @@ function toggleMute(videoId) {
 // Make toggleMute globally available
 window.toggleMute = toggleMute;
 
+// Content toggle functionality
+function switchContent(contentType) {
+    const caseStudiesContent = document.getElementById('case-studies-content');
+    const experimentsContent = document.getElementById('experiments-content');
+    const toggleButtons = document.querySelectorAll('.toggle-option');
+    
+    // Remove active class from all buttons
+    toggleButtons.forEach(button => button.classList.remove('active'));
+    
+    // Show/hide content based on selection
+    if (contentType === 'case-studies') {
+        caseStudiesContent.style.display = 'block';
+        experimentsContent.style.display = 'none';
+        // Add active class to case studies button
+        document.querySelector('.toggle-option[onclick="switchContent(\'case-studies\')"]').classList.add('active');
+    } else if (contentType === 'experiments') {
+        caseStudiesContent.style.display = 'none';
+        experimentsContent.style.display = 'block';
+        // Add active class to experiments button
+        document.querySelector('.toggle-option[onclick="switchContent(\'experiments\')"]').classList.add('active');
+    }
+}
+
+// Make switchContent globally available
+window.switchContent = switchContent;
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initCursorAnimation();
     initCarousel();
+    initDitherEffect();
 });
+
+// Initialize dither effect
+function initDitherEffect() {
+    const ditherContainer = document.getElementById('dither-header');
+    if (ditherContainer && window.DitherEffect) {
+        // Get brand color based on page
+        let waveColor = [0.5, 0.5, 0.5]; // Default gray
+        
+        const path = window.location.pathname;
+        if (path.includes('irm.html')) {
+            // Google blue: #4285F4
+            waveColor = [0.26, 0.52, 0.96]; // Convert hex to RGB (0-1)
+        } else if (path.includes('spotify.html')) {
+            // Spotify green: #1ED760
+            waveColor = [0.12, 0.85, 0.38];
+        } else if (path.includes('p44.html')) {
+            // project44 blue: #0072E9
+            waveColor = [0.0, 0.45, 0.91];
+        } else if (path.includes('jaas.html')) {
+            // Ubuntu orange: #dd4814
+            waveColor = [0.87, 0.28, 0.08];
+        } else if (path.includes('cell.html') || path.includes('hologram.html') || path.includes('slo.html')) {
+            // Datadog purple: #632CA6
+            waveColor = [0.39, 0.17, 0.65];
+        }
+        
+        new DitherEffect('dither-header', {
+            waveColor: waveColor,
+            colorIntensity: 8.2,
+            disableAnimation: false,
+            enableMouseInteraction: false,
+            mouseRadius: 0.3,
+            colorNum: 4,
+            waveAmplitude: 0,
+            waveFrequency: 10,
+            waveSpeed: 0.03,
+            pixelSize: 2
+        });
+    }
+}
 
 // Carousel functionality
 function initCarousel() {

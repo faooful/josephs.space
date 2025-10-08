@@ -1,0 +1,27 @@
+.dither-container {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.2;
+}
+
+.dither-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.container,
+header h1,
+header .cursor-container,
+main,
+section,
+.name-title {
+  position: relative;
+  z-index: 10;
+}

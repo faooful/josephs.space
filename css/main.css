@@ -1,5 +1,5 @@
 html {
-	background-color: #FFFFFF;
+	background-color: transparent;
 }
 
 body, p, h2, .section-col2, .section-col1, header, section, .container {
@@ -7,7 +7,7 @@ body, p, h2, .section-col2, .section-col1, header, section, .container {
 	font-optical-sizing: auto;
 	font-style: normal;
     font-weight: 300;
-	background: #fff;
+	background: transparent;
 	margin: 0;
 	padding: 0;
 }
@@ -31,17 +31,15 @@ body {
 
 header {
 	align-items: flex-start;
-	background-color: #fff;
+	background-color: transparent;
 	display: flex;
 	flex: none;
 	flex-direction: column;
 	flex-wrap: nowrap;
-	gap: 80px;
 	height: min-content;
 	justify-content: center;
 	overflow: visible;
-	padding: 50px 100px 40px;
-	position: relative;
+	padding: 0 100px 40px;
 }
 
 h1 {
@@ -68,10 +66,18 @@ section {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
-	background-color: #fff;
+	background-color: transparent;
 	gap: 80px;
 	padding: 0 100px 100px;
 	z-index: 1;
+}
+
+.bio-section {
+	padding-bottom: 16px !important;
+}
+
+.bio-paragraph {
+	padding-bottom: 24px !important;
 }
 
 .logo {
@@ -92,10 +98,13 @@ section {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+	align-items: center;
+	justify-content: center;
 }
 
 .top {
 	gap: 0;
+	align-items: center;
 }
 
 @media (max-width: 900px) {
@@ -184,9 +193,6 @@ section {
 	}
 }
 
-header {
-	position: relative;
-}
 
 .cursor-container {
 	position: absolute;
@@ -289,6 +295,7 @@ header {
 
 .case-study-link {
     margin-top: 16px;
+    align-self: flex-start;
 }
 
 .pill-icon {
@@ -405,6 +412,75 @@ section:has(.carousel-container) .section-col2 {
 
 .carousel-item .carousel-text {
     padding-top: 20px !important;
+}
+
+/* Content Toggle Styles */
+.content-toggle {
+    display: flex;
+    background-color: #f8f8f8;
+    border: 1px solid rgba(17, 17, 17, 0.1);
+    border-radius: 25px;
+    padding: 4px;
+    width: fit-content;
+    margin-bottom: 40px;
+    align-self: flex-start;
+}
+
+.toggle-option {
+    background: none;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.toggle-option.active {
+    background-color: #111;
+    color: #fff;
+    font-weight: 500;
+}
+
+.toggle-option:hover:not(.active) {
+    color: #111;
+    background-color: rgba(17, 17, 17, 0.05);
+}
+
+/* Contact Links Styling */
+.contact-links {
+    display: flex;
+    flex-direction: row;
+    gap: 32px;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-link {
+    color: #111;
+    text-decoration: none;
+    font-size: 22px;
+    line-height: 1.6em;
+    font-weight: 300;
+    font-family: 'EB Garamond', serif;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.contact-link:hover {
+    color: #666;
+}
+
+.contact-icon {
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 }
 
 .carousel-text p {

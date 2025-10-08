@@ -26,6 +26,7 @@ h2 {
 /* Project page header adjustments */
 header {
 	gap: 40px !important;
+	padding: 40px 100px 40px !important;
 }
 
 /* Style the back home button */
