@@ -20,22 +20,37 @@ function initCursorAnimation() {
 
         // Calculate header bounds
         const headerRect = header.getBoundingClientRect();
-        const headerBottom = headerRect.bottom;
+        const headerHeight = headerRect.height;
         
-        // Can move anywhere above the bottom of the header
-        const maxTop = headerBottom; // Can go to the bottom of the header
-        const minTop = 20; // Minimum 20px from top
+        // Keep cursor within header bounds only
+        const minTop = 20; // Minimum margin from top of header
+        const maxTop = headerHeight - 100; // Stay within header, leave space for cursor height
         
-        // Random target position within bounds
-        const targetTop = Math.random() * (maxTop - minTop) + minTop;
-        const targetRight = Math.random() * (window.innerWidth - 200); // Leave space for cursor width
+        // Calculate cursor width (approximate based on content)
+        const cursorWidth = 150; // Estimated width of cursor container with content
         
-        // Move cursor with smooth transition
-        cursorContainer.style.top = targetTop + 'px';
-        cursorContainer.style.right = targetRight + 'px';
-        cursorContainer.style.left = 'auto';
+        // Use left positioning for easier calculations
+        const minLeft = 20; // Minimum distance from left edge
+        const maxLeft = window.innerWidth - cursorWidth - 20; // Maximum left position
         
-        console.log('Cursor moving to:', targetTop, targetRight);
+        // Ensure we have valid bounds
+        const validTopRange = Math.max(0, maxTop - minTop);
+        const validLeftRange = Math.max(0, maxLeft - minLeft);
+        
+        // Random target position within bounds (only if we have valid space)
+        const targetTop = validTopRange > 0 ? Math.random() * validTopRange + minTop : minTop;
+        const targetLeft = validLeftRange > 0 ? Math.random() * validLeftRange + minLeft : minLeft;
+        
+        // Final safety check to ensure position is within viewport
+        const finalTop = Math.max(20, Math.min(targetTop, headerHeight - 100));
+        const finalLeft = Math.max(20, Math.min(targetLeft, window.innerWidth - cursorWidth - 20));
+        
+        // Move cursor with smooth transition (using left positioning)
+        cursorContainer.style.top = finalTop + 'px';
+        cursorContainer.style.left = finalLeft + 'px';
+        cursorContainer.style.right = 'auto';
+        
+        console.log('Cursor moving to:', finalTop, finalLeft, 'Viewport:', window.innerWidth, 'x', window.innerHeight);
         
         // Schedule next move with random delay (0-10 seconds)
         const nextDelay = Math.random() * 10000; // 0-10 seconds in milliseconds
@@ -44,15 +59,9 @@ function initCursorAnimation() {
     }
 
     // Start the animation after a short delay to ensure everything is loaded
-    // The cursor starts from its current position (top-right corner from CSS)
     setTimeout(() => {
         console.log('Starting cursor animation from current position');
-        // Add the animated class for smooth transitions BEFORE the first move
-        cursorContainer.classList.add('animated');
-        // Small delay to ensure transition is applied before moving
-        setTimeout(() => {
-            moveCursor();
-        }, 100);
+        moveCursor();
     }, 1000);
 
     // Clean up on page unload
@@ -84,9 +93,11 @@ function toggleMute(videoId) {
 // Make toggleMute globally available
 window.toggleMute = toggleMute;
 
+// Store reference to case studies content
+let caseStudiesElement = null;
+
 // Content toggle functionality
 function switchContent(contentType) {
-    const caseStudiesContent = document.getElementById('case-studies-content');
     const experimentsContent = document.getElementById('experiments-content');
     const toggleButtons = document.querySelectorAll('.toggle-option');
     
@@ -95,13 +106,33 @@ function switchContent(contentType) {
     
     // Show/hide content based on selection
     if (contentType === 'case-studies') {
-        caseStudiesContent.style.display = 'block';
+        // Restore case studies content if it was removed
+        if (!caseStudiesElement || !caseStudiesElement.parentNode) {
+            const main = document.querySelector('main');
+            const experimentsContent = document.getElementById('experiments-content');
+            if (!caseStudiesElement) {
+                caseStudiesElement = document.getElementById('case-studies-content');
+            }
+            main.insertBefore(caseStudiesElement, experimentsContent);
+        }
+        caseStudiesElement.style.display = 'block';
+        caseStudiesElement.classList.remove('hidden');
         experimentsContent.style.display = 'none';
+        experimentsContent.classList.add('hidden');
         // Add active class to case studies button
         document.querySelector('.toggle-option[onclick="switchContent(\'case-studies\')"]').classList.add('active');
     } else if (contentType === 'experiments') {
-        caseStudiesContent.style.display = 'none';
+        // Remove case studies content from DOM completely
+        if (!caseStudiesElement) {
+            caseStudiesElement = document.getElementById('case-studies-content');
+        }
+        if (caseStudiesElement && caseStudiesElement.parentNode) {
+            caseStudiesElement.remove();
+        }
+        caseStudiesElement.style.display = 'none';
+        caseStudiesElement.classList.add('hidden');
         experimentsContent.style.display = 'block';
+        experimentsContent.classList.remove('hidden');
         // Add active class to experiments button
         document.querySelector('.toggle-option[onclick="switchContent(\'experiments\')"]').classList.add('active');
     }

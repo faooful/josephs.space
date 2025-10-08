@@ -58,14 +58,14 @@
             <p>I'm a Product Design Leader with over a decade of experience in creating thoughtful, scalable products and helping teams deliver sustainable output at companies like Datadog, project44, Spotify, and Google.</p>
             <p class="bio-paragraph">When I'm not working, you can find me solving the NYT crossword, playing backgammon, or trying to convince my cat that if he talks to me, I won't tell anyone.</p>
             <div class="content-toggle">
-              <button class="toggle-option active" onclick="switchContent('case-studies')">Case Studies</button>
-              <button class="toggle-option" onclick="switchContent('experiments')">Experiments</button>
+              <button class="toggle-option active" onclick="switchContent('experiments')">Experiments</button>
+              <button class="toggle-option" onclick="switchContent('case-studies')">Case Studies</button>
             </div>
           </div>
         </section>
 
 
-        <div id="case-studies-content">
+        <div id="case-studies-content" style="display: none;" class="hidden">
           <section>
             <div class="section-col1">
               <img src="img//home/datadog.webp" alt="Datadog Logo" class="logo">
@@ -122,7 +122,7 @@
           </section>
         </div>
 
-        <div id="experiments-content" style="display: none;">
+        <div id="experiments-content">
           <section>
             <div class="section-col1">
               <div class="carousel-container">
@@ -217,11 +217,7 @@
                   <span class="dot" onclick="currentSlide(7)"></span>
                 </div>
               </div>
-            </div>
           </div>
-            <div class="section-col2">
-              <!-- Empty column for spacing -->
-            </div>
           </section>
         </div>
       </main>

@@ -1,5 +1,14 @@
 html {
 	background-color: transparent;
+	height: auto;
+	min-height: auto;
+	overflow-x: hidden;
+}
+
+body {
+	height: auto;
+	min-height: auto;
+	overflow-x: hidden;
 }
 
 body, p, h2, .section-col2, .section-col1, header, section, .container {
@@ -14,6 +23,8 @@ body, p, h2, .section-col2, .section-col1, header, section, .container {
 
 body {
 	overflow-x: hidden;
+	height: auto;
+	min-height: auto;
 }
 
 .bold {
@@ -27,6 +38,17 @@ body {
 .container {
 	margin: 0 auto;
 	box-sizing: border-box;
+	height: auto;
+	min-height: auto;
+	overflow: hidden;
+}
+
+main {
+	height: auto;
+	min-height: auto;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
 }
 
 header {
@@ -40,6 +62,7 @@ header {
 	justify-content: center;
 	overflow: visible;
 	padding: 0 100px 40px;
+	position: relative;
 }
 
 h1 {
@@ -49,6 +72,144 @@ h1 {
 	text-align: left;
 	font-weight: 400;
 	margin: 0 0 24px 0;
+}
+
+/* Responsive h1 styles */
+@media (max-width: 1200px) {
+	h1 {
+		font-size: 120px;
+	}
+	
+	h2 {
+		font-size: 40px !important;
+	}
+}
+
+@media (max-width: 768px) {
+	h1 {
+		font-size: 80px;
+		line-height: 0.95em;
+	}
+	
+	h2 {
+		font-size: 36px !important;
+		line-height: 1.25em !important;
+	}
+}
+
+@media (max-width: 480px) {
+	h1 {
+		font-size: 60px;
+		line-height: 1em;
+		margin: 0 0 16px 0;
+	}
+	
+	h2 {
+		font-size: 28px !important;
+		line-height: 1.3em !important;
+	}
+}
+
+/* Responsive header and section padding */
+@media (max-width: 1200px) {
+	header {
+		padding: 0 60px 40px;
+	}
+	
+	section {
+		padding: 0 60px 40px;
+	}
+	
+	.carousel-container {
+		padding: 0 0 80px 60px !important;
+	}
+}
+
+@media (max-width: 768px) {
+	header {
+		padding: 0 40px 32px;
+	}
+	
+	section {
+		padding: 0 40px 32px;
+		gap: 40px;
+	}
+	
+	.carousel-container {
+		padding: 0 0 60px 40px !important;
+	}
+}
+
+@media (max-width: 480px) {
+	header {
+		padding: 0 20px 24px;
+	}
+	
+	section {
+		padding: 0 20px 24px;
+		gap: 24px;
+	}
+	
+	.carousel-container {
+		padding: 0 0 40px 20px !important;
+	}
+}
+
+/* Responsive name-title */
+@media (max-width: 1200px) {
+	.name-title {
+		padding: 40px 60px 0 !important;
+	}
+}
+
+@media (max-width: 768px) {
+	.name-title {
+		padding: 32px 40px 0 !important;
+	}
+}
+
+@media (max-width: 480px) {
+	.name-title {
+		padding: 24px 20px 0 !important;
+	}
+}
+
+/* Responsive contact links */
+@media (max-width: 768px) {
+	.contact-links {
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 20px;
+		align-items: center;
+		justify-content: flex-start;
+	}
+	
+	.contact-link {
+		font-size: 18px;
+		flex-shrink: 0;
+	}
+	
+	.contact-icon {
+		width: 14px;
+		height: 14px;
+	}
+}
+
+@media (max-width: 480px) {
+	.contact-links {
+		flex-direction: column;
+		gap: 16px;
+		align-items: flex-start;
+	}
+	
+	.contact-link {
+		font-size: 16px;
+	}
+	
+	.contact-icon {
+		width: 12px;
+		height: 12px;
+	}
 }
 
 p {
@@ -68,7 +229,7 @@ section {
 	align-items: flex-start;
 	background-color: transparent;
 	gap: 80px;
-	padding: 0 100px 100px;
+	padding: 0 100px 40px;
 	z-index: 1;
 }
 
@@ -197,18 +358,18 @@ section {
 .cursor-container {
 	position: absolute;
 	top: 20px;
-	right: 20px;
-	z-index: 1000;
+	left: calc(100% - 170px);
+	z-index: 99999;
 	pointer-events: none;
 	display: flex;
 	align-items: center;
 	gap: 8px;
 	padding: 14px;
+	transition: top 3s cubic-bezier(0.25, 0.46, 0.45, 0.94), left 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .cursor-container.animated {
-	transition: all 3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	will-change: top, right;
+	will-change: top, left;
 }
 
 .header-shape {
@@ -321,15 +482,22 @@ section {
 .carousel-container {
     position: relative;
     max-width: 100%;
-    margin: 0 0 100px 0;
-    padding-left: 100px;
+    margin: 0;
+    padding: 0 0 80px 100px;
 }
 
 /* Remove flex and padding from carousel section */
 section:has(.carousel-container) {
     display: block !important;
     padding: 0 !important;
+    margin: 0 !important;
     overflow-x: visible;
+}
+
+/* Also target the experiments section specifically */
+#experiments-content section {
+    padding: 0 !important;
+    margin: 0 !important;
 }
 
 section:has(.carousel-container) .section-col1,
@@ -337,6 +505,25 @@ section:has(.carousel-container) .section-col2 {
     display: block !important;
     width: 100% !important;
     flex: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#experiments-content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#case-studies-content {
+    height: auto;
+}
+
+#case-studies-content.hidden {
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
 }
 
 /* Allow carousel to extend beyond container */
@@ -455,9 +642,11 @@ section:has(.carousel-container) .section-col2 {
 .contact-links {
     display: flex;
     flex-direction: row;
-    gap: 32px;
+    flex-wrap: wrap;
+    gap: 24px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    max-width: 100%;
 }
 
 .contact-link {

@@ -190,6 +190,53 @@ label {
 }
 
 
+/* Responsive styles for project pages */
+@media (max-width: 1200px) {
+	h1 {
+		font-size: 50px !important;
+	}
+	
+	h2 {
+		font-size: 22px !important;
+	}
+	
+	header {
+		padding: 40px 60px 40px !important;
+	}
+}
+
+@media (max-width: 768px) {
+	h1 {
+		font-size: 40px !important;
+		line-height: 1.1em !important;
+	}
+	
+	h2 {
+		font-size: 20px !important;
+	}
+	
+	header {
+		padding: 32px 40px 32px !important;
+		gap: 24px !important;
+	}
+}
+
+@media (max-width: 480px) {
+	h1 {
+		font-size: 32px !important;
+		line-height: 1.2em !important;
+	}
+	
+	h2 {
+		font-size: 18px !important;
+	}
+	
+	header {
+		padding: 24px 20px 24px !important;
+		gap: 16px !important;
+	}
+}
+
 @media only screen and (max-width: 960px) {
     .project-info {
         display: flow;
