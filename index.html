@@ -66,6 +66,122 @@
 
         <section>
           <div class="section-col1">
+            <div class="carousel-container">
+              <div class="carousel-wrapper">
+                <div class="carousel-track">
+                  <div class="carousel-item active">
+                    <div class="carousel-content">
+                      <div class="content-block">
+                        <h3>API Documentation</h3>
+                        <div class="code-block">
+                          <div class="method-tag put">PUT</div>
+                          <span>/api/characters</span>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <h4>Body required</h4>
+                        <div class="param-list">
+                          <div class="param-item">
+                            <span class="param-name">name</span>
+                            <span class="param-type">string</span>
+                            <span class="param-required">required</span>
+                          </div>
+                          <div class="param-item">
+                            <span class="param-name">description</span>
+                            <span class="param-type">string</span>
+                            <span class="param-required">required</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <div class="curl-block">
+                          <code>curl -X PUT /api/characters -d '{"name": "", "description": ""}'</code>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-content">
+                      <div class="content-block">
+                        <h3>Search Interface</h3>
+                        <div class="code-block">
+                          <div class="method-tag post">POST</div>
+                          <span>/api/search</span>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <h4>Query Parameters</h4>
+                        <div class="param-list">
+                          <div class="param-item">
+                            <span class="param-name">query</span>
+                            <span class="param-type">string</span>
+                            <span class="param-required">required</span>
+                          </div>
+                          <div class="param-item">
+                            <span class="param-name">page</span>
+                            <span class="param-type">number</span>
+                            <span class="param-default">default: 1</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <div class="response-block">
+                          <h4>Response Schema</h4>
+                          <div class="json-block">
+                            <code>{"results": [], "total": 0}</code>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-content">
+                      <div class="content-block">
+                        <h3>Authentication</h3>
+                        <div class="code-block">
+                          <div class="method-tag get">GET</div>
+                          <span>/api/auth/token</span>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <h4>Headers</h4>
+                        <div class="param-list">
+                          <div class="param-item">
+                            <span class="param-name">Authorization</span>
+                            <span class="param-type">Bearer token</span>
+                            <span class="param-required">required</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="content-block">
+                        <div class="status-codes">
+                          <span class="status-code success">200</span>
+                          <span class="status-code error">401</span>
+                          <span class="status-code error">422</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="carousel-controls">
+                <button class="carousel-btn prev-btn" onclick="changeSlide(-1)">‹</button>
+                <div class="carousel-dots">
+                  <span class="dot active" onclick="currentSlide(1)"></span>
+                  <span class="dot" onclick="currentSlide(2)"></span>
+                  <span class="dot" onclick="currentSlide(3)"></span>
+                </div>
+                <button class="carousel-btn next-btn" onclick="changeSlide(1)">›</button>
+              </div>
+            </div>
+          </div>
+          <div class="section-col2">
+            <!-- Empty column for spacing -->
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
             <img src="img/home/project-44.svg" alt="project44 Logo" class="logo">
           </div>
           <div class="section-col2">

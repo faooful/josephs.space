@@ -66,4 +66,82 @@ function initCursorAnimation() {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initCursorAnimation();
-}); 
+    initCarousel();
+});
+
+// Carousel functionality
+function initCarousel() {
+    let currentSlideIndex = 0;
+    const slides = document.querySelectorAll('.carousel-item');
+    const dots = document.querySelectorAll('.dot');
+    const track = document.querySelector('.carousel-track');
+
+    function showSlide(index) {
+        // Remove active class from all slides and dots
+        slides.forEach(slide => slide.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        // Add active class to current slide and dot
+        if (slides[index]) {
+            slides[index].classList.add('active');
+        }
+        if (dots[index]) {
+            dots[index].classList.add('active');
+        }
+        
+        // Calculate transform to show the selected slide
+        const slideWidth = slides[0].offsetWidth + 20; // width + gap
+        const translateX = -index * slideWidth;
+        if (track) {
+            track.style.transform = `translateX(${translateX}px)`;
+        }
+    }
+
+    function changeSlide(direction) {
+        currentSlideIndex += direction;
+        
+        // Handle wrapping
+        if (currentSlideIndex >= slides.length) {
+            currentSlideIndex = 0;
+        } else if (currentSlideIndex < 0) {
+            currentSlideIndex = slides.length - 1;
+        }
+        
+        showSlide(currentSlideIndex);
+    }
+
+    function currentSlide(index) {
+        currentSlideIndex = index - 1; // Convert to 0-based index
+        showSlide(currentSlideIndex);
+    }
+
+    // Auto-advance carousel every 5 seconds
+    let carouselInterval;
+
+    function startCarousel() {
+        carouselInterval = setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+    }
+
+    function stopCarousel() {
+        clearInterval(carouselInterval);
+    }
+
+    // Make functions globally available
+    window.changeSlide = changeSlide;
+    window.currentSlide = currentSlide;
+
+    // Initialize carousel
+    if (slides.length > 0) {
+        showSlide(0);
+        startCarousel();
+        
+        // Pause auto-advance on hover
+        const carouselContainer = document.querySelector('.carousel-container');
+        if (carouselContainer) {
+            carouselContainer.addEventListener('mouseenter', stopCarousel);
+            carouselContainer.addEventListener('mouseleave', startCarousel);
+        }
+    }
+} 
