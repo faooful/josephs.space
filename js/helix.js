@@ -63,6 +63,27 @@ function initCursorAnimation() {
     });
 }
 
+// Mute toggle functionality
+function toggleMute(videoId) {
+    const video = document.getElementById(videoId);
+    const button = video.parentElement.querySelector('.mute-toggle');
+    const muteIcon = button.querySelector('.mute-icon');
+    const unmuteIcon = button.querySelector('.unmute-icon');
+    
+    if (video.muted) {
+        video.muted = false;
+        muteIcon.style.display = 'none';
+        unmuteIcon.style.display = 'block';
+    } else {
+        video.muted = true;
+        muteIcon.style.display = 'block';
+        unmuteIcon.style.display = 'none';
+    }
+}
+
+// Make toggleMute globally available
+window.toggleMute = toggleMute;
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initCursorAnimation();
@@ -81,7 +102,7 @@ function initCarousel() {
         slides.forEach(slide => slide.classList.remove('active'));
         dots.forEach(dot => dot.classList.remove('active'));
         
-        // Add active class to current slide and dot
+        // Add active class to current slide
         if (slides[index]) {
             slides[index].classList.add('active');
         }
@@ -115,19 +136,6 @@ function initCarousel() {
         showSlide(currentSlideIndex);
     }
 
-    // Auto-advance carousel every 5 seconds
-    let carouselInterval;
-
-    function startCarousel() {
-        carouselInterval = setInterval(() => {
-            changeSlide(1);
-        }, 5000);
-    }
-
-    function stopCarousel() {
-        clearInterval(carouselInterval);
-    }
-
     // Make functions globally available
     window.changeSlide = changeSlide;
     window.currentSlide = currentSlide;
@@ -135,13 +143,5 @@ function initCarousel() {
     // Initialize carousel
     if (slides.length > 0) {
         showSlide(0);
-        startCarousel();
-        
-        // Pause auto-advance on hover
-        const carouselContainer = document.querySelector('.carousel-container');
-        if (carouselContainer) {
-            carouselContainer.addEventListener('mouseenter', stopCarousel);
-            carouselContainer.addEventListener('mouseleave', startCarousel);
-        }
     }
 } 

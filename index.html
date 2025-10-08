@@ -70,108 +70,93 @@
               <div class="carousel-wrapper">
                 <div class="carousel-track">
                   <div class="carousel-item active">
-                    <div class="carousel-content">
-                      <div class="content-block">
-                        <h3>API Documentation</h3>
-                        <div class="code-block">
-                          <div class="method-tag put">PUT</div>
-                          <span>/api/characters</span>
-                        </div>
-                      </div>
-                      <div class="content-block">
-                        <h4>Body required</h4>
-                        <div class="param-list">
-                          <div class="param-item">
-                            <span class="param-name">name</span>
-                            <span class="param-type">string</span>
-                            <span class="param-required">required</span>
-                          </div>
-                          <div class="param-item">
-                            <span class="param-name">description</span>
-                            <span class="param-type">string</span>
-                            <span class="param-required">required</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="content-block">
-                        <div class="curl-block">
-                          <code>curl -X PUT /api/characters -d '{"name": "", "description": ""}'</code>
-                        </div>
-                      </div>
+                    <div class="carousel-image">
+                      <video src="img/product-screens/little-signals.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
+                    </div>
+                    <div class="carousel-text">
+                      <p>Interactive API documentation tool with real-time testing capabilities and comprehensive endpoint coverage.</p>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <div class="carousel-content">
-                      <div class="content-block">
-                        <h3>Search Interface</h3>
-                        <div class="code-block">
-                          <div class="method-tag post">POST</div>
-                          <span>/api/search</span>
-                        </div>
+                    <div class="carousel-image">
+                      <div class="video-wrapper">
+                        <video src="img/product-screens/figma soundboard.mp4" class="carousel-screenshot" autoplay loop muted playsinline id="figma-soundboard"></video>
+                        <button class="mute-toggle" onclick="toggleMute('figma-soundboard')">
+                          <svg class="mute-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" fill="currentColor"/>
+                          </svg>
+                          <svg class="unmute-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                          </svg>
+                        </button>
                       </div>
-                      <div class="content-block">
-                        <h4>Query Parameters</h4>
-                        <div class="param-list">
-                          <div class="param-item">
-                            <span class="param-name">query</span>
-                            <span class="param-type">string</span>
-                            <span class="param-required">required</span>
-                          </div>
-                          <div class="param-item">
-                            <span class="param-name">page</span>
-                            <span class="param-type">number</span>
-                            <span class="param-default">default: 1</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="content-block">
-                        <div class="response-block">
-                          <h4>Response Schema</h4>
-                          <div class="json-block">
-                            <code>{"results": [], "total": 0}</code>
-                          </div>
-                        </div>
-                      </div>
+                    </div>
+                    <div class="carousel-text">
+                      <p>Advanced search functionality with filtering, pagination, and real-time results across multiple data sources.</p>
                     </div>
                   </div>
                   <div class="carousel-item">
-                    <div class="carousel-content">
-                      <div class="content-block">
-                        <h3>Authentication</h3>
-                        <div class="code-block">
-                          <div class="method-tag get">GET</div>
-                          <span>/api/auth/token</span>
-                        </div>
+                    <div class="carousel-image">
+                      <div class="video-wrapper">
+                        <video src="img/product-screens/figma-find.mp4" class="carousel-screenshot" autoplay loop muted playsinline id="figma-find"></video>
+                        <button class="mute-toggle" onclick="toggleMute('figma-find')">
+                          <svg class="mute-icon" viewBox="0 0 24 24" width="24" height="24">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" fill="currentColor"/>
+                          </svg>
+                          <svg class="unmute-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                          </svg>
+                        </button>
                       </div>
-                      <div class="content-block">
-                        <h4>Headers</h4>
-                        <div class="param-list">
-                          <div class="param-item">
-                            <span class="param-name">Authorization</span>
-                            <span class="param-type">Bearer token</span>
-                            <span class="param-required">required</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="content-block">
-                        <div class="status-codes">
-                          <span class="status-code success">200</span>
-                          <span class="status-code error">401</span>
-                          <span class="status-code error">422</span>
-                        </div>
-                      </div>
+                    </div>
+                    <div class="carousel-text">
+                      <p>Secure token-based authentication system with JWT validation and role-based access control.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-image">
+                      <video src="img/product-screens/note-tab.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
+                    </div>
+                    <div class="carousel-text">
+                      <p>User profile management system with customizable fields, avatar uploads, and preference settings.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-image">
+                      <video src="img/product-screens/what the druids.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
+                    </div>
+                    <div class="carousel-text">
+                      <p>Comprehensive analytics dashboard with custom reporting, data visualization, and real-time metrics tracking.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-image">
+                      <img src="img/product-screens/little-signals.png" alt="Little Signals" class="carousel-screenshot">
+                    </div>
+                    <div class="carousel-text">
+                      <p>Secure file upload system with drag-and-drop interface, progress tracking, and cloud storage integration.</p>
+                    </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="carousel-image">
+                      <img src="img/product-screens/little-signals.png" alt="Little Signals" class="carousel-screenshot">
+                    </div>
+                    <div class="carousel-text">
+                      <p>Live event streaming system with WebSocket connections, real-time notifications, and event filtering capabilities.</p>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="carousel-controls">
-                <button class="carousel-btn prev-btn" onclick="changeSlide(-1)">‹</button>
                 <div class="carousel-dots">
                   <span class="dot active" onclick="currentSlide(1)"></span>
                   <span class="dot" onclick="currentSlide(2)"></span>
                   <span class="dot" onclick="currentSlide(3)"></span>
+                  <span class="dot" onclick="currentSlide(4)"></span>
+                  <span class="dot" onclick="currentSlide(5)"></span>
+                  <span class="dot" onclick="currentSlide(6)"></span>
+                  <span class="dot" onclick="currentSlide(7)"></span>
                 </div>
-                <button class="carousel-btn next-btn" onclick="changeSlide(1)">›</button>
               </div>
             </div>
           </div>

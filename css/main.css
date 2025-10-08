@@ -13,7 +13,7 @@ body, p, h2, .section-col2, .section-col1, header, section, .container {
 }
 
 body {
-	overflow-x: visible;
+	overflow-x: hidden;
 }
 
 .bold {
@@ -342,24 +342,81 @@ section:has(.carousel-container) .section-col2 {
 
 .carousel-track {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     transition: transform 0.5s ease-in-out;
 }
 
 .carousel-item {
-    flex: 0 0 calc(33.333% - 14px);
-    background-color: #f0f0f0;
+    flex: 0 0 auto;
     border-radius: 12px;
-    padding: 32px;
-    min-height: 400px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    width: clamp(500px, 60vw, 700px);
+}
+
+.carousel-image {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+}
+
+.image-placeholder {
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.carousel-item.active {
-    background-color: #1a1a1a;
+.carousel-screenshot {
+    width: 100%;
+    height: clamp(350px, 42vw, 470px);
+    object-fit: contain;
 }
+
+.video-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.mute-toggle {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.2s ease;
+    z-index: 10;
+}
+
+.mute-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-item .carousel-text {
+    padding-top: 20px !important;
+}
+
+.carousel-text p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.4;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    text-align: left;
+    vertical-align: top;
+}
+
 
 .carousel-content {
     padding: 0;
@@ -439,6 +496,11 @@ section:has(.carousel-container) .section-col2 {
 
 .method-tag.get {
     background-color: #059669;
+    color: #ffffff;
+}
+
+.method-tag.patch {
+    background-color: #f59e0b;
     color: #ffffff;
 }
 
@@ -553,14 +615,14 @@ section:has(.carousel-container) .section-col2 {
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #4b5563;
+    width: 54px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: #B8B8B8;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .dot.active {
-    background-color: #ffffff;
+    background-color: #F06293;
 }
