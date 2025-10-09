@@ -536,7 +536,7 @@ section:has(.carousel-container) .section-col2 {
 
 .carousel-track {
     display: flex;
-    gap: 24px;
+    gap: 40px;
     transition: transform 0.5s ease-in-out;
 }
 
@@ -670,6 +670,28 @@ section:has(.carousel-container) .section-col2 {
     width: 16px;
     height: 16px;
     vertical-align: middle;
+}
+
+/* Inline link styling for carousel */
+.inline-link {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(17, 17, 17, 0.3);
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+    display: inline;
+    align-items: center;
+}
+
+.inline-link:hover {
+    text-decoration-color: rgba(17, 17, 17, 0.6);
+}
+
+.inline-link .arrow-icon {
+    width: 12px;
+    height: 12px;
+    vertical-align: middle;
+    display: inline;
 }
 
 .carousel-text p {
