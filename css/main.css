@@ -72,6 +72,8 @@ h1 {
 	text-align: left;
 	font-weight: 400;
 	margin: 0 0 24px 0;
+	position: relative;
+	z-index: 1;
 }
 
 /* Responsive h1 styles */
