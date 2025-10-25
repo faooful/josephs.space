@@ -8,6 +8,8 @@
   z-index: 1;
   pointer-events: none;
   opacity: 0.2;
+  mask: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
+  -webkit-mask: linear-gradient(to bottom, black 0%, black 60%, transparent 100%);
 }
 
 .dither-container canvas {
