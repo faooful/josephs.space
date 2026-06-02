@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Scaling Designer Taste - Joseph Korol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css?v=redesign">
+  </head>
+  <body class="writing-page">
+    <div class="container">
+      <header class="writing-hero">
+        <span><a href="../" class="pill-link">Back home</a></span>
+        <p class="writing-kicker">Writing</p>
+        <h1><span class="project-accent project-accent-cell">Scaling designer taste</span> when agents do most of the building.</h1>
+      </header>
+
+      <main>
+        <section>
+          <div class="section-col1">
+            <h2>Premise</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I've been thinking a lot about what it means to scale a designer's time when agents are doing most of the building.</p>
+            <p>It started with a simple frustration. Our team was shipping fast with AI agents, and the UI kept coming back inconsistent. Not broken, just... off. Wrong surface colours. Components used in the wrong context. Patterns that existed in our system getting ignored in favour of whatever the agent had seen most often in its training data. And I kept having to catch it in review.</p>
+            <p>The thing I realised is that agents don't know the design system we use internally. Not because it's poorly documented. Because it was never built to be read by machines. The docs were written for engineers who already have context. The components live in a library that an agent can't browse. And unlike something like shadcn, there's no public corpus of examples for it to have learned from. The agents were essentially working blind every time they touched our UI.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>First pass</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>So I started experimenting with <a href="https://github.com/google-labs-code/design.md" target="_blank" rel="noopener noreferrer">design.md</a>, a spec for writing design documentation in a format agents can actually consume. My first instinct was to write one big file. The logic felt sound at the time: capture everything in one place, make it the source of truth, give agents one document to read.</p>
+            <p>I got pretty deep into it before the problem became obvious. The moment you try to make a markdown file the source of truth for your entire design system, you've just created another thing to maintain. Every time a component changes, every time a token gets updated, every time a pattern evolves, that file needs to change too. And it won't. Not consistently. Not across a whole team moving fast.</p>
+            <p>Breaking it down by component felt like a better direction: <code>/components/table/design.md</code>, <code>/components/sidebar/design.md</code>. Smaller surface area, easier to keep current, closer to the thing it's describing. That part was genuinely interesting. Rethinking the design language through the lens of how an agent reads it is a different exercise than writing docs for engineers.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Review signal</h2>
+          </div>
+          <div class="section-col2">
+            <figure class="writing-figure review-summary">
+              <figcaption>Pull request review summary</figcaption>
+              <div class="review-chrome">
+                <span class="draft-pill">Draft</span>
+                <span>feat(settings): redesign SkillsTab with tabs, remote sources, and pagination</span>
+                <span class="review-number">#2811</span>
+              </div>
+              <div class="review-card">
+                <p class="review-title">GUI Design Review - PR #2811</p>
+                <p class="review-score">Score: 2 / 5</p>
+                <p>This PR introduces significant new UI components, but is missing CSS definitions for the majority of new visual elements. The code architecture is sound, but the visual layer is incomplete.</p>
+                <div class="review-divider"></div>
+                <p class="review-critical">Critical: Missing CSS Definitions</p>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Class</th>
+                      <th>Used in</th>
+                      <th>Purpose</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>.settings-skills-tab-bar</code></td>
+                      <td>SkillsTab</td>
+                      <td>Tab container</td>
+                    </tr>
+                    <tr>
+                      <td><code>.settings-skills-tab-badge</code></td>
+                      <td>SkillsTab</td>
+                      <td>Count badge inside tabs</td>
+                    </tr>
+                    <tr>
+                      <td><code>.settings-remote-source-card</code></td>
+                      <td>RemoteSourceCard</td>
+                      <td>Card wrapper for remote sources</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </figure>
+            <p class="figure-note">The useful signal was not just that the PR had issues. It was that the critique became specific enough to act on: missing CSS definitions, variant drift, and unstyled states.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>What changed</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>But then a colleague pointed out a problem I hadn't fully sat with yet. The moment you put token values and component specs in a markdown file, you have two sources of truth. The component library changes. The markdown doesn't. Agents start working from stale data. That might actually be worse than working blind.</p>
+            <p>So I ran two approaches in parallel. One was more of a steering doc: three files covering what to avoid, an on-demand review skill you could load when auditing a diff. Gotcha guides rather than blueprints. The second followed the design.md spec more faithfully, YAML tokens as authoritative values, full component coverage. After testing both I landed somewhere I didn't expect: the second direction isn't right. At least not in the way I was thinking about it.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Review loop</h2>
+          </div>
+          <div class="section-col2">
+            <figure class="writing-figure inline-review">
+              <figcaption>Inline design review</figcaption>
+              <div class="file-pill">packages/gui/src/bits/components/settings/SkillsTab.tsx</div>
+              <div class="inline-comment">
+                <p><strong>[DESIGN] medium</strong> - <code>.settings-badge.origin</code> has no CSS variant defined. This will render as the unstyled base badge.</p>
+                <p>Consider either reusing the info badge color or adding:</p>
+                <pre><code>.settings-badge.origin {
+  background: color-mix(in srgb, var(--gui-link) 12%, transparent);
+  color: var(--gui-link);
+}</code></pre>
+                <p>This should work correctly in both dark and light mode because <code>--gui-link</code> is theme-aware.</p>
+              </div>
+              <div class="inline-fix">
+                <span>Fixed in <code>7d910ef</code></span>
+                <span>Added the missing origin badge variant.</span>
+              </div>
+            </figure>
+            <p class="figure-note">This is the difference between broad taste feedback and portable judgement. The review named the visual problem, explained the system expectation, and suggested a concrete repair.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Two layers</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>What I think actually works is two layers.</p>
+            <p>The markdown captures judgement. Why this pattern and not that one. When to use a sheet versus a dialogue. What "own the polish" actually means in practice on our team. The stuff that can't be inferred from looking at the component source. Slow-changing, principle-driven, written by a designer. I kept it strict: no hex values, no token definitions, nothing that stales. Just the why.</p>
+            <p>The structural layer is something else entirely. In our case it's an MCP server with live access to our component library, current schemas, actual prop values. Agents query it at inference time rather than reading a markdown copy of it. The drift problem mostly disappears because they're reading the real thing.</p>
+            <p>Together those two layers are what makes our existing design system usable by agents without rebuilding it from scratch. We're not replacing what we have. We're adding an interface it was never designed to have.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Leverage</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>And the thing I keep coming back to is this: I'm not trying to review more PRs. I'm trying to write my judgement down once in a form agents can carry forward. That's a different kind of leverage. And I think designers who figure it out early are going to have their taste show up in a lot more places than designers who don't.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <a href="../" class="pill-link">Back home</a>
+          </div>
+          <div class="section-col2"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

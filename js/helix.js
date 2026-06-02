@@ -4,65 +4,59 @@
 function initCursorAnimation() {
     const cursorContainer = document.querySelector('.cursor-container');
     if (!cursorContainer) {
-        console.log('Cursor container not found');
         return;
     }
 
     let animationTimeout;
 
-    function moveCursor() {
-        // Get header element to determine boundaries
-        const header = document.querySelector('header');
+    function pinCurrentCursorPosition() {
+        const header = cursorContainer.closest('header');
         if (!header) {
-            console.log('Header not found');
+            return false;
+        }
+
+        const headerRect = header.getBoundingClientRect();
+        const cursorRect = cursorContainer.getBoundingClientRect();
+        cursorContainer.classList.remove('animated');
+        cursorContainer.style.top = (cursorRect.top - headerRect.top) + 'px';
+        cursorContainer.style.left = (cursorRect.left - headerRect.left) + 'px';
+        cursorContainer.style.right = 'auto';
+        return true;
+    }
+
+    function moveCursor() {
+        const header = cursorContainer.closest('header');
+        if (!header) {
             return;
         }
 
-        // Calculate header bounds
-        const headerRect = header.getBoundingClientRect();
-        const headerHeight = headerRect.height;
-        
-        // Keep cursor within header bounds only
-        const minTop = 20; // Minimum margin from top of header
-        const maxTop = headerHeight - 100; // Stay within header, leave space for cursor height
-        
-        // Calculate cursor width (approximate based on content)
-        const cursorWidth = 150; // Estimated width of cursor container with content
-        
-        // Use left positioning for easier calculations
-        const minLeft = 20; // Minimum distance from left edge
-        const maxLeft = window.innerWidth - cursorWidth - 20; // Maximum left position
-        
-        // Ensure we have valid bounds
+        const headerWidth = header.clientWidth;
+        const headerHeight = header.clientHeight;
+        const cursorWidth = cursorContainer.offsetWidth || 150;
+        const cursorHeight = cursorContainer.offsetHeight || 44;
+        const minTop = 8;
+        const maxTop = Math.max(minTop, headerHeight - cursorHeight - 8);
+        const minLeft = 4;
+        const maxLeft = Math.max(minLeft, headerWidth - cursorWidth - 4);
         const validTopRange = Math.max(0, maxTop - minTop);
         const validLeftRange = Math.max(0, maxLeft - minLeft);
-        
-        // Random target position within bounds (only if we have valid space)
         const targetTop = validTopRange > 0 ? Math.random() * validTopRange + minTop : minTop;
         const targetLeft = validLeftRange > 0 ? Math.random() * validLeftRange + minLeft : minLeft;
-        
-        // Final safety check to ensure position is within viewport
-        const finalTop = Math.max(20, Math.min(targetTop, headerHeight - 100));
-        const finalLeft = Math.max(20, Math.min(targetLeft, window.innerWidth - cursorWidth - 20));
-        
-        // Move cursor with smooth transition (using left positioning)
-        cursorContainer.style.top = finalTop + 'px';
-        cursorContainer.style.left = finalLeft + 'px';
+
+        cursorContainer.style.top = targetTop + 'px';
+        cursorContainer.style.left = targetLeft + 'px';
         cursorContainer.style.right = 'auto';
-        
-        console.log('Cursor moving to:', finalTop, finalLeft, 'Viewport:', window.innerWidth, 'x', window.innerHeight);
-        
-        // Schedule next move with random delay (0-10 seconds)
-        const nextDelay = Math.random() * 10000; // 0-10 seconds in milliseconds
-        console.log('Next move in:', nextDelay / 1000, 'seconds');
+
+        const nextDelay = Math.random() * 10000;
         animationTimeout = setTimeout(moveCursor, nextDelay);
     }
 
-    // Start the animation after a short delay to ensure everything is loaded
-    setTimeout(() => {
-        console.log('Starting cursor animation from current position');
-        moveCursor();
-    }, 1000);
+    if (pinCurrentCursorPosition()) {
+        requestAnimationFrame(() => {
+            cursorContainer.classList.add('animated');
+            animationTimeout = setTimeout(moveCursor, 1000);
+        });
+    }
 
     // Clean up on page unload
     window.addEventListener('beforeunload', () => {
