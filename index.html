@@ -2,208 +2,207 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Product Design & Leadership</title>
+    <title>Joseph Korol — Product Design & Leadership</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="img/favicon-32x32.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond&family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/dither.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="js/dither.js"></script>
-    <script src="js/helix.js"></script>
+    <script src="js/helix.js" defer></script>
   </head>
-  <body>
-    <div id="dither-header" class="dither-container"></div>
-    <div class="container">
+  <body class="home-page">
+    <main class="home-shell">
+      <article class="home-stack">
+        <header class="home-intro" aria-labelledby="site-title">
+          <div class="cursor-container home-cursor" aria-hidden="true">
+            <svg class="header-shape" viewBox="0 0 24 24" width="24" height="24">
+              <path d="M18.464 16.929c.448.894-.55 1.819-1.409 1.304l-6.54-3.924a1 1 0 0 0-1.03 0l-6.54 3.924c-.858.515-1.857-.41-1.41-1.305l7.57-15.14a1 1 0 0 1 1.79 0z" fill="#45A329"/>
+            </svg>
+            <div class="cursor-label">Online</div>
+          </div>
 
-      <section class="name-title">
-        <div class="section-col1">
-          <p class="bold">Joseph Korol</p>
-          <p>Product Designer</p>
-        </div>
-        <div class="section-col2 top">
-          <div class="contact-links">
-            <a href="mailto:joseph.m.korol@gmail.com" class="contact-link"><img src="img/icons/inbox.svg" alt="Email" class="contact-icon"> joseph.m.korol@gmail.com</a>
-            <a href="cv/Joseph Korol - Product Designer Resume.pdf" download target="_blank" class="contact-link"><img src="img/icons/download.svg" alt="Download" class="contact-icon"> Download CV</a>
-            <a href="https://faooful.github.io/book-club/" target="_blank" class="contact-link">Reading <img src="img/icons/external-link.svg" alt="External" class="contact-icon"></a>
+          <div class="identity">
+            <img class="wizard-hat" src="img/hat.png" alt="">
+            <h1 id="site-title">Joseph Korol</h1>
+            <p>Product Design Leader</p>
+            <nav class="quick-links" aria-label="Primary contact links">
+              <a href="writing/">Writing</a>
+              <a href="cv/Joseph Korol - Product Designer Resume.pdf" download target="_blank">CV</a>
+              <a href="mailto:joseph.m.korol@gmail.com">Email</a>
+            </nav>
           </div>
-        </div>
-      </section>
 
-      <header>
-        <div class="space-container">
-          <div class="space">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
+          <div class="bio-copy">
+            <p>I'm a Product Design Leader with over a decade of experience creating thoughtful, scalable products and helping teams deliver sustainable output at companies like Datadog, project44, Spotify, and Google.</p>
+            <p>Currently leading design on Datadog's Data Observability suite, shaping product surfaces that help teams detect, resolve, and prevent incidents in data and AI products.</p>
+            <p>Beyond work, I solve the NYT crossword, play backgammon, read with friends, and build small tools when something in daily life starts asking for a better interface.</p>
           </div>
-        </div>
-        <div class="cursor-container">
-          <svg class="header-shape" viewBox="0 0 24 24" width="24" height="24">
-            <path d="M18.464 16.929c.448.894-.55 1.819-1.409 1.304l-6.54-3.924a1 1 0 0 0-1.03 0l-6.54 3.924c-.858.515-1.857-.41-1.41-1.305l7.57-15.14a1 1 0 0 1 1.79 0z" fill="#45A329"/>
-          </svg>
-          <div class="cursor-label">Online</div>
-        </div>
-        <h1>Design leadership across startups and global orgs.</h1>
-      </header>
-      
-      <main>
-        <section class="bio-section">
-          <div class="section-col1">
-            <!-- Example: could be a label, icon, or left margin -->
-          </div>
-          <div class="section-col2">
-            <p>I'm a Product Design Leader with over a decade of experience in creating thoughtful, scalable products and helping teams deliver sustainable output at companies like Datadog, project44, Spotify, and Google.</p>
-            <p class="bio-paragraph">When I'm not working, you can find me solving the NYT crossword, playing backgammon, or trying to convince my cat that if he talks to me, I won't tell anyone.</p>
-            <div class="content-toggle">
-              <button class="toggle-option active" onclick="switchContent('experiments')">Play</button>
-              <button class="toggle-option" onclick="switchContent('case-studies')">Work</button>
+        </header>
+
+        <section class="home-section" aria-labelledby="work-title">
+          <h2 id="work-title">Case Studies</h2>
+          <div class="index-list">
+            <div class="index-row index-row-disabled" aria-label="Datadog">
+              <span class="row-year">Now</span>
+              <span class="row-icon"><img src="img/home/datadog.webp" alt=""></span>
+              <span class="row-main">
+                <span class="row-title">Datadog</span>
+                <span class="row-meta">Designing AI experiences</span>
+              </span>
+              <span class="coming-soon-badge">Coming soon</span>
             </div>
+
+            <a class="index-row" href="projects/p44.html" aria-label="project44 case study">
+              <span class="row-year">2023</span>
+              <span class="row-icon"><img src="img/home/project-44.svg" alt=""></span>
+              <span class="row-main">
+                <span class="row-title">project44</span>
+                <span class="row-meta">Surface and highlight logistics issues</span>
+              </span>
+            </a>
+
+            <a class="index-row" href="projects/spotify.html" aria-label="Spotify case study">
+              <span class="row-year">2021</span>
+              <span class="row-icon"><img src="img/home/Spotify_logo.webp" alt=""></span>
+              <span class="row-main">
+                <span class="row-title">Spotify</span>
+                <span class="row-meta">One account across the Spotify universe</span>
+              </span>
+            </a>
+
+            <a class="index-row" href="projects/irm.html" aria-label="Google case study">
+              <span class="row-year">2019</span>
+              <span class="row-icon"><img src="img/home/google.webp" alt=""></span>
+              <span class="row-main">
+                <span class="row-title">Google</span>
+                <span class="row-meta">Incident response tooling for critical moments</span>
+              </span>
+            </a>
+
+            <a class="index-row" href="projects/jaas.html" aria-label="Ubuntu case study">
+              <span class="row-year">2017</span>
+              <span class="row-icon"><img src="img/home/ubuntu.png" alt=""></span>
+              <span class="row-main">
+                <span class="row-title">Ubuntu</span>
+                <span class="row-meta">Cloud orchestration from CLI to GUI</span>
+              </span>
+            </a>
           </div>
         </section>
 
+        <section class="home-section" aria-labelledby="play-title">
+          <h2 id="play-title">Side Projects</h2>
+          <div class="play-grid">
+            <a class="play-card" href="https://little-signals.com/" target="_blank" rel="noopener noreferrer" aria-label="Little Signals">
+              <span class="play-preview">
+                <video src="img/product-screens/little-signals.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Little Signals</span>
+                <span class="play-meta">Shared baby tracking with lightweight analytics.</span>
+              </span>
+            </a>
 
-        <div id="case-studies-content" style="display: none;" class="hidden">
-          <section>
-            <div class="section-col1">
-              <img src="img//home/datadog.webp" alt="Datadog Logo" class="logo">
-            </div>
-            <div class="section-col2">
-              <h2><span class="datadog">Providing teams full context and visibility into their data pipelines. </span>Leading design in a new range of first-touch solutions.</h2>
-              <p>Leading design on the full Data Observability suite. By monitoring data quality across the entire data lifecycle, Datadog Data Observability empowers teams to detect, resolve, and prevent incidents in data and AI products.</p>
-              <p>I work closely with senior leadership to scale three distinct product surfaces and teams while also providing a north star direction for how these products could be packaged as a single distinct offering.</p>
-            </div>
-          </section>
+            <a class="play-card" href="https://faooful.github.io/NoteTab-website/" target="_blank" rel="noopener noreferrer" aria-label="NoteTab">
+              <span class="play-preview">
+                <video src="img/product-screens/note-tab.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">NoteTab</span>
+                <span class="play-meta">Color-coded note cards in Chrome.</span>
+              </span>
+            </a>
 
-          <section>
-            <div class="section-col1">
-              <img src="img/home/project-44.svg" alt="project44 Logo" class="logo">
-            </div>
-            <div class="section-col2">
-              <h2><span class="project44">Transforming supply chain visibility through intelligent logistics. </span>Designing for enterprise-scale data and insights.</h2>
-              <p>Led design for project44's supply chain visibility platform, helping enterprise clients track shipments and optimize logistics operations across global networks. The platform processes millions of data points to provide real-time insights into supply chain performance.</p>
-              <a href="projects/p44.html" class="pill-link case-study-link">Read case study <img src="img/icons/arrow-right.svg" alt="Arrow" class="arrow-icon"></a>
-            </div>
-          </section>
+            <a class="play-card" href="https://github.com/faooful/frost" target="_blank" rel="noopener noreferrer" aria-label="Frost">
+              <span class="play-preview">
+                <img src="img/product-screens/frost.png" alt="">
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Frost</span>
+                <span class="play-meta">Local AI receipt and invoice analysis.</span>
+              </span>
+            </a>
 
-          <section>
-            <div class="section-col1">
-              <img src="img/home/Spotify_logo.webp" alt="Spotify Logo" class="logo">
-            </div>
-            <div class="section-col2">
-              <h2><span class="spotify">Creating unified experiences across the entire Spotify ecosystem. </span>Designing for scale and user delight.</h2>
-              <p>Led design for Spotify's account experience, working across multiple teams to create a cohesive user journey that spans music, podcasts, and premium services. The challenge was maintaining consistency while allowing for the unique needs of different product areas.</p>
-              <a href="projects/spotify.html" class="pill-link case-study-link">Read case study <img src="img/icons/arrow-right.svg" alt="Arrow" class="arrow-icon"></a>
-            </div>
-          </section>
+            <a class="play-card" href="https://faooful.github.io/mockingbird/" target="_blank" rel="noopener noreferrer" aria-label="Mockingbird">
+              <span class="play-preview">
+                <video src="img/product-screens/mockingbird.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Mockingbird</span>
+                <span class="play-meta">Visual wireframing and journey mapping.</span>
+              </span>
+            </a>
 
-          <section>
-            <div class="section-col1">
-              <img src="img/home/google.webp" alt="Google Logo" class="logo">
-            </div>
-            <div class="section-col2">
-              <h2><span class="google">Creating a cohesive incident response tool to be used across the entirety of Google. </span>Designing for critical moments when every second counts.</h2>
-              <p>Led the design of Incident Response and Management (IRM), an initiative to improve Google's fragmented incident response process. I supported three engineering squads across different time zones, working to create a unified tool that replaced and combined the collection of previously used tools.</p>
-              <a href="projects/irm.html" class="pill-link case-study-link">Read case study <img src="img/icons/arrow-right.svg" alt="Arrow" class="arrow-icon"></a>
-            </div>
-          </section>
+            <a class="play-card" href="https://faooful.github.io/DotaQuest/" target="_blank" rel="noopener noreferrer" aria-label="Dota Quest">
+              <span class="play-preview">
+                <video src="img/product-screens/dota-quest.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Dota Quest</span>
+                <span class="play-meta">Randomised hero and items for a unique Dota 2 experience.</span>
+              </span>
+            </a>
 
-          <section>
-            <div class="section-col1">
-              <img src="img/home/ubuntu.png" alt="Ubuntu Logo" class="logo">
-            </div>
-            <div class="section-col2">
-              <h2><span class="ubuntu">Enabling developers to design and build cloud infrastructure faster than any other product. </span>Moving from CLI to GUI for broader accessibility.</h2>
-              <p>Juju enables developers to design and build cloud infrastructure faster than any other product on the market. It was originally developed as a command line interface (CLI) tool. JAAS (Juju as a service) is moving Juju to a GUI and being able to build and deploy without your own infrastructure.</p>
-              <a href="projects/jaas.html" class="pill-link case-study-link">Read case study <img src="img/icons/arrow-right.svg" alt="Arrow" class="arrow-icon"></a>
-            </div>
-          </section>
-        </div>
+            <a class="play-card" href="https://faooful.github.io/html-workbench/" target="_blank" rel="noopener noreferrer" aria-label="HTML Workbench">
+              <span class="play-preview">
+                <video src="img/product-screens/html-workbench.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">HTML Workbench</span>
+                <span class="play-meta">Local editor and renderer for HTML artifacts.</span>
+              </span>
+            </a>
 
-        <div id="experiments-content">
-          <section>
-            <div class="section-col1">
-              <div class="carousel-container">
-              <div class="carousel-wrapper">
-                <div class="carousel-track">
-                  <div class="carousel-item active">
-                    <div class="carousel-image">
-                      <video src="img/product-screens/little-signals.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="carousel-text">
-                      <p>Little Signals is a lightweight app I built to help track feeds and diaper changes and share that with my partner. It also includes simple analytics to give a picture into my baby's patterns. <a href="https://little-signals.com/" target="_blank" class="inline-link">View</a></p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-image">
-                      <div class="video-wrapper">
-                        <video src="img/product-screens/figma soundboard.mp4" class="carousel-screenshot" autoplay loop muted playsinline id="figma-soundboard"></video>
-                        <button class="mute-toggle" onclick="toggleMute('figma-soundboard')">
-                          <svg class="mute-icon" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" fill="currentColor"/>
-                          </svg>
-                          <svg class="unmute-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="carousel-text">
-                      <p>Uses the width of a Figma frame as the timeline and the width and position of components as sound samples, I wanted to ensure no one needs to give up their dream of being a DJ.</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-image">
-                      <div class="video-wrapper">
-                        <video src="img/product-screens/figma-find.mp4" class="carousel-screenshot" autoplay loop muted playsinline id="figma-find"></video>
-                        <button class="mute-toggle" onclick="toggleMute('figma-find')">
-                          <svg class="mute-icon" viewBox="0 0 24 24" width="24" height="24">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" fill="currentColor"/>
-                          </svg>
-                          <svg class="unmute-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="carousel-text">
-                      <p>Searching your Teams in Figma for designs that are similar to what you're working on. "Find more like..." before "Find more like..." was released.</p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-image">
-                      <video src="img/product-screens/note-tab.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="carousel-text">
-                      <p>Transform your notes into organized, color-coded cards with smart syntax recognition in your Chrome browser. <a href="https://faooful.github.io/NoteTab-website/" target="_blank" class="inline-link">View</a></p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <div class="carousel-image">
-                      <video src="img/product-screens/what the druids.mp4" class="carousel-screenshot" autoplay loop muted playsinline></video>
-                    </div>
-                    <div class="carousel-text">
-                      <p>A design system component guessing game inspired by Wordle. Used for fun and for when new designers join the team.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="carousel-controls">
-                <div class="carousel-dots">
-                  <span class="dot active" onclick="currentSlide(1)"></span>
-                  <span class="dot" onclick="currentSlide(2)"></span>
-                  <span class="dot" onclick="currentSlide(3)"></span>
-                  <span class="dot" onclick="currentSlide(4)"></span>
-                  <span class="dot" onclick="currentSlide(5)"></span>
-                </div>
-              </div>
+            <a class="play-card" href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer" aria-label="Remote Book Club">
+              <span class="play-preview">
+                <img src="img/product-screens/remote-book-club.gif" alt="">
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Reading</span>
+                <span class="play-meta">Remote book club with friends.</span>
+              </span>
+            </a>
+
+            <a class="play-card" href="img/product-screens/figma-find.mp4" target="_blank" rel="noopener noreferrer" aria-label="Figma Find">
+              <span class="play-preview">
+                <video src="img/product-screens/figma-find.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Figma Find</span>
+                <span class="play-meta">Find similar designs across Figma teams.</span>
+              </span>
+            </a>
+
+            <a class="play-card" href="img/product-screens/figma soundboard.mp4" target="_blank" rel="noopener noreferrer" aria-label="Figma Soundboard">
+              <span class="play-preview">
+                <video src="img/product-screens/figma soundboard.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">Figma Soundboard</span>
+                <span class="play-meta">Turns frame layout into playable samples.</span>
+              </span>
+            </a>
+
+            <a class="play-card" href="img/product-screens/what the druids.mp4" target="_blank" rel="noopener noreferrer" aria-label="What the Druids">
+              <span class="play-preview">
+                <video src="img/product-screens/what the druids.mp4" autoplay loop muted playsinline></video>
+              </span>
+              <span class="play-detail">
+                <span class="play-title">What the Druids</span>
+                <span class="play-meta">A design-system guessing game.</span>
+              </span>
+            </a>
           </div>
-          </section>
-        </div>
-      </main>
-    </div>
+        </section>
+
+        <footer class="home-footer" aria-label="Contact links">
+          <a href="mailto:joseph.m.korol@gmail.com">Email</a>
+          <a href="cv/Joseph Korol - Product Designer Resume.pdf" download target="_blank">CV</a>
+          <a href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer">Reading</a>
+          <a href="https://www.linkedin.com/in/-jmw-/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </footer>
+      </article>
+    </main>
   </body>
 </html>
