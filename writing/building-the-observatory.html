@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Building The Observatory - Joseph Korol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css?v=redesign">
+  </head>
+  <body class="writing-page">
+    <div class="container">
+      <header class="writing-hero">
+        <span><a href="../" class="pill-link">Back home</a></span>
+        <p class="writing-kicker">Writing</p>
+        <h1><span class="project-accent project-accent-cell">Building The Observatory</span>, a little globe of Gielinor in the browser.</h1>
+      </header>
+
+      <main>
+        <section>
+          <div class="section-col1">
+            <h2>Impulse</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I wanted a map of Gielinor that felt less like opening a wiki page and more like looking at a place.</p>
+            <p>That was the whole impulse really. I spend a lot of time in Old School RuneScape bouncing between tabs: the world map, the wiki, quest requirements, boss pages, account stats. It works, but it has that slightly fragmented feeling where the information is all technically available and still somehow not in the same room.</p>
+            <p>So I started building The Observatory.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Globe</h2>
+          </div>
+          <div class="section-col2">
+            <figure class="writing-figure">
+              <figcaption>The Observatory globe</figcaption>
+              <img src="../img/writing/observatory/observatory-globe.png" alt="The Observatory showing Gielinor wrapped onto a globe." style="display: block; width: 100%; height: auto;">
+            </figure>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Shape</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The first version in my head was probably too simple: take the OSRS world map, put it on a plane, drop some markers on it, call it a day. But that missed the thing I actually wanted. I did not want another flat map. The interesting part was the feeling of pulling back far enough that Gielinor becomes a little object, then diving back into it when you care about a specific place.</p>
+            <p>That is where the globe came from.</p>
+            <p>The awkward bit is that OSRS is not a planet. It is a finite game map made of map squares, regions, cache data, missing edges, instanced oddities, and a lot of things that were never designed to be wrapped around a sphere. There is no real east-meets-west continuity. There is no hidden geography beyond the edge. It is just a game world with bounds.</p>
+            <p>I spent a surprising amount of time on that fact.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Cache</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The scene generation starts from the OSRS cache, via <code>rs-map-viewer</code> and an OpenRS2 cache build, then exports map-square geometry into <code>public/osrs-scene/osrs-238_2026-06-03</code>. The generated output is not one neat file. It is a manifest, overview textures, a texture atlas, and thousands of little binary chunks: positions, colours, indices, UVs, texture indices. The app uses the overview texture while you are far away, then streams the chunk meshes when you move closer.</p>
+            <p>That part was interesting actually, because it made the app feel more like a tiny map engine than a React page. The React bit is mostly the shell. The real object is the scene: Three.js, React Three Fiber, a custom globe-to-plane projection, a camera rig, and a bunch of generated data that needs to appear at the right moment without making the first load ridiculous.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Seam</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The first big visual problem was the seam.</p>
+            <p>When you wrap a finite OSRS map texture around a globe, there is a dark vertical gap where the texture runs out. I tried the obvious thing first: make the texture wrap-safe by duplicating a strip from one side into the empty padding on the other side. Technically it worked. Visually it was weird. The back of the globe started showing repeated geography that implied the world continued when it did not.</p>
+            <p>Then I tried making the empty strip more ocean-coloured. That was also almost right, and still wrong. It made the gap less black, but it turned the edge into a strange blue band. One of those fixes where the bug is gone and your eye immediately finds the fix instead.</p>
+            <p>So I backed that out.</p>
+            <p>That is something I keep relearning with visual work. Sometimes the correct answer is not to hide the artefact harder. Sometimes the artefact is telling you something true about the underlying model. Gielinor does not wrap. The better version was not pretending it did.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Deployment</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The second big problem was deployment, and that one was less philosophical.</p>
+            <p>Locally, everything worked. The generated chunks sat in <code>public/osrs-scene/osrs-238_2026-06-03/chunks</code>, the app streamed them when you zoomed in, and the player lookup endpoint could fetch and parse OSRS hiscores/wiki-ish data. Then I put it on GitHub Pages and immediately hit the shape of a static host.</p>
+            <p>The lookup route could not run there. Of course it could not. GitHub Pages was serving static files, so the app tried to fetch JSON from an API route that did not exist and got HTML back. That produced the very glamorous error: <code>Unexpected token '&lt;', "&lt;!DOCTYPE "... is not valid JSON</code>.</p>
+            <p>So I made the app honest. On the static build, player lookup is disabled with a real message instead of a broken JSON parse. GitHub Pages can show the map, but it cannot be the whole product.</p>
+            <p>Vercel fixed the API side, but not the chunk side.</p>
+            <p>The chunks were about 8.1GB across 7,680 files. That is not something I wanted to push through Vercel as part of every deployment, and it is definitely not something GitHub Pages wanted in an artefact. For a minute I pointed the app at raw GitHub URLs, which is the kind of solution that feels clever until the browser starts trying to fetch hundreds of binary files and you remember that raw GitHub is not a CDN.</p>
+            <p>So the final shape became: Vercel for the app and API, Cloudflare R2 for the heavy map chunks.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>R2</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>That made the architecture click into place. The app loads from Vercel. The overview texture and manifest are small enough to live with the app. But when the camera gets close enough to need real geometry, the browser fetches chunk binaries from a Cloudflare Worker in front of an R2 bucket. The Worker is deliberately boring: <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, CORS headers, long cache headers, and object lookup by path. The exciting part is that there is no exciting part.</p>
+            <p>I uploaded all 7,680 files to R2, verified the live Worker URLs were returning <code>HTTP 200</code>, then changed <code>NEXT_PUBLIC_OSRS_CHUNK_ROOT</code> to point at:</p>
+            <p><code>https://observatory-osrs-chunks.faooful.workers.dev/osrs-scene/osrs-238_2026-06-03</code></p>
+            <p>After that, Vercel deployments went back to being tiny. The browser still gets the close-up data, but Vercel does not carry the 8.1GB around.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Account</h2>
+          </div>
+          <div class="section-col2">
+            <figure class="writing-figure">
+              <figcaption>Player lookup with quest markers</figcaption>
+              <img src="../img/writing/observatory/observatory-player-lookup.png" alt="The Observatory showing a player lookup for jumpy wizard with available quest markers." style="display: block; width: 100%; height: auto;">
+            </figure>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Markers</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The player layer was the other half of the idea. I did not just want a pretty object. I wanted the map to react to an account.</p>
+            <p>The lookup flow lets me type an OSRS username, fetch the account state, and then turn that into map markers for things that are available. Right now the strongest version of that is quests and bosses. You search for a player, the app works out what can be started, and the map gets little pins where those activities live.</p>
+            <p>There is something satisfying about that, because it changes the map from a reference into a lens. The same geography means different things depending on the account. A quest marker is not just "this exists here". It is "this is available to you now".</p>
+            <p>That is the part I want to keep pushing.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Where it landed</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>There are still rough edges. The globe seam is still a compromise. The close-up transition needs more tuning. The static GitHub Pages version is useful but intentionally limited. And the whole thing is sitting on a very specific generated OSRS cache snapshot, <code>osrs-238_2026-06-03</code>, which is great for determinism and less great if I want it to track the live game forever.</p>
+            <p>But I like where it landed.</p>
+            <p>The thing that changed over the build was my sense of what the project was. I started with "can I put the OSRS map on a globe?" and ended up with a small streaming map system, a deployment split between Vercel and R2, and a UI that can make Gielinor feel personal to an account.</p>
+            <p>Which is very much how these agent-assisted projects tend to go for me. The first prompt is usually too small. Then the real work starts appearing in the gaps: the seam, the deployment limit, the static API route, the 8GB folder that absolutely should not be in the app host, the difference between a marker and a useful recommendation.</p>
+            <p>That is the bit I enjoy.</p>
+            <p>Not the magic of asking for a thing and receiving a finished product. It was not that. It was more like having enough momentum to keep following the next problem as it appeared, without the project collapsing under the weight of its own fiddly details.</p>
+            <p>And now there is a little globe of Gielinor sitting in the browser.</p>
+            <p>That still feels worth it.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Credits</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I should say the credits part plainly, because this only works because a lot of other people have made OSRS data and web graphics tooling usable in the first place.</p>
+            <p>The game world, names, art direction, and underlying Old School RuneScape material belong to <a href="https://oldschool.runescape.com/" target="_blank" rel="noopener noreferrer">Jagex</a>. The cache snapshot came from the <a href="https://archive.openrs2.org/" target="_blank" rel="noopener noreferrer">OpenRS2 Archive</a>, specifically the kind of cache and XTEA-key preservation work that makes experiments like this possible without scraping a live client. The scene export leaned heavily on <a href="https://github.com/dennisdev/rs-map-viewer" target="_blank" rel="noopener noreferrer">dennisdev/rs-map-viewer</a>, which already does the hard work of exploring current and historical RuneScape maps.</p>
+            <p>The account and activity layer pulls from a few community/public sources too: the <a href="https://secure.runescape.com/m=hiscore_oldschool/index_lite.ws" target="_blank" rel="noopener noreferrer">official OSRS hiscores endpoint</a>, <a href="https://github.com/weirdgloop/wikisync-api" target="_blank" rel="noopener noreferrer">WikiSync</a> for quest state when a player has shared it, the <a href="https://oldschool.runescape.wiki/api.php" target="_blank" rel="noopener noreferrer">Old School RuneScape Wiki API</a> for quest and page data, the <a href="https://prices.runescape.wiki/" target="_blank" rel="noopener noreferrer">OSRS Wiki real-time prices API</a>, and <a href="https://github.com/Explv/Explv.github.io" target="_blank" rel="noopener noreferrer">Explv's Map</a> as an open-source coordinate-map reference.</p>
+            <p>The rendering side is built on <a href="https://threejs.org/" target="_blank" rel="noopener noreferrer">Three.js</a>, <a href="https://r3f.docs.pmnd.rs/getting-started/introduction" target="_blank" rel="noopener noreferrer">React Three Fiber</a>, and <a href="https://github.com/pmndrs/drei" target="_blank" rel="noopener noreferrer">Drei</a>. The app itself is <a href="https://nextjs.org/docs" target="_blank" rel="noopener noreferrer">Next.js</a>, deployed on <a href="https://vercel.com/docs/frameworks/full-stack/nextjs" target="_blank" rel="noopener noreferrer">Vercel</a>, with the big generated chunk files served from <a href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener noreferrer">Cloudflare R2</a> through a small Cloudflare Worker. <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages" target="_blank" rel="noopener noreferrer">GitHub Pages</a> is still there as the static version, which is useful in its own more limited way.</p>
+            <p>That list matters. The Observatory is a little thing I made, but it is very much sitting on top of a community map, a preserved cache, a very generous wiki ecosystem, and a web graphics stack I did not have to invent.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <a href="index.html" class="pill-link">Back to writing</a>
+          </div>
+          <div class="section-col2"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
