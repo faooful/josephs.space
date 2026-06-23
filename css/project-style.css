@@ -633,6 +633,14 @@ label {
     padding-bottom: 38px !important;
 }
 
+.writing-index-page main > section {
+    grid-template-columns: 1fr !important;
+}
+
+.writing-index-page .section-col1 {
+    display: none !important;
+}
+
 .writing-kicker {
     color: var(--project-secondary) !important;
     font-size: 13px !important;
@@ -811,7 +819,7 @@ label {
 
 .writing-list {
     display: grid;
-    gap: 10px;
+    gap: 36px;
 }
 
 .writing-list-item {
