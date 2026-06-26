@@ -138,9 +138,55 @@ window.switchContent = switchContent;
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     initCursorAnimation();
+    initCaseStudiesToggle();
+    initSideProjectsToggle();
     initCarousel();
     initDitherEffect();
 });
+
+function initExpandableSection(sectionSelector, toggleSelector) {
+    const section = document.querySelector(sectionSelector);
+    const toggle = document.querySelector(toggleSelector);
+    const collapseDuration = 220;
+    let collapseTimeout;
+
+    if (!section || !toggle) {
+        return;
+    }
+
+    function updateLabel(isExpanded) {
+        toggle.textContent = isExpanded ? 'Less' : 'More';
+        toggle.setAttribute('aria-expanded', String(isExpanded));
+    }
+
+    updateLabel(section.classList.contains('is-expanded'));
+
+    toggle.addEventListener('click', () => {
+        const isExpanded = section.classList.contains('is-expanded');
+        clearTimeout(collapseTimeout);
+
+        if (isExpanded) {
+            section.classList.add('is-collapsing');
+            updateLabel(false);
+            collapseTimeout = setTimeout(() => {
+                section.classList.remove('is-expanded', 'is-collapsing');
+            }, collapseDuration);
+            return;
+        }
+
+        section.classList.remove('is-collapsing');
+        section.classList.add('is-expanded');
+        updateLabel(true);
+    });
+}
+
+function initCaseStudiesToggle() {
+    initExpandableSection('.case-studies-section', '.case-studies-toggle');
+}
+
+function initSideProjectsToggle() {
+    initExpandableSection('.side-projects-section', '.side-projects-toggle');
+}
 
 // Initialize dither effect
 function initDitherEffect() {
