@@ -1147,6 +1147,10 @@ section:has(.carousel-container) .section-col2 {
 	animation-delay: 175ms;
 }
 
+.side-projects-section.is-expanded .play-card:nth-child(11) {
+	animation-delay: 210ms;
+}
+
 @keyframes reveal-content {
 	from {
 		opacity: 0;
