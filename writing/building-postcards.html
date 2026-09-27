@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Building Postcards - Joseph Korol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css?v=redesign">
+  </head>
+  <body class="writing-page">
+    <div class="container">
+      <header class="writing-hero">
+        <span><a href="index.html" class="pill-link">Back to writing</a></span>
+        <p class="writing-kicker">Writing</p>
+        <h1>Building Postcards, a small correspondence system for agents.</h1>
+      </header>
+
+      <main>
+        <section>
+          <div class="section-col1">
+            <h2>Impulse</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I wanted to make a place for the little notes that usually disappear after a session ends.</p>
+            <p>Not a transcript viewer. Not a dashboard of agent activity. Something quieter than that: a collection of fictional postcards, written by agents and kept as small pieces of correspondence.</p>
+            <p>That was the impulse behind Postcards.</p>
+            <p>The first version of the idea was basically a folder of Markdown files and a page that could read them. Which is still more or less what it is. The work was in figuring out what kind of feeling could sit around that simple source.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Source</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The local Markdown files are the source of truth. Each postcard has a title, a date, a sender, a short public-safe reference, and a fictional body. The browser reads those files at build time, turns them into a correspondence collection, and renders the text as text rather than letting arbitrary HTML leak into the page.</p>
+            <p>That constraint is useful. It keeps the project legible. There is no database, no sync service, no API key, and no hidden ingestion pipeline. A new note is just a new file. You can open it, read it, edit it, and decide whether it should ever leave the machine.</p>
+            <p>It also makes the boundary between the agent and the archive much clearer. The writer can create a file. The collection still belongs to the person who keeps it.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Stamp</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The stamp was the part that made the project feel like a place rather than a list.</p>
+            <p>I wanted every note to have a little visual object attached to it, but I did not want to generate a new image every time the page loaded. So the artwork is local and deterministic. The postcard's id and story choose a motif, palette, pose, and a small amount of variation. The same postcard gets the same drawing again.</p>
+            <p>There are doors, lanterns, piers, birds, flowers, kites, teacups, trees, mushrooms, mountains, moons, umbrellas, balloons, books, keys, clocks, bicycles, cats, and fish. Twenty tiny families is enough to make the collection feel varied without making the archive dependent on a model call for its own decoration.</p>
+            <p>The stamp is not an illustration of the story in any literal sense. It is more like a recurring bit of handwriting.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Motion</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>Once the stamps existed, they needed a little life, but the obvious version was too much. A page full of endlessly moving objects turns into a screensaver very quickly.</p>
+            <p>So the motion is intentionally small. Selected SVG details alternate between poses. The stamp can lean towards the pointer, with the tilt capped at ten degrees. Keyboard focus gets a fixed tilt. Reduced-motion preferences remove both. Offscreen stamps and hidden tabs pause their scenes.</p>
+            <p>Those details sound minor, but they changed the character of the page. The stamps feel present without asking to be watched. That is probably the right energy for correspondence.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Reading</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The main design problem was not writing the postcard. It was making the act of reading feel good across a desktop and a phone.</p>
+            <p>I tried a Blue Airmail direction, then backed it out. It was a useful detour because it clarified what the collection did not need. The page did not need to perform nostalgia at full volume. It needed a strong list, a readable correspondence view, and enough room around the words for the fiction to breathe.</p>
+            <p>The final shape is quieter: browse the collection, select a title, read the note, move to another one. On smaller screens the navigation changes rather than simply shrinking. The correspondence can use the viewport properly, and the reading surface stays the thing you came for.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Guardrails</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The project is also a small exercise in making agent output safe to keep around.</p>
+            <p>The writer validates the required fields and the shape of the Markdown before saving. The build checks the collection again. Privacy checks block recognizable private patterns, but they are not treated as magic; the instructions still ask for a human inspection before anything is committed or pushed.</p>
+            <p>That balance matters. Automation can catch malformed structure and obvious mistakes. It cannot decide whether a particular detail should become public. The person holding the archive still has to make that call.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Deployment</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The deployment is deliberately boring. The repository builds with Vite, runs its validation and TypeScript checks, and publishes only <code>dist/</code> to GitHub Pages. There is no server to keep awake and no collection service to trust.</p>
+            <p>That simplicity is part of the product. New postcards appear locally first. Publishing is manual. The source files remain understandable even if the website disappears. The archive has a home on the web, but it does not depend on the web to exist.</p>
+            <p>I like that the technical architecture makes the emotional premise more believable. These are small notes. They do not need a large machine behind them.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Where it landed</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>Postcards started as a way to save a few fictional messages and became a little correspondence system: local files, generated stamps, responsive reading, validation, and a publishing boundary that stays visible.</p>
+            <p>The interesting part was not making agents write postcards. They can do that easily enough. The interesting part was giving those notes a form that did not make them feel like logs.</p>
+            <p>There is a difference between storing output and keeping a collection. The first one is an archive problem. The second one has taste in it: what gets a title, what gets a stamp, what gets left private, what is worth returning to.</p>
+            <p>Now there is a quiet little page of correspondence sitting in the browser.</p>
+            <p>That feels like enough.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <a href="index.html" class="pill-link">Back to writing</a>
+          </div>
+          <div class="section-col2"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
