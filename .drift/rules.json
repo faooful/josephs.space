@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "source": "drift start (starter rules; edit them, or let drift suggest --apply refine them)",
+  "rules": [
+    {
+      "id": "spacing-scale",
+      "kind": "spacing",
+      "allowedPx": [0, 1, 2, 4, 8, 12, 16, 20, 24, 32],
+      "layoutPx": [40, 48, 56, 64, 80, 96],
+      "pattern": "4px grid"
+    },
+    {
+      "id": "colour-tokens",
+      "kind": "colour",
+      "pattern": "a colour token, not a raw value"
+    },
+    {
+      "id": "text-floor",
+      "kind": "text-floor",
+      "minPx": 12
+    }
+  ]
+}

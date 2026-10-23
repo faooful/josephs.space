@@ -1,0 +1,389 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#0072E9",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#059669",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#111",
+      "count": 4
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#1a1a1a",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#1A1A1A",
+      "count": 4
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#1b1b1b",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#2a2a2a",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#333",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#374151",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#4285F4",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#444",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#45A329",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#4b5563",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#60a5fa",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#632CA6",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#666",
+      "count": 5
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#6b7280",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#7c4dff",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#9333ea",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#9ca3af",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#B8B8B8",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#cccccc",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#d0d0d0",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#dc2626",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#dc262620",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#dd4814",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#e0e0e0",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#e5e7eb",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#F06293",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#f0f0f0",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#f59e0b",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#f87171",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#f8f8f8",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#fff",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "#ffffff",
+      "count": 12
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(0, 0, 0, 0.6)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(0, 0, 0, 0.8)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(127, 127, 127, 0.12)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(17, 17, 17, 0.05)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(17, 17, 17, 0.1)",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(17, 17, 17, 0.2)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(17, 17, 17, 0.3)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(17, 17, 17, 0.6)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(22, 22, 22, 0.04)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(255, 255, 255, 0.03)",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/main.css",
+      "value": "rgba(26, 26, 26, 0.4)",
+      "count": 9
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/modal.css",
+      "value": "#4643ff",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/modal.css",
+      "value": "#E0DDD3",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/modal.css",
+      "value": "#f0f0f0",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/modal.css",
+      "value": "#fff",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "#1a1a18",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "#2e2a2a",
+      "count": 3
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "#404040",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "#a3a3a3",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(0, 0, 0, 0.1)",
+      "count": 3
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(0, 0, 0, 0.22)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(127, 127, 127, 0.12)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(241, 241, 237, 0.03)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(241, 241, 237, 0.035)",
+      "count": 1
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(241, 241, 237, 0.04)",
+      "count": 2
+    },
+    {
+      "rule": "colour-tokens",
+      "file": "css/project-style.css",
+      "value": "rgba(241, 241, 237, 0.08)",
+      "count": 2
+    },
+    {
+      "rule": "text-floor",
+      "file": "css/main.css",
+      "value": "font-size 10px in css/main.css; the desk floor is 12px",
+      "count": 1
+    },
+    {
+      "rule": "text-floor",
+      "file": "css/main.css",
+      "value": "font-size 11px in css/main.css; the desk floor is 12px",
+      "count": 3
+    },
+    {
+      "rule": "text-floor",
+      "file": "css/project-style.css",
+      "value": "font-size 11px in css/project-style.css; the desk floor is 12px",
+      "count": 1
+    }
+  ]
+}

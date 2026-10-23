@@ -1,0 +1,27 @@
+# Runs drift on every pull request, using the rules in this repo's .drift/.
+# Remove this file to stop. Nothing else runs on a schedule.
+#
+# faooful/drift is a private repo and this repo is public, so GitHub will not
+# resolve `uses: faooful/drift@v1` here. The drift action is checked out at the
+# v1 tag with a read-only token (secret DRIFT_ACTION_TOKEN: a fine-grained
+# token with Contents: read on faooful/drift) and run from that local path.
+name: drift
+on:
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the drift action (faooful/drift@v1)
+        uses: actions/checkout@v4
+        with:
+          repository: faooful/drift
+          ref: v1
+          path: .drift-action
+          token: ${{ secrets.DRIFT_ACTION_TOKEN }}
+          persist-credentials: false
+      - uses: ./.drift-action
