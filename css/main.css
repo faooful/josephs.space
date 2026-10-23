@@ -1171,6 +1171,10 @@ section:has(.carousel-container) .section-col2 {
 	animation-delay: 280ms;
 }
 
+.side-projects-section.is-expanded .play-card:nth-child(14) {
+	animation-delay: 315ms;
+}
+
 @keyframes reveal-content {
 	from {
 		opacity: 0;
@@ -1558,6 +1562,12 @@ a.case-card:hover .case-link {
 
 .play-card:hover .play-meta {
 	color: var(--home-primary);
+}
+
+/* Drift: preview matches the terminal background in its video */
+.play-card--drift .play-preview {
+	background: #1b1b1b;
+	border-color: #1b1b1b;
 }
 
 .home-footer {
