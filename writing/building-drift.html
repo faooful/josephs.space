@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Building Drift - Joseph Korol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css?v=redesign">
+  </head>
+  <body class="writing-page">
+    <div class="container">
+      <header class="writing-hero">
+        <span><a href="index.html" class="pill-link">Back to writing</a></span>
+        <p class="writing-kicker">Writing</p>
+        <h1>Building Drift, a small tool for keeping a design system from wandering off.</h1>
+      </header>
+
+      <main>
+        <section>
+          <div class="section-col1">
+            <h2>Impulse</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I wanted something that would notice when a codebase started quietly wandering away from its own design system.</p>
+            <p>Not a style guide nobody opens. Not a big audit you run once and forget about. Something smaller than that: a tool that sits next to the code, watches what actually gets merged, and speaks up when it matters.</p>
+            <p>That was the impulse behind Drift.</p>
+            <p>It is a CLI and a GitHub Action, and its whole job is keeping a design system from drifting. Which is also why the logo is an animated ASCII car drifting across the terminal. I'll be honest, that part was not strictly necessary.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Drift</h2>
+          </div>
+          <div class="section-col2">
+            <figure class="writing-figure">
+              <figcaption>Drift in the terminal</figcaption>
+              <video src="../img/product-screens/drift.mp4" autoplay loop muted playsinline aria-label="A terminal recording of drift checking a project and opening its design-system library" style="display: block; width: 100%; height: auto;"></video>
+            </figure>
+            <p class="figure-note">The car is doing most of the marketing. The rest is a handful of commands.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Premise</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>In <a href="scaling-designer-taste.html">Scaling designer taste</a> I wrote about the problem with making a markdown file the source of truth for a design system. You create another thing to maintain, and it goes stale.</p>
+            <p>Drift comes at it from the other side. Instead of writing the system down and hoping the code follows, it looks at the code that actually got merged. A merge is a decent signal that someone meant it.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Start</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The first command is <code>drift start</code>. It sets up the rules for a repo, so there is something to check against.</p>
+            <p>After that, <code>drift check</code> lints the code against those rules. That part is fairly ordinary on purpose. A linter is a familiar shape, and I wanted Drift to feel like something you already know how to live with.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Baseline</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>The part I cared about most was not making every existing problem someone's problem on day one.</p>
+            <p>So pull requests fail by default only on new findings, measured against a baseline. Whatever was already there stays visible, but it doesn't block the work. If a change adds new drift, the check says so. If it doesn't, it gets out of the way.</p>
+            <p>Most codebases already have some drift in them. Pretending otherwise just teaches people to ignore the tool.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Suggest</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p><code>drift suggest</code> is the bit that learns. It looks at merged history and proposes tokens and rules from it.</p>
+            <p>I like that direction. It turns what the team actually shipped into a starting point, rather than a spec written up front. You still decide what becomes a rule.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Library</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p><code>drift library</code> serves or exports a local design-system site. It has Foundations, Components with real renders, Rules, and a Timeline of merged PRs.</p>
+            <p>The real renders matter. A component page that shows the actual component is a lot more trustworthy than a screenshot someone took months ago.</p>
+            <p>The Timeline is probably my favourite part. It gives the design system a history, not just a list of what is allowed.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Setup</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>Getting it into a repo is meant to be boring. <code>drift setup</code> adds a one-file workflow to any repo. <code>drift remove</code> takes it out again.</p>
+            <p>That second command matters more than it sounds. A tool is much easier to try when it is just as easy to undo.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Team</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>I built Drift with my team of AI bots over the past few days.</p>
+            <p>That is still a slightly strange sentence to write. But it is how it happened: lots of small steps, each one reviewed, with me deciding what stayed.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <h2>Where it landed</h2>
+          </div>
+          <div class="section-col2 writing-copy">
+            <p>Drift started as a way to catch design-system drift and became a small set of commands: start, check, suggest, library, setup, remove. And a car.</p>
+            <p>The interesting part was not the linting. Plenty of tools can lint. The interesting part was making the check fair to a codebase that already has a history, and letting that history suggest the rules instead of the other way round.</p>
+            <p>It is still early, and the repo is private for now.</p>
+            <p>But there is a little car drifting across my terminal, and a design system that is a bit harder to wander away from.</p>
+            <p>That feels like enough for now.</p>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-col1">
+            <a href="index.html" class="pill-link">Back to writing</a>
+          </div>
+          <div class="section-col2"></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
