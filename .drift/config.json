@@ -1,0 +1,89 @@
+{
+  "scan": {
+    "dirs": [
+      "css",
+      "js"
+    ],
+    "extensions": [
+      ".css",
+      ".js"
+    ]
+  },
+  "decisions": [
+    {
+      "kind": "colour",
+      "value": "#fbfbfa",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#161616",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#676763",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#9a9a94",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "rgba(22, 22, 22, 0.09)",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "rgba(22, 22, 22, 0.045)",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "rgba(22, 22, 22, 0.42)",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#73736d",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#8a8a84",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#1d7dff",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#1ed760",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#71a7ff",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#e95420",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#55c7ff",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#5aa4e8",
+      "resolution": "allow"
+    }
+  ]
+}
