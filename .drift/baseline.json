@@ -368,6 +368,216 @@
       "count": 2
     },
     {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "margin-left: -100px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "margin-left: -6px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding-left: 100px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 100px",
+      "count": 4
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 14px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 22px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 3px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 5px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 60px",
+      "count": 5
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 6px",
+      "count": 4
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 72px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/main.css",
+      "value": "padding: 9px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/modal.css",
+      "value": "margin-right: 10px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/modal.css",
+      "value": "margin-top: 120px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/modal.css",
+      "value": "padding: 10px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin-bottom: 10px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin-bottom: 18px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin: 10px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin: 14px",
+      "count": 4
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin: 18px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "margin: 42px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding-bottom: 14px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding-bottom: 34px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding-bottom: 38px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding-bottom: 5px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 100px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 10px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 14px",
+      "count": 3
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 18px",
+      "count": 4
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 22px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 30px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 42px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 5px",
+      "count": 2
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 60px",
+      "count": 1
+    },
+    {
+      "rule": "spacing-scale",
+      "file": "css/project-style.css",
+      "value": "padding: 72px",
+      "count": 1
+    },
+    {
       "rule": "text-floor",
       "file": "css/main.css",
       "value": "font-size 10px in css/main.css; the desk floor is 12px",
