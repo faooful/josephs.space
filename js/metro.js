@@ -239,7 +239,7 @@
 		const label = el('text', { x: x + dx, y: y + dy, 'text-anchor': anchor, 'dominant-baseline': 'middle', class: deco || st.soon ? 'm-label-sm' : 'm-label' }, gLabels);
 		label.textContent = st.label;
 		const along = hubDistance(st.lines[0], x, y);
-		const item = { st, g, label, x, y, along, line: st.lines[0], waiting: [] };
+		const item = { st, g, label, x, y, shape, size, along, line: st.lines[0], waiting: [] };
 		if (!deco) {
 			stationEls.set(st.id, item);
 			labelEls.set(st.id, label);
@@ -263,7 +263,7 @@
 	hubName.textContent = bioName;
 	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
 	hubRole.textContent = bioRole;
-	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1] };
+	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1], shape: 'circle', size: 40 };
 
 	// stops along each route, for trains
 	stationEls.forEach((item) => {
@@ -338,7 +338,7 @@
 	const ident = document.querySelector('.metro-ident');
 	const popBody = pop.querySelector('.m-pop-body');
 	let openItem = null;
-	let popAt = [0, 0]; // where the hub's card sits, for the morph
+	let popAt = [0, 0]; // where the open card sits, for the morph
 
 	// the line's colour with its station shape on it, standing in for the legend
 	function lineKey(line) {
@@ -402,7 +402,8 @@
 		return img;
 	}
 
-	// the hub's card: name, role, the bio's opening two sentences and the contact links, all cloned from the list
+	// the hub's card: name, role, the bio's opening two paragraphs and the contact links, all cloned from the list;
+	// the second is set as a quieter 'Currently' line, with its first word picked out (the words are unchanged)
 	function bioSection() {
 		const sec = document.createElement('div');
 		sec.className = 'm-pop-sec m-pop-bio';
@@ -414,9 +415,16 @@
 		role.className = 'm-pop-kicker';
 		role.textContent = bioRole;
 		sec.append(title, role);
-		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p) => {
+		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p, i) => {
 			const copy = p.cloneNode(true);
-			copy.className = 'm-pop-meta';
+			copy.className = i ? 'm-pop-bio-now' : 'm-pop-bio-lede';
+			const first = copy.firstChild;
+			if (i && first && first.nodeType === 3 && first.data.startsWith('Currently')) {
+				const lead = document.createElement('span');
+				lead.textContent = 'Currently';
+				first.data = first.data.slice(9);
+				copy.prepend(lead);
+			}
 			sec.append(copy);
 		});
 		const links = document.createElement('div');
@@ -426,61 +434,92 @@
 		return sec;
 	}
 
-	// the hub's card is centred on it, above or below; these are the screen edges it keeps inside
-	const hubGap = () => 28 * cam.k + 8;
+	// ---------- every card is anchored to its shape: a corner of the card sits on the shape's outline ----------
 	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
 	const popFloor = () => dock.getBoundingClientRect().top - 8;
+	const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
+	let popDir = [1, 1]; // which way the card runs from its shape: right/down 1, left/up -1
 
-	// pan so the hub's card fits centred on the hub: horizontally, then above it, or else below
-	function panToHub() {
-		const [sx, sy] = toScreen(HUB[0], HUB[1]);
-		const w = pop.offsetWidth;
-		const need = pop.offsetHeight + hubGap();
-		const x = w + 32 > vw ? vw / 2 : Math.max(16 + w / 2, Math.min(sx, vw - 16 - w / 2));
-		let y = sy;
-		if (sy - need < popRoof() && sy + need > popFloor()) {
-			const above = popRoof() + need;
-			const below = popFloor() - need;
-			y = Math.abs(above - sy) <= Math.abs(below - sy) || below < popRoof() ? above : below;
+	// the shape's outline as drawn while open (scaled 1.22), around its centre in screen px: [left, top, right, bottom]
+	function shapeBox(item) {
+		const s = item.size * 1.22 * cam.k;
+		if (item.shape === 'square') {
+			return [-0.45 * s, -0.45 * s, 0.45 * s, 0.45 * s];
 		}
-		cam.tx += x - sx;
-		cam.ty += y - sy;
+		if (item.shape === 'triangle') {
+			return [-0.55 * s, -0.638 * s, 0.55 * s, 0.319 * s];
+		}
+		const r = item.shape === 'diamond' ? 0.575 * s : s / 2;
+		return [-r, -r, r, r];
+	}
+
+	// one axis: the card runs on from the shape's near edge a, or back from its far edge b; the way with more room wins,
+	// unless only the other fits; shift is how far the map has to move for it to fit
+	function pickWay(a, b, len, lo, hi) {
+		const shift = (start) => (start < lo ? lo - start : start + len > hi ? hi - start - len : 0);
+		const ways = [{ dir: 1, shift: shift(a) }, { dir: -1, shift: shift(b - len) }];
+		if (a + b > lo + hi) {
+			ways.reverse();
+		}
+		return ways.find((w) => w.shift === 0) || (Math.abs(ways[0].shift) <= Math.abs(ways[1].shift) ? ways[0] : ways[1]);
+	}
+
+	// choose the card's corner and pan the map if that is the only way it fits on screen, between the name and the dock
+	function panToFit(item) {
+		const [sx, sy] = toScreen(item.x, item.y);
+		const [l, t, r, b] = shapeBox(item);
+		const x = pickWay(sx + l, sx + r, pop.offsetWidth, 16, vw - 16);
+		const y = pickWay(sy + t, sy + b, pop.offsetHeight, popRoof(), popFloor());
+		popDir = [x.dir, y.dir];
+		cam.tx += x.shift;
+		cam.ty += y.shift;
 		applyCam();
 	}
 
-	// ---------- the hub's card grows out of the hub: a FLIP of transform and border-radius ----------
+	// ---------- each card grows out of its shape: a FLIP of transform, with border-radius or a polygon clip ----------
 	// one animation per element, the same length, so closing is the exact reverse and a reopen mid-way just turns it round
-	const MORPH_MS = 360;
+	const MORPH_MS = 550;
 	const SETTLE = 0.7; // the shape settles at 70%, then the content fades in
 	const popClose = pop.querySelector('.m-pop-close');
 	let morph = null; // { anims, closing }
 
-	// from: where the hub is on screen when the morph starts, if the map is about to pan away from there
-	function morphFrames(from) {
+	// triangles and diamonds open through a polygon clip: 8 points on the shape's outline that move out to the card's edges
+	const POLY = {
+		triangle: [[50, 0], [62.5, 25], [75, 50], [100, 100], [50, 100], [0, 100], [25, 50], [37.5, 25]],
+		diamond: [[50, 0], [75, 25], [100, 50], [75, 75], [50, 100], [25, 75], [0, 50], [25, 25]],
+	};
+	const BOX = [[50, 0], [100, 0], [100, 50], [100, 100], [50, 100], [0, 100], [0, 50], [0, 0]];
+
+	// from: where the shape is on screen when the morph starts, if the map is about to pan away from there
+	function morphFrames(item, from) {
 		if (reduceQuery.matches) {
 			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
 		}
-		const [sx, sy] = from || toScreen(HUB[0], HUB[1]);
+		const [sx, sy] = from || toScreen(item.x, item.y);
+		const [l, t, r, b] = shapeBox(item);
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
-		// starts as the white inside of the hub's ring, as drawn while it is open (r 20, stroke 4.8, scaled 1.22)
-		const r = 17.6 * 1.22 * cam.k;
-		const cx = popAt[0] + w / 2;
-		const cy = popAt[1] + h / 2;
+		const poly = POLY[item.shape];
+		// circles start fully round, the rest with the stroke's own round corners
+		const r0 = item.shape === 'circle' ? (r - l) / 2 : 1.5 * cam.k;
 		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
 		const shape = [];
 		for (let i = 0; i <= 12; i++) {
 			const e = smooth(i / 12);
-			const W = 2 * r + (w - 2 * r) * e;
-			const H = 2 * r + (h - 2 * r) * e;
-			const R = r + (12 - r) * e;
-			const x = sx + (cx - sx) * e - W / 2;
-			const y = sy + (cy - sy) * e - H / 2;
-			shape.push({
+			const W = r - l + (w - r + l) * e;
+			const H = b - t + (h - b + t) * e;
+			const R = r0 + (12 - r0) * e;
+			const x = sx + l + (popAt[0] - sx - l) * e;
+			const y = sy + t + (popAt[1] - sy - t) * e;
+			const f = {
 				transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + (W / w).toFixed(4) + ',' + (H / h).toFixed(4) + ')',
 				borderRadius: (R * w / W).toFixed(2) + 'px / ' + (R * h / H).toFixed(2) + 'px',
 				offset: (i / 12) * SETTLE,
-			});
+			};
+			if (poly) {
+				f.clipPath = 'polygon(' + poly.map(([px, py], j) => (px + (BOX[j][0] - px) * e).toFixed(2) + '% ' + (py + (BOX[j][1] - py) * e).toFixed(2) + '%').join(',') + ')';
+			}
+			shape.push(f);
 		}
 		shape.push({ ...shape[12], offset: 1 });
 		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
@@ -512,29 +551,32 @@
 		}
 	}
 
-	function hideHubCard() {
+	function hideCard() {
 		stopMorph();
 		pop.hidden = true;
+		pop.classList.remove('is-closing');
 		svg.classList.remove('is-bio');
 	}
 
-	// plays the morph open (closing false) or back into the hub (closing true)
-	function playMorph(closing, from) {
+	// plays the morph open (closing false) or back into the shape (closing true)
+	function playMorph(item, closing, from) {
 		if (morph && morph.anims[0].playState === 'running') {
 			if (morph.closing !== closing) {
 				morph.closing = closing;
+				pop.classList.toggle('is-closing', closing);
 				morph.anims.forEach((a) => a.reverse());
 			}
 			return;
 		}
 		stopMorph();
-		const m = { closing, anims: morphFrames(from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		pop.classList.toggle('is-closing', closing); // a card on its way out lets clicks through to the map
+		const m = { item, closing, anims: morphFrames(item, from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
 		m.anims[0].onfinish = () => {
 			if (morph !== m) {
 				return;
 			}
 			if (m.closing) {
-				hideHubCard();
+				hideCard();
 			} else {
 				stopMorph();
 			}
@@ -543,54 +585,41 @@
 	}
 
 	function openStation(item, focusInside) {
-		if (item.bio && morph && morph.closing) {
+		if (morph && morph.closing && morph.item === item) {
 			// reopened while it shrinks back: turn the same animation round, nothing jumps
 			openItem = item;
 			item.g.classList.add('is-open');
 			item.g.setAttribute('aria-expanded', 'true');
-			playMorph(false);
+			playMorph(item, false);
 			if (focusInside) {
 				(pop.querySelector('a') || popClose).focus();
 			}
 			return;
 		}
 		closePop(false, true);
-		hideHubCard();
+		hideCard(); // also ends a card still shrinking back
 		openItem = item;
 		popBody.replaceChildren(...(item.bio ? [bioSection()] : item.st.entries.map(section)));
+		pop.classList.toggle('m-pop--bio', !!item.bio);
 		pop.hidden = false;
 		item.g.classList.add('is-open');
 		item.g.setAttribute('aria-expanded', 'true');
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
 		const was = [cam.tx, cam.ty];
-		const hubWas = toScreen(HUB[0], HUB[1]);
-		if (item.bio) {
-			panToHub();
-		} else if (small()) {
-			// the card takes the right of the screen; pan so the station sits just left of it,
-			// below the name and above the dock (a card too tall for that gap scrolls)
-			const [sx, sy] = toScreen(item.x, item.y);
-			const minY = ident.getBoundingClientRect().bottom + 8 + 24;
-			const maxY = Math.max(minY, dock.getBoundingClientRect().top - 8 - pop.offsetHeight + 24);
-			cam.tx += vw - pop.offsetWidth - 16 - 24 - sx;
-			cam.ty += Math.min(maxY, Math.max(minY, sy)) - sy;
-			applyCam();
-		}
-		placePop();
-		if (item.bio) {
-			const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
-			playMorph(false, panned && hubWas);
-			if (panned) {
-				panWithMorph(morph, was, [cam.tx, cam.ty]);
-			}
+		const from = toScreen(item.x, item.y);
+		panToFit(item);
+		const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
+		playMorph(item, false, panned && from);
+		if (panned) {
+			panWithMorph(morph, was, [cam.tx, cam.ty]);
 		}
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
 		}
 	}
 
-	// instant skips the hub's morph, for when another card takes its place
+	// instant skips the morph, for when another card takes its place
 	function closePop(returnFocus, instant) {
 		if (!openItem) {
 			return;
@@ -599,41 +628,30 @@
 		openItem = null;
 		item.g.classList.remove('is-open');
 		item.g.setAttribute('aria-expanded', 'false');
-		if (item.bio && !instant) {
-			playMorph(true);
+		if (!instant) {
+			playMorph(item, true);
 		} else {
-			hideHubCard();
+			hideCard();
 		}
 		if (returnFocus) {
 			item.g.focus({ preventScroll: true });
 		}
 	}
 
+	// the card keeps its corner on the shape as the map moves, held on screen between the name and the dock
 	function placePop() {
 		if (!openItem) {
 			return;
 		}
 		const [sx, sy] = toScreen(openItem.x, openItem.y);
-		pop.style.maxHeight = '';
+		const [l, t, r, b] = shapeBox(openItem);
+		pop.style.maxHeight = Math.round(popFloor() - popRoof()) + 'px'; // a card taller than that scrolls
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
-		if (openItem.bio) {
-			const above = sy - hubGap() - h;
-			const top = above >= popRoof() || sy + hubGap() + h > popFloor() ? above : sy + hubGap();
-			popAt = [Math.round(sx - w / 2), Math.round(top)];
-			pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
-			return;
-		}
-		const gap = 24 * Math.max(0.8, cam.k);
-		let left = sx > vw / 2 && !small() ? sx - w - gap : sx + gap;
-		let top = sy - 24;
-		left = Math.max(16, Math.min(left, vw - w - 16));
-		// stay clear of the dock (hint and contact links) where the card would sit over it
-		const d = dock.getBoundingClientRect();
-		const bottom = left < d.right && left + w > d.left ? d.top - 8 : vh - 16;
-		pop.style.maxHeight = Math.round(bottom - 16) + 'px';
-		top = Math.max(16, Math.min(top, bottom - Math.min(h, bottom - 16)));
-		pop.style.transform = 'translate(' + Math.round(left) + 'px,' + Math.round(top) + 'px)';
+		const left = popDir[0] > 0 ? sx + l : sx + r - w;
+		const top = popDir[1] > 0 ? sy + t : sy + b - h;
+		popAt = [Math.round(clamp(left, 16, vw - 16 - w)), Math.round(clamp(top, popRoof(), popFloor() - h))];
+		pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 	}
 
 	popClose.addEventListener('click', () => closePop(true));
