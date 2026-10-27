@@ -338,6 +338,7 @@
 	const ident = document.querySelector('.metro-ident');
 	const popBody = pop.querySelector('.m-pop-body');
 	let openItem = null;
+	let popAt = [0, 0]; // where the hub's card sits, for the morph
 
 	// the line's colour with its station shape on it, standing in for the legend
 	function lineKey(line) {
@@ -447,8 +448,96 @@
 		applyCam();
 	}
 
+	// ---------- the hub's card grows out of the hub: a FLIP of transform and border-radius ----------
+	// one animation per element, the same length, so closing is the exact reverse and a reopen mid-way just turns it round
+	const MORPH_MS = 360;
+	const SETTLE = 0.7; // the shape settles at 70%, then the content fades in
+	const popClose = pop.querySelector('.m-pop-close');
+	let morph = null; // { anims, closing }
+
+	function morphFrames() {
+		if (reduceQuery.matches) {
+			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
+		}
+		const [sx, sy] = toScreen(HUB[0], HUB[1]);
+		const w = pop.offsetWidth;
+		const h = pop.offsetHeight;
+		// starts as the white inside of the hub's ring, as drawn while it is open (r 20, stroke 4.8, scaled 1.22)
+		const r = 17.6 * 1.22 * cam.k;
+		const cx = popAt[0] + w / 2;
+		const cy = popAt[1] + h / 2;
+		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
+		const shape = [];
+		for (let i = 0; i <= 12; i++) {
+			const p = i / 12;
+			const e = p * p * (3 - 2 * p); // gentle in and out
+			const W = 2 * r + (w - 2 * r) * e;
+			const H = 2 * r + (h - 2 * r) * e;
+			const R = r + (12 - r) * e;
+			const x = sx + (cx - sx) * e - W / 2;
+			const y = sy + (cy - sy) * e - H / 2;
+			shape.push({
+				transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + (W / w).toFixed(4) + ',' + (H / h).toFixed(4) + ')',
+				borderRadius: (R * w / W).toFixed(2) + 'px / ' + (R * h / H).toFixed(2) + 'px',
+				offset: (i / 12) * SETTLE,
+			});
+		}
+		shape.push({ ...shape[12], offset: 1 });
+		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
+		return [[pop, shape, MORPH_MS], [popBody, fade, MORPH_MS], [popClose, fade, MORPH_MS]];
+	}
+
+	function stopMorph() {
+		if (morph) {
+			morph.anims.forEach((a) => a.cancel());
+			morph = null;
+		}
+	}
+
+	function hideHubCard() {
+		stopMorph();
+		pop.hidden = true;
+		svg.classList.remove('is-bio');
+	}
+
+	// plays the morph open (closing false) or back into the hub (closing true)
+	function playMorph(closing) {
+		if (morph && morph.anims[0].playState === 'running') {
+			if (morph.closing !== closing) {
+				morph.closing = closing;
+				morph.anims.forEach((a) => a.reverse());
+			}
+			return;
+		}
+		stopMorph();
+		const m = { closing, anims: morphFrames().map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		m.anims[0].onfinish = () => {
+			if (morph !== m) {
+				return;
+			}
+			if (m.closing) {
+				hideHubCard();
+			} else {
+				stopMorph();
+			}
+		};
+		morph = m;
+	}
+
 	function openStation(item, focusInside) {
-		closePop(false);
+		if (item.bio && morph && morph.closing) {
+			// reopened while it shrinks back: turn the same animation round, nothing jumps
+			openItem = item;
+			item.g.classList.add('is-open');
+			item.g.setAttribute('aria-expanded', 'true');
+			playMorph(false);
+			if (focusInside) {
+				(pop.querySelector('a') || popClose).focus();
+			}
+			return;
+		}
+		closePop(false, true);
+		hideHubCard();
 		openItem = item;
 		popBody.replaceChildren(...(item.bio ? [bioSection()] : item.st.entries.map(section)));
 		pop.hidden = false;
@@ -469,21 +558,28 @@
 			applyCam();
 		}
 		placePop();
+		if (item.bio) {
+			playMorph(false);
+		}
 		if (focusInside) {
-			(pop.querySelector('a') || pop.querySelector('.m-pop-close')).focus();
+			(pop.querySelector('a') || popClose).focus();
 		}
 	}
 
-	function closePop(returnFocus) {
+	// instant skips the hub's morph, for when another card takes its place
+	function closePop(returnFocus, instant) {
 		if (!openItem) {
 			return;
 		}
 		const item = openItem;
 		openItem = null;
-		pop.hidden = true;
 		item.g.classList.remove('is-open');
 		item.g.setAttribute('aria-expanded', 'false');
-		svg.classList.remove('is-bio');
+		if (item.bio && !instant) {
+			playMorph(true);
+		} else {
+			hideHubCard();
+		}
 		if (returnFocus) {
 			item.g.focus({ preventScroll: true });
 		}
@@ -500,7 +596,8 @@
 		if (openItem.bio) {
 			const above = sy - hubGap() - h;
 			const top = above >= popRoof() || sy + hubGap() + h > popFloor() ? above : sy + hubGap();
-			pop.style.transform = 'translate(' + Math.round(sx - w / 2) + 'px,' + Math.round(top) + 'px)';
+			popAt = [Math.round(sx - w / 2), Math.round(top)];
+			pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 			return;
 		}
 		const gap = 24 * Math.max(0.8, cam.k);
@@ -515,7 +612,7 @@
 		pop.style.transform = 'translate(' + Math.round(left) + 'px,' + Math.round(top) + 'px)';
 	}
 
-	pop.querySelector('.m-pop-close').addEventListener('click', () => closePop(true));
+	popClose.addEventListener('click', () => closePop(true));
 
 	// ---------- list fallback ----------
 	function openList() {
