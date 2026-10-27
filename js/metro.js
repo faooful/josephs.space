@@ -898,18 +898,6 @@
 		}
 	});
 
-	document.querySelectorAll('[data-zoom]').forEach((btn) => {
-		btn.addEventListener('click', () => {
-			endIntro();
-			const kind = btn.dataset.zoom;
-			if (kind === 'fit') {
-				setCam(fitK(), WORLD.w / 2, WORLD.h / 2);
-			} else {
-				zoomAt(kind === 'in' ? 1.3 : 1 / 1.3, vw / 2, vh / 2);
-			}
-		});
-	});
-
 	window.addEventListener('resize', () => {
 		const cx = (vw / 2 - cam.tx) / cam.k;
 		const cy = (vh / 2 - cam.ty) / cam.k;

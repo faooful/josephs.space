@@ -184,17 +184,8 @@
 	font-weight: 460;
 }
 
-.metro-controls {
-	top: 32px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-	position: fixed;
-	right: 32px;
-	z-index: 4;
-}
-
-.m-btn {
+/* "Back to the map" inside the list */
+.ml-close {
 	align-items: center;
 	background: var(--map-card);
 	border: 1px solid var(--home-border);
@@ -203,16 +194,15 @@
 	cursor: pointer;
 	display: inline-flex;
 	font-family: 'Inter', sans-serif;
-	font-size: 16px;
+	font-size: 12px;
 	font-weight: 460;
 	height: 40px;
 	justify-content: center;
 	min-width: 40px;
 	padding: 0 12px;
 }
-.m-btn--text { font-size: 12px; }
-.m-btn:hover { background: var(--home-row-hover); }
-.m-btn:focus-visible { box-shadow: 0 0 0 2px var(--home-focus); outline: none; }
+.ml-close:hover { background: var(--home-row-hover); }
+.ml-close:focus-visible { box-shadow: 0 0 0 2px var(--home-focus); outline: none; }
 
 /* popup: the same card vocabulary as the home rows */
 .m-pop {
@@ -327,7 +317,6 @@
 	width: 1px;
 }
 .metro-page:not(.js) .metro-view,
-.metro-page:not(.js) .metro-controls,
 .metro-page:not(.js) .metro-dock,
 .metro-page:not(.js) .ml-close { display: none; }
 
@@ -347,11 +336,10 @@
 		bottom: 16px;
 		left: 16px;
 		padding: 12px;
-		right: 80px;
+		right: 16px;
 	}
 	.metro-hint { display: block; }
-	.metro-controls { bottom: 16px; right: 16px; top: auto; }
-	.m-btn { height: 48px; min-width: 48px; }
+	.ml-close { height: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

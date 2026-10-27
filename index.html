@@ -16,7 +16,7 @@
   </head>
   <body class="home-page metro-page">
     <script>document.body.classList.add('js');</script>
-    <a class="skip-link" href="#metro-list">Skip to the list of pages</a>
+    <a class="skip-link" href="#metro-list" data-list="open">Skip to the list of pages</a>
 
     <header class="metro-view" id="metro-view" tabindex="0" aria-label="Map of the site" aria-describedby="metro-keys">
       <div class="cursor-container home-cursor" aria-hidden="true">
@@ -26,7 +26,7 @@
         <div class="cursor-label">Online</div>
       </div>
       <svg class="metro-svg" id="metro-svg" role="group" aria-label="Stations"></svg>
-      <p id="metro-keys" hidden>Arrow keys pan, plus and minus zoom, Tab moves between stations, Enter opens one.</p>
+      <p id="metro-keys" hidden>Arrow keys pan, plus and minus zoom, 0 resets the view, Tab moves between stations, Enter opens one.</p>
     </header>
 
     <div class="metro-ident identity">
@@ -52,20 +52,13 @@
       </footer>
     </div>
 
-    <div class="metro-controls" role="group" aria-label="Map controls">
-      <button class="m-btn" type="button" data-zoom="in" aria-label="Zoom in">+</button>
-      <button class="m-btn" type="button" data-zoom="out" aria-label="Zoom out">&minus;</button>
-      <button class="m-btn m-btn--text" type="button" data-zoom="fit" aria-label="Show the whole map">Fit</button>
-      <button class="m-btn m-btn--text" type="button" data-list="open" aria-controls="metro-list">List</button>
-    </div>
-
     <div class="m-pop" id="metro-pop" role="dialog" aria-modal="false" aria-labelledby="metro-pop-title" hidden>
       <button class="m-pop-close" type="button" aria-label="Close">&times;</button>
       <div class="m-pop-body"></div>
     </div>
 
     <!-- The list is the source of truth: the map reads its stations from it, and it is the page
-         without script, for screen readers, and behind the List button. -->
+         without script, for screen readers, and behind the skip link. -->
     <main class="metro-list" id="metro-list" tabindex="-1" aria-labelledby="ml-title">
       <div class="metro-list-inner">
         <div class="ml-head">
@@ -73,7 +66,7 @@
             <p class="ml-ident">Joseph Korol · Product Designer</p>
             <h2 id="ml-title">Everything on the map</h2>
           </div>
-          <button class="m-btn m-btn--text ml-close" type="button" data-list="close">Back to the map</button>
+          <button class="ml-close" type="button" data-list="close">Back to the map</button>
         </div>
 
         <div class="bio-copy">
