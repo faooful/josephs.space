@@ -315,9 +315,13 @@
 		cam.ty = Math.min(vh - margin, Math.max(margin - h, cam.ty));
 	}
 
+	function drawCam() {
+		world.setAttribute('transform', 'translate(' + cam.tx.toFixed(2) + ' ' + cam.ty.toFixed(2) + ') scale(' + cam.k.toFixed(4) + ')');
+	}
+
 	function applyCam() {
 		clampCam();
-		world.setAttribute('transform', 'translate(' + cam.tx.toFixed(2) + ' ' + cam.ty.toFixed(2) + ') scale(' + cam.k.toFixed(4) + ')');
+		drawCam();
 		svg.classList.toggle('is-far', cam.k < 0.62);
 		placePop();
 	}
@@ -434,7 +438,7 @@
 		return sec;
 	}
 
-	// ---------- every card is centred on its shape, held on screen between the name and the dock ----------
+	// ---------- every card is centred on its shape: the map pans to make room, and a card bigger than the room (or on a dragged map) is held on screen ----------
 	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
 	const popFloor = () => dock.getBoundingClientRect().top - 8;
 	const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
@@ -497,7 +501,7 @@
 	morphSvg.setAttribute('aria-hidden', 'true');
 	const morphPath = el('path', {}, morphSvg);
 	pop.before(morphSvg);
-	let morph = null; // { item, closing, anims, pan, from, to }
+	let morph = null; // { item, closing, anims, pan, from, to, w, h, roof, floor }
 
 	// Every outline is the same 8 points on a frame (in % of it), with round corners of radius R: a FLIP of the frame from the
 	// shape's box to the card's, while the points slide out to the box's corners and edges and R goes to the card's 12px.
@@ -538,8 +542,8 @@
 		return d + 'Z';
 	}
 
-	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border), its centre on the node's,
-	// pushed back inside the screen only by as much as the box at this size would overflow
+	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border), its centre on the node's.
+	// The map pans so the card fits centred; only a card bigger than the room is held on screen, eased in with e
 	function morphD(m, e) {
 		const item = m.item;
 		const [sx, sy] = toScreen(item.x, item.y);
@@ -548,11 +552,10 @@
 		const H = mix(b - t, m.h, e);
 		const cx = mix(sx + (l + r) / 2, sx, e);
 		const cy = mix(sy + (t + b) / 2, sy, e);
-		// centred on the node; only once the growing box would run off screen is it nudged inside, by as much
-		// as it is grown (so the shift eases in from nothing), and it arrives on the card's whole-pixel box
-		const hold = (v, lo, hi, end, at) => v + (clamp(v, lo, hi) - v) * e + (at - end) * e;
-		const x = hold(cx - W / 2, 16, vw - 16 - W, clamp(sx - m.w / 2, 16, vw - 16 - m.w), popAt[0]);
-		const y = hold(cy - H / 2, m.roof, m.floor - H, clamp(sy - m.h / 2, m.roof, m.floor - m.h), popAt[1]);
+		// it arrives on the card's whole-pixel box (and, for a card bigger than the room, its held place)
+		const [hx, hy] = m.pan ? m.pan.hold : [popAt[0] - (sx - m.w / 2), popAt[1] - (sy - m.h / 2)];
+		const x = cx - W / 2 + hx * e;
+		const y = cy - H / 2 + hy * e;
 		const poly = POLY[item.shape] || BOX;
 		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 12, e) - 0.5 * e;
 		const iw = W - e; // drawn on the middle of the 1px border at the end
@@ -575,6 +578,18 @@
 		const p = a.effect.getComputedTiming().progress;
 		const e = shapeAt(m, (p == null ? 1 : p) * m.ms);
 		m.e = e;
+		if (m.pan) {
+			if (cam.tx !== m.pan.at[0] || cam.ty !== m.pan.at[1]) {
+				m.pan = null; // the map was dragged or zoomed: the pan gives way
+			} else {
+				const f = m.pan.e0 < 1 ? (e - m.pan.e0) / (1 - m.pan.e0) : 1; // the same curve as the shape
+				cam.tx = mix(m.pan.from[0], m.pan.to[0], f);
+				cam.ty = mix(m.pan.from[1], m.pan.to[1], f);
+				m.pan.at = [cam.tx, cam.ty];
+				drawCam();
+				placeFast(m);
+			}
+		}
 		morphPath.setAttribute('d', morphD(m, e));
 		morphPath.style.fill = mixColour(m.from.fill, m.to.fill, e);
 		morphPath.style.stroke = mixColour(m.from.stroke, m.to.stroke, e);
@@ -585,7 +600,11 @@
 	function stopMorph() {
 		if (morph) {
 			morph.anims.forEach((a) => a.cancel());
+			const panned = !!morph.pan;
 			morph = null;
+			if (panned) {
+				applyCam(); // a pan cut short (closed part-way) stays where it got to
+			}
 		}
 		morphSvg.classList.remove('is-on');
 		pop.classList.remove('is-morphing');
@@ -624,6 +643,14 @@
 			const m = { item, closing, anims: [pop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, direction: closing ? 'reverse' : 'normal', fill: 'both' })] };
 			m.anims[0].onfinish = () => (morph === m && (m.closing ? hideCard() : stopMorph()));
 			morph = m;
+			if (!closing) {
+				const to = panTo(item, pop.offsetWidth, pop.offsetHeight, popRoof(), popFloor());
+				if (to) {
+					cam.tx = to[0];
+					cam.ty = to[1];
+					applyCam(); // no motion: the map is simply where it needs to be
+				}
+			}
 			return;
 		}
 		if (!colours) {
@@ -663,11 +690,50 @@
 			if (m.closing) {
 				hideCard();
 			} else {
+				if (m.pan) {
+					[cam.tx, cam.ty] = m.pan.to; // land exactly where the pan was going
+				}
 				stopMorph();
 			}
 		};
+		if (!closing) {
+			// opening never leaves the card off centre if the map can move to make room; closing leaves the map where it is
+			const to = panTo(item, m.w, m.h, m.roof, m.floor);
+			if (to) {
+				// where the card will be held once the map is there (only its whole-pixel rounding, unless it is bigger than the room)
+				const [tx, ty] = [item.x * cam.k + to[0], item.y * cam.k + to[1]];
+				const hold = [Math.round(clamp(tx - m.w / 2, 16, vw - 16 - m.w)) - (tx - m.w / 2), Math.round(clamp(ty - m.h / 2, m.roof, m.floor - m.h)) - (ty - m.h / 2)];
+				m.pan = { from: [cam.tx, cam.ty], to, at: [cam.tx, cam.ty], e0, hold };
+			}
+		}
 		morph = m;
 		drawMorph(m);
+	}
+
+	// where the map would have to be for a w x h card to sit centred on the item, inside the room; null if it already fits.
+	// On an axis where the card is bigger than the room, the item goes to the room's middle and placePop holds the card
+	function panTo(item, w, h, roof, floor) {
+		const [sx, sy] = toScreen(item.x, item.y);
+		const need = (s, size, lo, hi) => (hi - lo >= size ? clamp(s, lo + size / 2, hi - size / 2) - s : (lo + hi) / 2 - s);
+		const dx = need(sx, w, 16, vw - 16);
+		const dy = need(sy, h, roof, floor);
+		if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+			return null;
+		}
+		const save = [cam.tx, cam.ty];
+		cam.tx += dx;
+		cam.ty += dy;
+		clampCam(); // never past the map's own limits
+		const to = [cam.tx, cam.ty];
+		[cam.tx, cam.ty] = save;
+		return to[0] === save[0] && to[1] === save[1] ? null : to;
+	}
+
+	// placePop from the sizes read when the morph began, for frames that must not read layout
+	function placeFast(m) {
+		const [sx, sy] = toScreen(m.item.x, m.item.y);
+		popAt = [Math.round(clamp(sx - m.w / 2, 16, vw - 16 - m.w)), Math.round(clamp(sy - m.h / 2, m.roof, m.floor - m.h))];
+		pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 	}
 
 	function openStation(item, focusInside) {
