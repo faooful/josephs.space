@@ -53,7 +53,7 @@
 	const list = document.getElementById('metro-list');
 	const NOTE_STOPS = 5;
 	const NOTE_SLOTS = [[720, 545, -22, 0, 'end'], [830, 630, 0, 28, 'middle'], [920, 630, 0, -26, 'middle'], [1010, 630, 0, 28, 'middle'], [1100, 630, 0, -26, 'middle'], [1190, 630, 0, 28, 'middle']];
-	const shortLabel = (t) => (t.length > 18 ? t.slice(0, 17).trimEnd() + '\u2026' : t);
+	const shortLabel = (t) => (t.length > 20 ? t.slice(0, 19).trimEnd() + '\u2026' : t);
 
 	function noteLi(id, kicker, label, href, cta, title, meta, image, alt) {
 		const li = document.createElement('li');
