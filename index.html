@@ -4,247 +4,141 @@
     <meta charset="UTF-8">
     <title>Joseph Korol — Product Design & Leadership</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Joseph Korol, product designer. Case studies, side projects, writing and notes, drawn as a metro map.">
     <link rel="shortcut icon" href="img/favicon-32x32.png" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/metro.css">
     <script src="js/helix.js" defer></script>
+    <script src="js/metro.js" defer></script>
   </head>
-  <body class="home-page">
-    <main class="home-shell">
-      <article class="home-stack">
-        <header class="home-intro" aria-labelledby="site-title">
-          <div class="cursor-container home-cursor" aria-hidden="true">
-            <svg class="header-shape" viewBox="0 0 24 24" width="24" height="24">
-              <path d="M18.464 16.929c.448.894-.55 1.819-1.409 1.304l-6.54-3.924a1 1 0 0 0-1.03 0l-6.54 3.924c-.858.515-1.857-.41-1.41-1.305l7.57-15.14a1 1 0 0 1 1.79 0z" fill="#45A329"/>
-            </svg>
-            <div class="cursor-label">Online</div>
+  <body class="home-page metro-page">
+    <script>document.body.classList.add('js');</script>
+    <a class="skip-link" href="#metro-list">Skip to the list of pages</a>
+
+    <header class="metro-view" id="metro-view" tabindex="0" aria-label="Map of the site" aria-describedby="metro-keys">
+      <div class="cursor-container home-cursor" aria-hidden="true">
+        <svg class="header-shape" viewBox="0 0 24 24" width="24" height="24">
+          <path d="M18.464 16.929c.448.894-.55 1.819-1.409 1.304l-6.54-3.924a1 1 0 0 0-1.03 0l-6.54 3.924c-.858.515-1.857-.41-1.41-1.305l7.57-15.14a1 1 0 0 1 1.79 0z" fill="#45A329"/>
+        </svg>
+        <div class="cursor-label">Online</div>
+      </div>
+      <svg class="metro-svg" id="metro-svg" role="group" aria-label="Stations"></svg>
+      <p id="metro-keys" hidden>Arrow keys pan, plus and minus zoom, Tab moves between stations, Enter opens one.</p>
+    </header>
+
+    <div class="metro-ident identity">
+      <img class="wizard-hat" src="img/hat.png" alt="">
+      <h1 id="site-title">Joseph Korol</h1>
+      <p>Product Designer</p>
+    </div>
+
+    <div class="metro-dock">
+      <ul class="m-legend" aria-label="Lines">
+        <li><i class="m-swatch m-swatch--case"></i>Case Studies</li>
+        <li><i class="m-swatch m-swatch--side"></i>Side Projects</li>
+        <li><i class="m-swatch m-swatch--write"></i>Writing</li>
+        <li><i class="m-swatch m-swatch--notes"></i>Notes (examples)</li>
+        <li><i class="m-swatch m-swatch--soon"></i>Coming soon</li>
+      </ul>
+      <span class="metro-hint">Drag to explore · pinch to zoom · tap a station</span>
+      <footer class="home-footer" aria-label="Contact links">
+        <a href="mailto:joseph.m.korol@gmail.com">Email</a>
+        <a href="cv/Joseph Korol - Product Designer Resume.pdf" download target="_blank">CV</a>
+        <a href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer">Reading</a>
+        <a href="https://www.linkedin.com/in/-jmw-/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </footer>
+    </div>
+
+    <div class="metro-controls" role="group" aria-label="Map controls">
+      <button class="m-btn" type="button" data-zoom="in" aria-label="Zoom in">+</button>
+      <button class="m-btn" type="button" data-zoom="out" aria-label="Zoom out">&minus;</button>
+      <button class="m-btn m-btn--text" type="button" data-zoom="fit" aria-label="Show the whole map">Fit</button>
+      <button class="m-btn m-btn--text" type="button" data-list="open" aria-controls="metro-list">List</button>
+    </div>
+
+    <div class="m-pop" id="metro-pop" role="dialog" aria-modal="false" aria-labelledby="metro-pop-title" hidden>
+      <button class="m-pop-close" type="button" aria-label="Close">&times;</button>
+      <div class="m-pop-body"></div>
+    </div>
+
+    <!-- The list is the source of truth: the map reads its stations from it, and it is the page
+         without script, for screen readers, and behind the List button. -->
+    <main class="metro-list" id="metro-list" tabindex="-1" aria-labelledby="ml-title">
+      <div class="metro-list-inner">
+        <div class="ml-head">
+          <div>
+            <p class="ml-ident">Joseph Korol · Product Designer</p>
+            <h2 id="ml-title">Everything on the map</h2>
           </div>
+          <button class="m-btn m-btn--text ml-close" type="button" data-list="close">Back to the map</button>
+        </div>
 
-          <div class="identity">
-            <img class="wizard-hat" src="img/hat.png" alt="">
-            <h1 id="site-title">Joseph Korol</h1>
-            <p>Product Designer</p>
-          </div>
+        <div class="bio-copy">
+          <p>I'm a Product Design Leader with over a decade of experience creating thoughtful, scalable products and helping teams deliver sustainable output at companies like Datadog, project44, Spotify, and Google.</p>
+          <p>Currently leading design on Datadog's Data Observability suite, shaping product surfaces that help teams detect, resolve, and prevent incidents in data and AI products.</p>
+          <p>Beyond work, I solve the NYT crossword, play backgammon, <a href="writing/">write about design and tools</a>, read with friends, and build small tools when something in daily life starts asking for a better interface.</p>
+        </div>
 
-          <div class="bio-copy">
-            <p>I'm a Product Design Leader with over a decade of experience creating thoughtful, scalable products and helping teams deliver sustainable output at companies like Datadog, project44, Spotify, and Google.</p>
-            <p>Currently leading design on Datadog's Data Observability suite, shaping product surfaces that help teams detect, resolve, and prevent incidents in data and AI products.</p>
-            <p>Beyond work, I solve the NYT crossword, play backgammon, <a href="writing/">write about design and tools</a>, read with friends, and build small tools when something in daily life starts asking for a better interface.</p>
-          </div>
-        </header>
-
-        <section class="home-section case-studies-section" aria-labelledby="work-title">
-          <div class="section-heading-row">
-            <h2 id="work-title">Case Studies</h2>
-            <button class="section-more-link case-studies-toggle" type="button" aria-expanded="false">More</button>
-          </div>
-          <div class="index-list">
-            <div class="index-row index-row-disabled" aria-label="Datadog">
-              <span class="row-year">Now</span>
-              <span class="row-icon"><img src="img/home/datadog.webp" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">Datadog</span>
-                <span class="row-meta">Designing AI experiences</span>
-              </span>
-              <span class="coming-soon-badge">Coming soon</span>
-            </div>
-
-            <a class="index-row" href="projects/p44.html" aria-label="project44 case study">
-              <span class="row-year">2023</span>
-              <span class="row-icon"><img src="img/home/project-44.svg" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">project44</span>
-                <span class="row-meta">Surface and highlight logistics issues</span>
-              </span>
-            </a>
-
-            <a class="index-row" href="projects/spotify.html" aria-label="Spotify case study">
-              <span class="row-year">2021</span>
-              <span class="row-icon"><img src="img/home/Spotify_logo.webp" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">Spotify</span>
-                <span class="row-meta">One account across the Spotify universe</span>
-              </span>
-            </a>
-
-            <a class="index-row" href="projects/irm.html" aria-label="Google case study">
-              <span class="row-year">2019</span>
-              <span class="row-icon"><img src="img/home/google.webp" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">Google</span>
-                <span class="row-meta">Incident response tooling for critical moments</span>
-              </span>
-            </a>
-
-            <a class="index-row" href="projects/jaas.html" aria-label="Ubuntu case study">
-              <span class="row-year">2017</span>
-              <span class="row-icon"><img src="img/home/ubuntu.png" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">Ubuntu</span>
-                <span class="row-meta">Cloud orchestration from CLI to GUI</span>
-              </span>
-            </a>
-
-            <a class="index-row" href="projects/cell.html" aria-label="Cell case study">
-              <span class="row-year">2016</span>
-              <span class="row-icon"><img src="img/cell/logo.png" alt=""></span>
-              <span class="row-main">
-                <span class="row-title">Cell</span>
-                <span class="row-meta">Programmatic 3D data in the browser</span>
-              </span>
-            </a>
-          </div>
+        <section data-line="case" aria-labelledby="ml-case">
+          <h3 id="ml-case"><i class="m-swatch m-swatch--case"></i>Case Studies</h3>
+          <ul>
+            <li data-station="datadog" data-kicker="Now" data-soon><span class="ml-title">Datadog</span><span class="ml-meta">Designing AI experiences</span><span class="coming-soon-badge">Coming soon</span></li>
+            <li data-station="p44" data-kicker="2023"><span class="ml-kicker">2023</span><a href="projects/p44.html" data-cta="Read case study">project44</a><span class="ml-meta">Surface and highlight logistics issues</span></li>
+            <li data-station="spotify" data-kicker="2021"><span class="ml-kicker">2021</span><a href="projects/spotify.html" data-cta="Read case study">Spotify</a><span class="ml-meta">One account across the Spotify universe</span></li>
+            <li data-station="google" data-kicker="2019"><span class="ml-kicker">2019</span><a href="projects/irm.html" data-cta="Read case study">Google</a><span class="ml-meta">Incident response tooling for critical moments</span></li>
+            <li data-station="ubuntu" data-kicker="2017"><span class="ml-kicker">2017</span><a href="projects/jaas.html" data-cta="Read case study">Ubuntu</a><span class="ml-meta">Cloud orchestration from CLI to GUI</span></li>
+            <li data-station="cell" data-kicker="2016"><span class="ml-kicker">2016</span><a href="projects/cell.html" data-cta="Read case study">Cell</a><span class="ml-meta">Programmatic 3D data in the browser</span></li>
+          </ul>
         </section>
 
-        <section class="home-section side-projects-section" aria-labelledby="play-title">
-          <div class="section-heading-row">
-            <h2 id="play-title">Side Projects</h2>
-            <button class="section-more-link side-projects-toggle" type="button" aria-expanded="false">More</button>
-          </div>
-          <div class="play-grid">
-            <a class="play-card play-card--drift" href="img/product-screens/drift.mp4" target="_blank" rel="noopener noreferrer" aria-label="Drift">
-              <span class="play-preview">
-                <video src="img/product-screens/drift.mp4" poster="img/product-screens/drift-poster.jpg" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Drift</span>
-                <span class="play-meta">Keeps a codebase's design system from drifting.</span>
-              </span>
-            </a>
+        <section data-line="side" aria-labelledby="ml-side">
+          <h3 id="ml-side"><i class="m-swatch m-swatch--side"></i>Side Projects</h3>
+          <ul>
+            <li data-station="drift"><a href="img/product-screens/drift.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">Drift</a><span class="ml-meta">Keeps a codebase's design system from drifting.</span></li>
+            <li data-station="prmap"><a href="img/product-screens/designers-pr-map.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">Designers PR Map</a><span class="ml-meta">Shows designers shipping production PRs across their product areas.</span></li>
+            <li data-station="cli"><a href="img/product-screens/cli-playground.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">CLI Playground</a><span class="ml-meta">Demo environment for testing CLI commands while designing.</span></li>
+            <li data-station="obs"><a href="https://observatory-lac.vercel.app/" target="_blank" rel="noopener noreferrer" data-cta="Open project">The Observatory</a><span class="ml-meta">Interactive OSRS globe with player-aware activity mapping.</span></li>
+            <li data-station="workbench"><a href="https://faooful.github.io/html-workbench/" target="_blank" rel="noopener noreferrer" data-cta="Open project">HTML Workbench</a><span class="ml-meta">Local editor and renderer for HTML artifacts.</span></li>
+            <li data-station="signals"><a href="https://little-signals.com/" target="_blank" rel="noopener noreferrer" data-cta="Open project">Little Signals</a><span class="ml-meta">Shared baby tracking with lightweight analytics.</span></li>
+            <li data-station="mocking"><a href="https://faooful.github.io/mockingbird/" target="_blank" rel="noopener noreferrer" data-cta="Open project">Mockingbird</a><span class="ml-meta">Visual wireframing and journey mapping.</span></li>
+            <li data-station="frost"><a href="https://github.com/faooful/frost" target="_blank" rel="noopener noreferrer" data-cta="Open project">Frost</a><span class="ml-meta">Local AI receipt and invoice analysis.</span></li>
+            <li data-station="dota"><a href="https://faooful.github.io/DotaQuest/" target="_blank" rel="noopener noreferrer" data-cta="Open project">Dota Quest</a><span class="ml-meta">Randomised hero and items for a unique Dota 2 experience.</span></li>
+            <li data-station="notetab"><a href="https://faooful.github.io/NoteTab-website/" target="_blank" rel="noopener noreferrer" data-cta="Open project">NoteTab</a><span class="ml-meta">Color-coded note cards in Chrome.</span></li>
+            <li data-station="reading"><a href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer" data-cta="Open project">Reading</a><span class="ml-meta">Remote book club with friends.</span></li>
+            <li data-station="ffind"><a href="img/product-screens/figma-find.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">Figma Find</a><span class="ml-meta">Find similar designs across Figma teams.</span></li>
+            <li data-station="fsound"><a href="img/product-screens/figma soundboard.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">Figma Soundboard</a><span class="ml-meta">Turns frame layout into playable samples.</span></li>
+            <li data-station="druids"><a href="img/product-screens/what the druids.mp4" target="_blank" rel="noopener noreferrer" data-cta="Watch demo">What the Druids</a><span class="ml-meta">A design-system guessing game.</span></li>
+          </ul>
+        </section>
 
-            <a class="play-card" href="img/product-screens/designers-pr-map.mp4" target="_blank" rel="noopener noreferrer" aria-label="Designers PR Map">
-              <span class="play-preview">
-                <video src="img/product-screens/designers-pr-map.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Designers PR Map</span>
-                <span class="play-meta">Shows designers shipping production PRs across their product areas.</span>
-              </span>
-            </a>
+        <section data-line="write" aria-labelledby="ml-write">
+          <h3 id="ml-write"><i class="m-swatch m-swatch--write"></i>Writing</h3>
+          <ul>
+            <li data-station="drift" data-kicker="Oct 23, 2026 · 3 min read"><span class="ml-kicker">Oct 23, 2026 · 3 min read</span><a href="writing/building-drift.html" data-cta="Read the post">Building Drift, a small tool for keeping a design system from wandering off.</a></li>
+            <li data-station="postcards" data-kicker="Sep 27, 2026 · 5 min read" data-label="Postcards"><span class="ml-kicker">Sep 27, 2026 · 5 min read</span><a href="writing/building-postcards.html" data-cta="Read the post">Building Postcards, a passive collection of whimsical stories.</a></li>
+            <li data-station="obs" data-kicker="Jun 23, 2026 · 8 min read"><span class="ml-kicker">Jun 23, 2026 · 8 min read</span><a href="writing/building-the-observatory.html" data-cta="Read the post">Building The Observatory, a little globe of Gielinor in the browser.</a></li>
+            <li data-station="taste" data-kicker="Jun 2, 2026 · 5 min read" data-label="Scaling taste"><span class="ml-kicker">Jun 2, 2026 · 5 min read</span><a href="writing/scaling-designer-taste.html" data-cta="Read the post">Scaling designer taste when agents do most of the building.</a></li>
+            <li data-station="writing-index"><a href="writing/" data-cta="Read all writing">All writing</a><span class="ml-meta">Every post, newest first.</span></li>
+          </ul>
+        </section>
 
-            <a class="play-card" href="img/product-screens/cli-playground.mp4" target="_blank" rel="noopener noreferrer" aria-label="CLI Playground">
-              <span class="play-preview">
-                <video src="img/product-screens/cli-playground.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">CLI Playground</span>
-                <span class="play-meta">Demo environment for testing CLI commands while designing.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://observatory-lac.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="The Observatory">
-              <span class="play-preview">
-                <video src="img/product-screens/the-observatory.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">The Observatory</span>
-                <span class="play-meta">Interactive OSRS globe with player-aware activity mapping.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://faooful.github.io/html-workbench/" target="_blank" rel="noopener noreferrer" aria-label="HTML Workbench">
-              <span class="play-preview">
-                <video src="img/product-screens/html-workbench.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">HTML Workbench</span>
-                <span class="play-meta">Local editor and renderer for HTML artifacts.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://little-signals.com/" target="_blank" rel="noopener noreferrer" aria-label="Little Signals">
-              <span class="play-preview">
-                <video src="img/product-screens/little-signals.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Little Signals</span>
-                <span class="play-meta">Shared baby tracking with lightweight analytics.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://faooful.github.io/mockingbird/" target="_blank" rel="noopener noreferrer" aria-label="Mockingbird">
-              <span class="play-preview">
-                <video src="img/product-screens/mockingbird.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Mockingbird</span>
-                <span class="play-meta">Visual wireframing and journey mapping.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://github.com/faooful/frost" target="_blank" rel="noopener noreferrer" aria-label="Frost">
-              <span class="play-preview">
-                <img src="img/product-screens/frost.png" alt="">
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Frost</span>
-                <span class="play-meta">Local AI receipt and invoice analysis.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://faooful.github.io/DotaQuest/" target="_blank" rel="noopener noreferrer" aria-label="Dota Quest">
-              <span class="play-preview">
-                <video src="img/product-screens/dota-quest.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Dota Quest</span>
-                <span class="play-meta">Randomised hero and items for a unique Dota 2 experience.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://faooful.github.io/NoteTab-website/" target="_blank" rel="noopener noreferrer" aria-label="NoteTab">
-              <span class="play-preview">
-                <video src="img/product-screens/note-tab.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">NoteTab</span>
-                <span class="play-meta">Color-coded note cards in Chrome.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer" aria-label="Remote Book Club">
-              <span class="play-preview">
-                <img src="img/product-screens/remote-book-club.gif" alt="">
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Reading</span>
-                <span class="play-meta">Remote book club with friends.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="img/product-screens/figma-find.mp4" target="_blank" rel="noopener noreferrer" aria-label="Figma Find">
-              <span class="play-preview">
-                <video src="img/product-screens/figma-find.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Figma Find</span>
-                <span class="play-meta">Find similar designs across Figma teams.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="img/product-screens/figma soundboard.mp4" target="_blank" rel="noopener noreferrer" aria-label="Figma Soundboard">
-              <span class="play-preview">
-                <video src="img/product-screens/figma soundboard.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">Figma Soundboard</span>
-                <span class="play-meta">Turns frame layout into playable samples.</span>
-              </span>
-            </a>
-
-            <a class="play-card" href="img/product-screens/what the druids.mp4" target="_blank" rel="noopener noreferrer" aria-label="What the Druids">
-              <span class="play-preview">
-                <video src="img/product-screens/what the druids.mp4" autoplay loop muted playsinline></video>
-              </span>
-              <span class="play-detail">
-                <span class="play-title">What the Druids</span>
-                <span class="play-meta">A design-system guessing game.</span>
-              </span>
-            </a>
-
-          </div>
+        <section data-line="notes" aria-labelledby="ml-notes">
+          <h3 id="ml-notes"><i class="m-swatch m-swatch--notes"></i>Notes <span class="coming-soon-badge">Examples</span></h3>
+          <!-- One list, newest first after sorting by data-date. The map and this list both show the 5 newest. -->
+          <ul data-notes>
+            <li data-note data-date="2026-10-26" data-example><span class="ml-kicker">Oct 26, 2026 · Example note</span><span class="ml-meta">Example. Spent the morning deleting rules from Drift instead of adding them.</span></li>
+            <li data-note data-date="2026-10-25" data-example><span class="ml-kicker">Oct 25, 2026 · Example note</span><span class="ml-meta">Example. The crossword app's pencil mode is the best unsure state.</span></li>
+            <li data-note data-date="2026-10-21" data-example><span class="ml-kicker">Oct 21, 2026 · Example note</span><span class="ml-meta">Example. Drift's logo is an ASCII car.</span></li>
+            <li data-note data-date="2026-10-18" data-example><span class="ml-kicker">Oct 18, 2026 · Example note</span><span class="ml-meta">Example. A short note about a small thing, until the Notes feed exists.</span></li>
+            <li data-note data-date="2026-10-14" data-example><span class="ml-kicker">Oct 14, 2026 · Example note</span><span class="ml-meta">Example. Another placeholder note for the green line.</span></li>
+            <li data-note data-date="2026-10-09" data-example><span class="ml-kicker">Oct 9, 2026 · Example note</span><span class="ml-meta">Example. The oldest example: with six notes, this one drops off the map and the list.</span></li>
+          </ul>
+          <ul>
+            <li data-station="all-notes"><a href="notes/" data-cta="Open all notes">All notes</a><span class="ml-meta">The full Notes feed (coming soon).</span></li>
+          </ul>
         </section>
 
         <footer class="home-footer" aria-label="Contact links">
@@ -253,7 +147,7 @@
           <a href="https://faooful.github.io/book-club/" target="_blank" rel="noopener noreferrer">Reading</a>
           <a href="https://www.linkedin.com/in/-jmw-/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </footer>
-      </article>
+      </div>
     </main>
   </body>
 </html>
