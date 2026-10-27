@@ -172,6 +172,11 @@
 		});
 		if (!spec.route) {
 			fadeIns.push(tBar(gLines, spec.stubs[0], 'm-cap m-' + key + ' m-stub'));
+			// no legend: a hover title and a label say what the dashed stub is
+			const tag = LINE_NAMES[key] + ', coming soon';
+			const hint = el('g', { class: 'm-stub-hint', role: 'img', 'aria-label': tag }, gStations);
+			el('title', {}, hint).textContent = tag;
+			el('path', { d: roundedPath(spec.stubs[0], 16), class: 'm-stub-hit' }, hint);
 			continue;
 		}
 		const path = el('path', { d: roundedPath(spec.route, 16), class: 'm-line m-' + key }, gLines);
@@ -247,13 +252,18 @@
 	decoItems.forEach((d) => {
 		fadeIns.push(d.g, d.label);
 	});
-	// hub
-	const hub = el('g', { class: 'st st--hub st--deco', 'aria-hidden': 'true' }, gStations);
+	// hub: opens the bio from the list, so the words live in one place. First in tab order.
+	const [bioName, bioRole] = textOf(list, '.ml-ident').split(' · ');
+	const hub = el('g', { class: 'st st--hub', tabindex: '0', role: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'data-id': 'hub', 'aria-label': bioName + ', ' + bioRole + ', about' }, gStations);
+	gStations.insertBefore(hub, gStations.querySelector('.st[data-id]'));
+	el('circle', { cx: HUB[0], cy: HUB[1], r: 30, class: 'st-hit' }, hub);
+	el('circle', { cx: HUB[0], cy: HUB[1], r: 28, class: 'st-ring' }, hub);
 	el('path', { d: glyphPath('circle', HUB[0], HUB[1], 40), class: 'st-glyph' }, hub);
-	const hubName = el('text', { x: HUB[0] + 30, y: HUB[1] + 32, class: 'm-label-hub', 'dominant-baseline': 'middle' }, gLabels);
-	hubName.textContent = 'Joseph Korol';
-	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm', 'dominant-baseline': 'middle' }, gLabels);
-	hubRole.textContent = 'Product Designer';
+	const hubName = el('text', { x: HUB[0] + 30, y: HUB[1] + 32, class: 'm-label-hub m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
+	hubName.textContent = bioName;
+	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
+	hubRole.textContent = bioRole;
+	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1] };
 
 	// stops along each route, for trains
 	stationEls.forEach((item) => {
@@ -324,17 +334,29 @@
 
 	// ---------- popup ----------
 	const pop = document.getElementById('metro-pop');
+	const dock = document.querySelector('.metro-dock');
+	const ident = document.querySelector('.metro-ident');
 	const popBody = pop.querySelector('.m-pop-body');
 	let openItem = null;
+	let popAt = [0, 0]; // where the hub's card sits, for the morph
+
+	// the line's colour with its station shape on it, standing in for the legend
+	function lineKey(line) {
+		const key = document.createElementNS(NS, 'svg');
+		key.setAttribute('class', 'm-line-key m-key--' + line);
+		key.setAttribute('viewBox', '0 0 24 12');
+		key.setAttribute('aria-hidden', 'true');
+		el('path', { d: 'M0 6H24', class: 'k-line' }, key);
+		el('path', { d: glyphPath(SHAPES[line], 12, 6, 8), class: 'k-glyph' }, key);
+		return key;
+	}
 
 	function section(entry, idx) {
 		const sec = document.createElement('div');
 		sec.className = 'm-pop-sec';
 		const kicker = document.createElement('div');
 		kicker.className = 'm-pop-kicker';
-		const sw = document.createElement('i');
-		sw.className = 'm-swatch m-swatch--' + entry.line;
-		kicker.append(sw, LINE_NAMES[entry.line] + (entry.kicker ? ' · ' + entry.kicker : ''));
+		kicker.append(lineKey(entry.line), LINE_NAMES[entry.line] + (entry.kicker ? ' · ' + entry.kicker : ''));
 		if (entry.soon) {
 			const badge = document.createElement('span');
 			badge.className = 'coming-soon-badge';
@@ -380,37 +402,208 @@
 		return img;
 	}
 
-	function openStation(item, focusInside) {
-		closePop(false);
-		openItem = item;
-		popBody.replaceChildren(...item.st.entries.map(section));
-		pop.hidden = false;
-		item.g.classList.add('is-open');
-		item.g.setAttribute('aria-expanded', 'true');
-		if (small()) {
-			// keep the station on screen with room for the card beside it
-			const [sx, sy] = toScreen(item.x, item.y);
-			if (sx > vw * 0.3 || sx < 24 || sy < 120 || sy > vh * 0.5) {
-				cam.tx += vw * 0.16 - sx;
-				cam.ty += vh * 0.32 - sy;
-				applyCam();
-			}
+	// the hub's card: name, role, the bio's opening two sentences and the contact links, all cloned from the list
+	function bioSection() {
+		const sec = document.createElement('div');
+		sec.className = 'm-pop-sec m-pop-bio';
+		const title = document.createElement('h2');
+		title.className = 'm-pop-title';
+		title.id = 'metro-pop-title';
+		title.textContent = bioName;
+		const role = document.createElement('div');
+		role.className = 'm-pop-kicker';
+		role.textContent = bioRole;
+		sec.append(title, role);
+		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p) => {
+			const copy = p.cloneNode(true);
+			copy.className = 'm-pop-meta';
+			sec.append(copy);
+		});
+		const links = document.createElement('div');
+		links.className = 'm-pop-links';
+		list.querySelectorAll('.home-footer a').forEach((a) => links.append(a.cloneNode(true)));
+		sec.append(links);
+		return sec;
+	}
+
+	// the hub's card is centred on it, above or below; these are the screen edges it keeps inside
+	const hubGap = () => 28 * cam.k + 8;
+	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
+	const popFloor = () => dock.getBoundingClientRect().top - 8;
+
+	// pan so the hub's card fits centred on the hub: horizontally, then above it, or else below
+	function panToHub() {
+		const [sx, sy] = toScreen(HUB[0], HUB[1]);
+		const w = pop.offsetWidth;
+		const need = pop.offsetHeight + hubGap();
+		const x = w + 32 > vw ? vw / 2 : Math.max(16 + w / 2, Math.min(sx, vw - 16 - w / 2));
+		let y = sy;
+		if (sy - need < popRoof() && sy + need > popFloor()) {
+			const above = popRoof() + need;
+			const below = popFloor() - need;
+			y = Math.abs(above - sy) <= Math.abs(below - sy) || below < popRoof() ? above : below;
 		}
-		placePop();
-		if (focusInside) {
-			(pop.querySelector('a') || pop.querySelector('.m-pop-close')).focus();
+		cam.tx += x - sx;
+		cam.ty += y - sy;
+		applyCam();
+	}
+
+	// ---------- the hub's card grows out of the hub: a FLIP of transform and border-radius ----------
+	// one animation per element, the same length, so closing is the exact reverse and a reopen mid-way just turns it round
+	const MORPH_MS = 360;
+	const SETTLE = 0.7; // the shape settles at 70%, then the content fades in
+	const popClose = pop.querySelector('.m-pop-close');
+	let morph = null; // { anims, closing }
+
+	// from: where the hub is on screen when the morph starts, if the map is about to pan away from there
+	function morphFrames(from) {
+		if (reduceQuery.matches) {
+			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
+		}
+		const [sx, sy] = from || toScreen(HUB[0], HUB[1]);
+		const w = pop.offsetWidth;
+		const h = pop.offsetHeight;
+		// starts as the white inside of the hub's ring, as drawn while it is open (r 20, stroke 4.8, scaled 1.22)
+		const r = 17.6 * 1.22 * cam.k;
+		const cx = popAt[0] + w / 2;
+		const cy = popAt[1] + h / 2;
+		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
+		const shape = [];
+		for (let i = 0; i <= 12; i++) {
+			const e = smooth(i / 12);
+			const W = 2 * r + (w - 2 * r) * e;
+			const H = 2 * r + (h - 2 * r) * e;
+			const R = r + (12 - r) * e;
+			const x = sx + (cx - sx) * e - W / 2;
+			const y = sy + (cy - sy) * e - H / 2;
+			shape.push({
+				transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + (W / w).toFixed(4) + ',' + (H / h).toFixed(4) + ')',
+				borderRadius: (R * w / W).toFixed(2) + 'px / ' + (R * h / H).toFixed(2) + 'px',
+				offset: (i / 12) * SETTLE,
+			});
+		}
+		shape.push({ ...shape[12], offset: 1 });
+		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
+		return [[pop, shape, MORPH_MS], [popBody, fade, MORPH_MS], [popClose, fade, MORPH_MS]];
+	}
+
+	const smooth = (p) => p * p * (3 - 2 * p); // gentle in and out
+
+	// the map's pan to fit the card rides along with the shape, so nothing jumps at the start
+	function panWithMorph(m, from, to) {
+		const step = () => {
+			const t = m.anims[0].currentTime;
+			const done = morph !== m;
+			const e = done ? (m.closing ? 0 : 1) : smooth(Math.min(1, (t || 0) / (MORPH_MS * SETTLE)));
+			cam.tx = from[0] + (to[0] - from[0]) * e;
+			cam.ty = from[1] + (to[1] - from[1]) * e;
+			applyCam();
+			if (!done) {
+				requestAnimationFrame(step);
+			}
+		};
+		step();
+	}
+
+	function stopMorph() {
+		if (morph) {
+			morph.anims.forEach((a) => a.cancel());
+			morph = null;
 		}
 	}
 
-	function closePop(returnFocus) {
+	function hideHubCard() {
+		stopMorph();
+		pop.hidden = true;
+		svg.classList.remove('is-bio');
+	}
+
+	// plays the morph open (closing false) or back into the hub (closing true)
+	function playMorph(closing, from) {
+		if (morph && morph.anims[0].playState === 'running') {
+			if (morph.closing !== closing) {
+				morph.closing = closing;
+				morph.anims.forEach((a) => a.reverse());
+			}
+			return;
+		}
+		stopMorph();
+		const m = { closing, anims: morphFrames(from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		m.anims[0].onfinish = () => {
+			if (morph !== m) {
+				return;
+			}
+			if (m.closing) {
+				hideHubCard();
+			} else {
+				stopMorph();
+			}
+		};
+		morph = m;
+	}
+
+	function openStation(item, focusInside) {
+		if (item.bio && morph && morph.closing) {
+			// reopened while it shrinks back: turn the same animation round, nothing jumps
+			openItem = item;
+			item.g.classList.add('is-open');
+			item.g.setAttribute('aria-expanded', 'true');
+			playMorph(false);
+			if (focusInside) {
+				(pop.querySelector('a') || popClose).focus();
+			}
+			return;
+		}
+		closePop(false, true);
+		hideHubCard();
+		openItem = item;
+		popBody.replaceChildren(...(item.bio ? [bioSection()] : item.st.entries.map(section)));
+		pop.hidden = false;
+		item.g.classList.add('is-open');
+		item.g.setAttribute('aria-expanded', 'true');
+		// the bio card repeats the name and role, so the hub's own labels step aside for it
+		svg.classList.toggle('is-bio', !!item.bio);
+		const was = [cam.tx, cam.ty];
+		const hubWas = toScreen(HUB[0], HUB[1]);
+		if (item.bio) {
+			panToHub();
+		} else if (small()) {
+			// the card takes the right of the screen; pan so the station sits just left of it,
+			// below the name and above the dock (a card too tall for that gap scrolls)
+			const [sx, sy] = toScreen(item.x, item.y);
+			const minY = ident.getBoundingClientRect().bottom + 8 + 24;
+			const maxY = Math.max(minY, dock.getBoundingClientRect().top - 8 - pop.offsetHeight + 24);
+			cam.tx += vw - pop.offsetWidth - 16 - 24 - sx;
+			cam.ty += Math.min(maxY, Math.max(minY, sy)) - sy;
+			applyCam();
+		}
+		placePop();
+		if (item.bio) {
+			const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
+			playMorph(false, panned && hubWas);
+			if (panned) {
+				panWithMorph(morph, was, [cam.tx, cam.ty]);
+			}
+		}
+		if (focusInside) {
+			(pop.querySelector('a') || popClose).focus();
+		}
+	}
+
+	// instant skips the hub's morph, for when another card takes its place
+	function closePop(returnFocus, instant) {
 		if (!openItem) {
 			return;
 		}
 		const item = openItem;
 		openItem = null;
-		pop.hidden = true;
 		item.g.classList.remove('is-open');
 		item.g.setAttribute('aria-expanded', 'false');
+		if (item.bio && !instant) {
+			playMorph(true);
+		} else {
+			hideHubCard();
+		}
 		if (returnFocus) {
 			item.g.focus({ preventScroll: true });
 		}
@@ -421,17 +614,29 @@
 			return;
 		}
 		const [sx, sy] = toScreen(openItem.x, openItem.y);
+		pop.style.maxHeight = '';
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
+		if (openItem.bio) {
+			const above = sy - hubGap() - h;
+			const top = above >= popRoof() || sy + hubGap() + h > popFloor() ? above : sy + hubGap();
+			popAt = [Math.round(sx - w / 2), Math.round(top)];
+			pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
+			return;
+		}
 		const gap = 24 * Math.max(0.8, cam.k);
 		let left = sx > vw / 2 && !small() ? sx - w - gap : sx + gap;
 		let top = sy - 24;
 		left = Math.max(16, Math.min(left, vw - w - 16));
-		top = Math.max(16, Math.min(top, vh - h - 16));
+		// stay clear of the dock (hint and contact links) where the card would sit over it
+		const d = dock.getBoundingClientRect();
+		const bottom = left < d.right && left + w > d.left ? d.top - 8 : vh - 16;
+		pop.style.maxHeight = Math.round(bottom - 16) + 'px';
+		top = Math.max(16, Math.min(top, bottom - Math.min(h, bottom - 16)));
 		pop.style.transform = 'translate(' + Math.round(left) + 'px,' + Math.round(top) + 'px)';
 	}
 
-	pop.querySelector('.m-pop-close').addEventListener('click', () => closePop(true));
+	popClose.addEventListener('click', () => closePop(true));
 
 	// ---------- list fallback ----------
 	function openList() {
@@ -740,7 +945,10 @@
 
 	function stationFrom(target) {
 		const g = target && target.closest ? target.closest('.st[data-id]') : null;
-		return g ? stationEls.get(g.dataset.id) : null;
+		if (!g) {
+			return null;
+		}
+		return g === hub ? hubItem : stationEls.get(g.dataset.id);
 	}
 
 	view.addEventListener('pointerdown', (e) => {
@@ -938,5 +1146,5 @@
 	startLoop();
 
 	// test hook: a read-only view of state for the checks in the PR package
-	window.__metro = { cam, stations: stationEls, open: (id) => openStation(stationEls.get(id), false), endIntro, restView, intro, trains };
+	window.__metro = { cam, stations: stationEls, open: (id) => openStation(id === 'hub' ? hubItem : stationEls.get(id), false), endIntro, restView, intro, trains };
 })();
