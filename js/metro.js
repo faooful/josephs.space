@@ -88,7 +88,7 @@
 	const newest = notes.slice(0, NOTE_STOPS);
 	if (newest.length && noteList) {
 		noteList.replaceChildren(...newest.map((n) => noteLi('note-' + n.slug, [n.when, n.project].filter(Boolean).join(' \u00b7 '),
-			shortLabel(n.title || n.whenShort), 'notes/#' + n.slug, 'Open on the notes page', n.title || n.text, n.title ? n.text : '', n.image, n.alt)),
+			shortLabel(n.title || n.project || n.whenShort), 'notes/#' + n.slug, 'Open on the notes page', n.title || n.text, n.title ? n.text : '', n.image, n.alt)),
 		noteLi('all-notes', '', 'All notes', 'notes/', 'Read all notes', 'All notes', 'Every note, newest first.', '', ''));
 		const stops = NOTE_SLOTS.slice(0, newest.length + 1);
 		stops.forEach((slot, i) => {

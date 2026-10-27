@@ -19,7 +19,7 @@ Notes are short posts (one to three sentences, with an optional image). They sho
    One to three sentences. Markdown works, including [links](https://example.com).
    ```
 
-   Only the text is needed. `date` falls back to the date in the file name; `title`, `project`, `image` and `alt` are optional. A note without a title is labelled on the map by its date. Put any image under `img/notes/`, and give its path from the site root.
+   Only the text is needed. `date` falls back to the date in the file name; `title`, `project`, `image` and `alt` are optional. A note without a title is labelled on the map by its project, or by its date if it has no project either. Put any image under `img/notes/`, and give its path from the site root.
 
 2. Commit and push to `master`. That's all: GitHub Pages rebuilds the site and `notes/index.json` (the feed the map and /notes read) lists the new note a minute or so later.
 
