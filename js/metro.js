@@ -172,6 +172,11 @@
 		});
 		if (!spec.route) {
 			fadeIns.push(tBar(gLines, spec.stubs[0], 'm-cap m-' + key + ' m-stub'));
+			// no legend: a hover title and a label say what the dashed stub is
+			const tag = LINE_NAMES[key] + ', coming soon';
+			const hint = el('g', { class: 'm-stub-hint', role: 'img', 'aria-label': tag }, gStations);
+			el('title', {}, hint).textContent = tag;
+			el('path', { d: roundedPath(spec.stubs[0], 16), class: 'm-stub-hit' }, hint);
 			continue;
 		}
 		const path = el('path', { d: roundedPath(spec.route, 16), class: 'm-line m-' + key }, gLines);
@@ -250,7 +255,7 @@
 	// hub: opens the bio from the list, so the words live in one place. First in tab order.
 	const [bioName, bioRole] = textOf(list, '.ml-ident').split(' · ');
 	const hub = el('g', { class: 'st st--hub', tabindex: '0', role: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'data-id': 'hub', 'aria-label': bioName + ', ' + bioRole + ', about' }, gStations);
-	gStations.prepend(hub);
+	gStations.insertBefore(hub, gStations.querySelector('.st[data-id]'));
 	el('circle', { cx: HUB[0], cy: HUB[1], r: 30, class: 'st-hit' }, hub);
 	el('circle', { cx: HUB[0], cy: HUB[1], r: 28, class: 'st-ring' }, hub);
 	el('path', { d: glyphPath('circle', HUB[0], HUB[1], 40), class: 'st-glyph' }, hub);
@@ -329,17 +334,28 @@
 
 	// ---------- popup ----------
 	const pop = document.getElementById('metro-pop');
+	const dock = document.querySelector('.metro-dock');
+	const ident = document.querySelector('.metro-ident');
 	const popBody = pop.querySelector('.m-pop-body');
 	let openItem = null;
+
+	// the line's colour with its station shape on it, standing in for the legend
+	function lineKey(line) {
+		const key = document.createElementNS(NS, 'svg');
+		key.setAttribute('class', 'm-line-key m-key--' + line);
+		key.setAttribute('viewBox', '0 0 24 12');
+		key.setAttribute('aria-hidden', 'true');
+		el('path', { d: 'M0 6H24', class: 'k-line' }, key);
+		el('path', { d: glyphPath(SHAPES[line], 12, 6, 8), class: 'k-glyph' }, key);
+		return key;
+	}
 
 	function section(entry, idx) {
 		const sec = document.createElement('div');
 		sec.className = 'm-pop-sec';
 		const kicker = document.createElement('div');
 		kicker.className = 'm-pop-kicker';
-		const sw = document.createElement('i');
-		sw.className = 'm-swatch m-swatch--' + entry.line;
-		kicker.append(sw, LINE_NAMES[entry.line] + (entry.kicker ? ' · ' + entry.kicker : ''));
+		kicker.append(lineKey(entry.line), LINE_NAMES[entry.line] + (entry.kicker ? ' · ' + entry.kicker : ''));
 		if (entry.soon) {
 			const badge = document.createElement('span');
 			badge.className = 'coming-soon-badge';
@@ -413,13 +429,14 @@
 		item.g.classList.add('is-open');
 		item.g.setAttribute('aria-expanded', 'true');
 		if (small()) {
-			// keep the station on screen with room for the card beside it
+			// the card takes the right of the screen; pan so the station sits just left of it,
+			// below the name and above the dock (a card too tall for that gap scrolls)
 			const [sx, sy] = toScreen(item.x, item.y);
-			if (sx > vw * 0.3 || sx < 24 || sy < 120 || sy > vh * 0.5) {
-				cam.tx += vw * 0.16 - sx;
-				cam.ty += vh * 0.32 - sy;
-				applyCam();
-			}
+			const minY = ident.getBoundingClientRect().bottom + 8 + 24;
+			const maxY = Math.max(minY, dock.getBoundingClientRect().top - 8 - pop.offsetHeight + 24);
+			cam.tx += vw - pop.offsetWidth - 16 - 24 - sx;
+			cam.ty += Math.min(maxY, Math.max(minY, sy)) - sy;
+			applyCam();
 		}
 		placePop();
 		if (focusInside) {
@@ -446,13 +463,18 @@
 			return;
 		}
 		const [sx, sy] = toScreen(openItem.x, openItem.y);
+		pop.style.maxHeight = '';
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
 		const gap = 24 * Math.max(0.8, cam.k);
 		let left = sx > vw / 2 && !small() ? sx - w - gap : sx + gap;
 		let top = sy - 24;
 		left = Math.max(16, Math.min(left, vw - w - 16));
-		top = Math.max(16, Math.min(top, vh - h - 16));
+		// stay clear of the dock (hint and contact links) where the card would sit over it
+		const d = dock.getBoundingClientRect();
+		const bottom = left < d.right && left + w > d.left ? d.top - 8 : vh - 16;
+		pop.style.maxHeight = Math.round(bottom - 16) + 'px';
+		top = Math.max(16, Math.min(top, bottom - Math.min(h, bottom - 16)));
 		pop.style.transform = 'translate(' + Math.round(left) + 'px,' + Math.round(top) + 'px)';
 	}
 
