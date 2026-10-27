@@ -15,7 +15,6 @@
 	const NS = 'http://www.w3.org/2000/svg';
 	const WORLD = { w: 1440, h: 900 };
 	const HUB = [720, 450];
-	const NOTES_ON_MAP = 5;
 	const reduceQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 	// ---------- geometry (world units, octilinear only) ----------
@@ -24,7 +23,8 @@
 		case: { route: [[590, 450], [420, 450], [330, 540], [330, 750]], stubs: [[[708, 450], [590, 450]]], trains: 2 },
 		side: { route: [[720, 450], [720, 230], [790, 160], [1230, 160], [1280, 210], [1280, 730]], stubs: [[[1280, 730], [1280, 800]]], trains: 3 },
 		write: { route: [[732, 450], [732, 360], [900, 360], [900, 60]], stubs: [], trains: 2 },
-		notes: { route: [[720, 450], [720, 600], [790, 670], [1220, 670]], stubs: [], trains: 2 }
+		// Notes has no stations yet: a short dashed stub off the hub, no route, no trains.
+		notes: { route: null, stubs: [[[720, 450], [720, 560]]], trains: 0 }
 	};
 	const LINE_NAMES = { case: 'Case Studies', side: 'Side Projects', write: 'Writing', notes: 'Notes' };
 	const SHAPES = { case: 'square', side: 'circle', write: 'triangle', notes: 'diamond' };
@@ -39,10 +39,8 @@
 		frost: [1280, 270, 22, 0, 'start'], dota: [1280, 345, 22, 0, 'start'], notetab: [1280, 420, 22, 0, 'start'],
 		reading: [1280, 495, 22, 0, 'start'], ffind: [1280, 570, 22, 0, 'start'], fsound: [1280, 645, 22, 0, 'start'],
 		druids: [1280, 720, 22, 0, 'start'],
-		postcards: [820, 360, 0, 28, 'middle'], taste: [900, 115, 22, 0, 'start'], 'writing-index': [900, 60, 22, 0, 'start'],
-		'all-notes': [1220, 670, 0, 30, 'middle']
+		postcards: [820, 360, 0, 28, 'middle'], taste: [900, 115, 22, 0, 'start'], 'writing-index': [900, 60, 22, 0, 'start']
 	};
-	const NOTE_SLOTS = [[720, 540, 22, 0, 'start'], [850, 670, 0, 28, 'middle'], [950, 670, 0, -26, 'middle'], [1050, 670, 0, 28, 'middle'], [1140, 670, 0, -26, 'middle']];
 	const DECO = [{ id: 'next-project', line: 'side', label: 'Next project', place: [1280, 790, 22, 0, 'start'] }];
 	// The few places where waiting passengers would sit on a line or a label.
 	const PAX_SIDE = { drift: [-1, 1], obs: [1, 1], postcards: [0, -1], 'writing-index': [-1, 0], taste: [-1, 0] };
@@ -65,8 +63,7 @@
 			kicker: li.dataset.kicker || '',
 			link,
 			cta: link ? (link.dataset.cta || 'Open') : '',
-			soon: li.hasAttribute('data-soon'),
-			example: li.hasAttribute('data-example')
+			soon: li.hasAttribute('data-soon')
 		};
 	}
 
@@ -87,27 +84,6 @@
 			stations.set(id, { id, place: PLACES[id], lines: [line], entries: [entry], label: li.dataset.label || entry.title, soon: entry.soon });
 		});
 	});
-
-	// Notes: one list sorted newest first, capped. Older notes leave the map and the list.
-	const notesList = list.querySelector('[data-notes]');
-	if (notesList) {
-		const notes = Array.from(notesList.querySelectorAll('li[data-note]'))
-			.sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
-		notes.forEach((li, i) => {
-			if (i >= NOTES_ON_MAP) {
-				li.remove();
-				return;
-			}
-			notesList.appendChild(li);
-			const entry = entryFrom(li, 'notes');
-			const date = new Date(li.dataset.date + 'T12:00:00');
-			const short = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-			entry.title = entry.example ? 'Example note' : entry.title;
-			entry.kicker = short;
-			const id = 'note-' + i;
-			stations.set(id, { id, place: NOTE_SLOTS[i], lines: ['notes'], entries: [entry], label: (entry.example ? 'Example · ' : '') + short, small: true, note: true });
-		});
-	}
 
 	// ---------- svg helpers ----------
 	function el(tag, attrs, parent) {
@@ -191,6 +167,10 @@
 			const stub = el('path', { d: roundedPath(pts, 16), class: 'm-stub m-' + key }, gLines);
 			fadeIns.push(stub);
 		});
+		if (!spec.route) {
+			fadeIns.push(tBar(gLines, spec.stubs[0], 'm-cap m-' + key + ' m-stub'));
+			continue;
+		}
 		const path = el('path', { d: roundedPath(spec.route, 16), class: 'm-line m-' + key }, gLines);
 		const len = path.getTotalLength();
 		const last = spec.stubs.length && spec.stubs[spec.stubs.length - 1][0][0] === spec.route[spec.route.length - 1][0] && spec.stubs[spec.stubs.length - 1][0][1] === spec.route[spec.route.length - 1][1]
@@ -242,13 +222,13 @@
 		const g = el('g', deco ? { class: cls, 'aria-hidden': 'true' } : { class: cls, tabindex: '0', role: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'data-id': st.id }, gStations);
 		if (!deco) {
 			const lineNames = st.lines.map((l) => LINE_NAMES[l]).join(' and ');
-			const extra = st.soon ? ', coming soon' : (st.note ? ', example note' : '');
-			g.setAttribute('aria-label', (st.note ? 'Example note, ' + st.entries[0].kicker : st.label) + extra + ', ' + lineNames);
+			const extra = st.soon ? ', coming soon' : '';
+			g.setAttribute('aria-label', st.label + extra + ', ' + lineNames);
 		}
 		el('circle', { cx: x, cy: y, r: 22, class: 'st-hit' }, g);
 		el('circle', { cx: x, cy: y, r: size / 2 + 8, class: 'st-ring' }, g);
 		el('path', { d: glyphPath(shape, x, y, size), class: 'st-glyph' }, g);
-		const label = el('text', { x: x + dx, y: y + dy, 'text-anchor': anchor, 'dominant-baseline': 'middle', class: st.small || deco || st.soon ? 'm-label-sm' : 'm-label' }, gLabels);
+		const label = el('text', { x: x + dx, y: y + dy, 'text-anchor': anchor, 'dominant-baseline': 'middle', class: deco || st.soon ? 'm-label-sm' : 'm-label' }, gLabels);
 		label.textContent = st.label;
 		const along = hubDistance(st.lines[0], x, y);
 		const item = { st, g, label, x, y, along, line: st.lines[0], waiting: [] };
@@ -352,10 +332,10 @@
 		const sw = document.createElement('i');
 		sw.className = 'm-swatch m-swatch--' + entry.line;
 		kicker.append(sw, LINE_NAMES[entry.line] + (entry.kicker ? ' · ' + entry.kicker : ''));
-		if (entry.soon || entry.example) {
+		if (entry.soon) {
 			const badge = document.createElement('span');
 			badge.className = 'coming-soon-badge';
-			badge.textContent = entry.soon ? 'Coming soon' : 'Example';
+			badge.textContent = 'Coming soon';
 			kicker.append(badge);
 		}
 		const title = document.createElement('h2');
