@@ -235,6 +235,8 @@
 	width: 100%;
 }
 .m-pop-img.is-loaded { opacity: 1; }
+.is-bio .m-hub-label { visibility: hidden; }
+.m-pop-links { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 8px; }
 .m-pop-meta { color: var(--home-secondary); font-size: 14px; font-weight: 400; line-height: 1.45; margin: 0; }
 .m-pop a,
 .metro-list a {

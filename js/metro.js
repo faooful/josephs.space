@@ -259,9 +259,9 @@
 	el('circle', { cx: HUB[0], cy: HUB[1], r: 30, class: 'st-hit' }, hub);
 	el('circle', { cx: HUB[0], cy: HUB[1], r: 28, class: 'st-ring' }, hub);
 	el('path', { d: glyphPath('circle', HUB[0], HUB[1], 40), class: 'st-glyph' }, hub);
-	const hubName = el('text', { x: HUB[0] + 30, y: HUB[1] + 32, class: 'm-label-hub', 'dominant-baseline': 'middle' }, gLabels);
+	const hubName = el('text', { x: HUB[0] + 30, y: HUB[1] + 32, class: 'm-label-hub m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
 	hubName.textContent = bioName;
-	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm', 'dominant-baseline': 'middle' }, gLabels);
+	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
 	hubRole.textContent = bioRole;
 	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1] };
 
@@ -401,7 +401,7 @@
 		return img;
 	}
 
-	// the hub's card: name, role and the bio paragraphs cloned from the list
+	// the hub's card: name, role, the bio's opening two sentences and the contact links, all cloned from the list
 	function bioSection() {
 		const sec = document.createElement('div');
 		sec.className = 'm-pop-sec m-pop-bio';
@@ -413,12 +413,38 @@
 		role.className = 'm-pop-kicker';
 		role.textContent = bioRole;
 		sec.append(title, role);
-		list.querySelectorAll('.bio-copy p').forEach((p) => {
+		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p) => {
 			const copy = p.cloneNode(true);
 			copy.className = 'm-pop-meta';
 			sec.append(copy);
 		});
+		const links = document.createElement('div');
+		links.className = 'm-pop-links';
+		list.querySelectorAll('.home-footer a').forEach((a) => links.append(a.cloneNode(true)));
+		sec.append(links);
 		return sec;
+	}
+
+	// the hub's card is centred on it, above or below; these are the screen edges it keeps inside
+	const hubGap = () => 28 * cam.k + 8;
+	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
+	const popFloor = () => dock.getBoundingClientRect().top - 8;
+
+	// pan so the hub's card fits centred on the hub: horizontally, then above it, or else below
+	function panToHub() {
+		const [sx, sy] = toScreen(HUB[0], HUB[1]);
+		const w = pop.offsetWidth;
+		const need = pop.offsetHeight + hubGap();
+		const x = w + 32 > vw ? vw / 2 : Math.max(16 + w / 2, Math.min(sx, vw - 16 - w / 2));
+		let y = sy;
+		if (sy - need < popRoof() && sy + need > popFloor()) {
+			const above = popRoof() + need;
+			const below = popFloor() - need;
+			y = Math.abs(above - sy) <= Math.abs(below - sy) || below < popRoof() ? above : below;
+		}
+		cam.tx += x - sx;
+		cam.ty += y - sy;
+		applyCam();
 	}
 
 	function openStation(item, focusInside) {
@@ -428,7 +454,11 @@
 		pop.hidden = false;
 		item.g.classList.add('is-open');
 		item.g.setAttribute('aria-expanded', 'true');
-		if (small()) {
+		// the bio card repeats the name and role, so the hub's own labels step aside for it
+		svg.classList.toggle('is-bio', !!item.bio);
+		if (item.bio) {
+			panToHub();
+		} else if (small()) {
 			// the card takes the right of the screen; pan so the station sits just left of it,
 			// below the name and above the dock (a card too tall for that gap scrolls)
 			const [sx, sy] = toScreen(item.x, item.y);
@@ -453,6 +483,7 @@
 		pop.hidden = true;
 		item.g.classList.remove('is-open');
 		item.g.setAttribute('aria-expanded', 'false');
+		svg.classList.remove('is-bio');
 		if (returnFocus) {
 			item.g.focus({ preventScroll: true });
 		}
@@ -466,6 +497,12 @@
 		pop.style.maxHeight = '';
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
+		if (openItem.bio) {
+			const above = sy - hubGap() - h;
+			const top = above >= popRoof() || sy + hubGap() + h > popFloor() ? above : sy + hubGap();
+			pop.style.transform = 'translate(' + Math.round(sx - w / 2) + 'px,' + Math.round(top) + 'px)';
+			return;
+		}
 		const gap = 24 * Math.max(0.8, cam.k);
 		let left = sx > vw / 2 && !small() ? sx - w - gap : sx + gap;
 		let top = sy - 24;
