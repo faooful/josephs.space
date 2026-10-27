@@ -84,6 +84,71 @@
       "kind": "colour",
       "value": "#5aa4e8",
       "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#ec3523",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#1b418c",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#f7cc0b",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#45A329",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#ffffff",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#e5ecf0",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#edf1e8",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "rgba(22, 22, 22, 0.035)",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#4f78c9",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#17201f",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#151a13",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "rgba(241, 241, 237, 0.03)",
+      "resolution": "allow"
+    },
+    {
+      "kind": "colour",
+      "value": "#1a1a19",
+      "resolution": "allow"
     }
   ]
 }
