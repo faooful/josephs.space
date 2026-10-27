@@ -476,90 +476,122 @@
 		applyCam();
 	}
 
-	// ---------- each card grows out of its shape: a FLIP of transform, with border-radius or a polygon clip ----------
-	// one animation per element, the same length, so closing is the exact reverse and a reopen mid-way just turns it round
-	const MORPH_MS = 550;
-	const SETTLE = 0.7; // the shape settles at 70%, then the content fades in
+	// ---------- the shape itself becomes the card ----------
+	// A copy of the station's own outline (same fill, same stroke) is drawn on a layer over the map and reshaped every frame:
+	// it moves and grows from the node to the card's box (a FLIP from the shape's first rect to the card's last), its outline
+	// going from circle, square, triangle or diamond to the card's rounded rectangle, its dark stroke thinning into the
+	// card's border and its fill becoming the card's. The real card stays see-through until the shape lands, then its
+	// content fades in over the last 150 ms. Closing is the exact reverse: text out first, then the shape back into the node.
+	// The layer is a plain SVG path redrawn from the clock, so it works the same in every browser (no CSS d, and a
+	// clip-path would cut a triangle's stroke off) and costs one small path paint a frame.
+	const MORPH_MS = 500;
+	const SETTLE = 0.7; // the shape lands at 70% (350 ms), then the content fades in
 	const popClose = pop.querySelector('.m-pop-close');
-	let morph = null; // { anims, closing }
+	const morphSvg = document.createElementNS(NS, 'svg');
+	morphSvg.setAttribute('class', 'm-morph');
+	morphSvg.setAttribute('aria-hidden', 'true');
+	const morphPath = el('path', {}, morphSvg);
+	pop.before(morphSvg);
+	let morph = null; // { item, closing, anims, pan, from, to }
 
-	// triangles and diamonds open through a polygon clip: 8 points on the shape's outline that move out to the card's edges
+	// Every outline is the same 8 points on a frame (in % of it), with round corners of radius R: a FLIP of the frame from the
+	// shape's box to the card's, while the points slide out to the box's corners and edges and R goes to the card's 12px.
+	// A circle is the box with R at half its size; triangles and diamonds start as their own polygon, with sharp corners.
+	const BOX = [[50, 0], [100, 0], [100, 50], [100, 100], [50, 100], [0, 100], [0, 50], [0, 0]];
 	const POLY = {
 		triangle: [[50, 0], [62.5, 25], [75, 50], [100, 100], [50, 100], [0, 100], [25, 50], [37.5, 25]],
 		diamond: [[50, 0], [75, 25], [100, 50], [75, 75], [50, 100], [25, 75], [0, 50], [25, 25]],
 	};
-	const BOX = [[50, 0], [100, 0], [100, 50], [100, 100], [50, 100], [0, 100], [0, 50], [0, 0]];
+	const KAPPA = 0.5523; // a cubic through a right-angled corner this way is a quarter circle
 
-	// from: where the shape is on screen when the morph starts, if the map is about to pan away from there
-	function morphFrames(item, from) {
-		if (reduceQuery.matches) {
-			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
+	const mix = (a, b, e) => a + (b - a) * e;
+	const channels = (c) => (c.match(/[\d.]+/g) || [0, 0, 0]).map(Number).concat([1]).slice(0, 4);
+	const mixColour = (a, b, e) => 'rgba(' + a.map((v, i) => (i < 3 ? Math.round(mix(v, b[i], e)) : +mix(v, b[i], e).toFixed(3))).join(',') + ')';
+	const f2 = (v) => v.toFixed(2);
+
+	// a closed polygon of the 8 points, its 4 corner points (odd) rounded by up to R, never past their neighbours;
+	// the other 4 (the edges' middles at the end, a diamond's or triangle's tips at the start) stay sharp
+	function roundedPoly(pts, R) {
+		const n = pts.length;
+		let d = '';
+		for (let i = 0; i < n; i++) {
+			const [vx, vy] = pts[i];
+			const [ax, ay] = pts[(i + n - 1) % n];
+			const [bx, by] = pts[(i + 1) % n];
+			const la = Math.hypot(ax - vx, ay - vy) || 1;
+			const lb = Math.hypot(bx - vx, by - vy) || 1;
+			const c = i % 2 ? Math.max(0, Math.min(R, la, lb)) : 0;
+			const ix = vx + ((ax - vx) / la) * c;
+			const iy = vy + ((ay - vy) / la) * c;
+			const ox = vx + ((bx - vx) / lb) * c;
+			const oy = vy + ((by - vy) / lb) * c;
+			d += (i ? 'L' : 'M') + f2(ix) + ' ' + f2(iy);
+			if (c > 0.01) {
+				d += 'C' + f2(mix(ix, vx, KAPPA)) + ' ' + f2(mix(iy, vy, KAPPA)) + ' ' + f2(mix(ox, vx, KAPPA)) + ' ' + f2(mix(oy, vy, KAPPA)) + ' ' + f2(ox) + ' ' + f2(oy);
+			}
 		}
-		const [sx, sy] = from || toScreen(item.x, item.y);
+		return d + 'Z';
+	}
+
+	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border)
+	function morphD(item, e) {
+		const [sx, sy] = toScreen(item.x, item.y);
 		const [l, t, r, b] = shapeBox(item);
-		const w = pop.offsetWidth;
-		const h = pop.offsetHeight;
-		const poly = POLY[item.shape];
-		// circles start fully round, the rest with the stroke's own round corners
-		const r0 = item.shape === 'circle' ? (r - l) / 2 : 1.5 * cam.k;
-		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
-		const shape = [];
-		for (let i = 0; i <= 12; i++) {
-			const e = smooth(i / 12);
-			const W = r - l + (w - r + l) * e;
-			const H = b - t + (h - b + t) * e;
-			const R = r0 + (12 - r0) * e;
-			const x = sx + l + (popAt[0] - sx - l) * e;
-			const y = sy + t + (popAt[1] - sy - t) * e;
-			const f = {
-				transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + (W / w).toFixed(4) + ',' + (H / h).toFixed(4) + ')',
-				borderRadius: (R * w / W).toFixed(2) + 'px / ' + (R * h / H).toFixed(2) + 'px',
-				offset: (i / 12) * SETTLE,
-			};
-			if (poly) {
-				f.clipPath = 'polygon(' + poly.map(([px, py], j) => (px + (BOX[j][0] - px) * e).toFixed(2) + '% ' + (py + (BOX[j][1] - py) * e).toFixed(2) + '%').join(',') + ')';
-			}
-			shape.push(f);
+		const x = mix(sx + l, popAt[0] + 0.5, e);
+		const y = mix(sy + t, popAt[1] + 0.5, e);
+		const W = mix(r - l, pop.offsetWidth - 1, e);
+		const H = mix(b - t, pop.offsetHeight - 1, e);
+		const poly = POLY[item.shape] || BOX;
+		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 11.5, e);
+		const pts = poly.map(([px, py], j) => [x + (W * mix(px, BOX[j][0], e)) / 100, y + (H * mix(py, BOX[j][1], e)) / 100]);
+		return roundedPoly(pts, R);
+	}
+
+	// one frame: read the clock (the content's fade), pan the map along if this open needs room, redraw the shape
+	function drawMorph(m) {
+		if (morph !== m) {
+			return;
 		}
-		shape.push({ ...shape[12], offset: 1 });
-		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
-		return [[pop, shape, MORPH_MS], [popBody, fade, MORPH_MS], [popClose, fade, MORPH_MS]];
-	}
-
-	const smooth = (p) => p * p * (3 - 2 * p); // gentle in and out
-
-	// the map's pan to fit the card rides along with the shape, so nothing jumps at the start
-	function panWithMorph(m, from, to) {
-		const step = () => {
-			const t = m.anims[0].currentTime;
-			const done = morph !== m;
-			const e = done ? (m.closing ? 0 : 1) : smooth(Math.min(1, (t || 0) / (MORPH_MS * SETTLE)));
-			cam.tx = from[0] + (to[0] - from[0]) * e;
-			cam.ty = from[1] + (to[1] - from[1]) * e;
+		const p = m.anims[0].effect.getComputedTiming().progress;
+		const e = smooth(Math.min(1, (p == null ? (m.closing ? 0 : 1) : p) / SETTLE));
+		if (m.pan) {
+			cam.tx = mix(m.pan[0][0], m.pan[1][0], e);
+			cam.ty = mix(m.pan[0][1], m.pan[1][1], e);
 			applyCam();
-			if (!done) {
-				requestAnimationFrame(step);
-			}
-		};
-		step();
+		}
+		morphPath.setAttribute('d', morphD(m.item, e));
+		morphPath.style.fill = mixColour(m.from.fill, m.to.fill, e);
+		morphPath.style.stroke = mixColour(m.from.stroke, m.to.stroke, e);
+		morphPath.style.strokeWidth = mix(m.from.width, 1, e).toFixed(2) + 'px';
+		requestAnimationFrame(() => drawMorph(m));
 	}
+
+	const smooth = (p) => p * p * (3 - 2 * p); // ease in and out
 
 	function stopMorph() {
 		if (morph) {
 			morph.anims.forEach((a) => a.cancel());
 			morph = null;
 		}
+		morphSvg.classList.remove('is-on');
+		pop.classList.remove('is-morphing');
 	}
+
+	let shownItem = null; // whose shape has become the card, so its node is empty until the card goes back into it
 
 	function hideCard() {
 		stopMorph();
 		pop.hidden = true;
 		pop.classList.remove('is-closing');
 		svg.classList.remove('is-bio');
+		if (shownItem) {
+			shownItem.g.classList.remove('is-card');
+			shownItem = null;
+		}
 	}
 
-	// plays the morph open (closing false) or back into the shape (closing true)
-	function playMorph(item, closing, from) {
+	// plays the morph open (closing false) or back into the shape (closing true); pan: the map's [from, to] for this open
+	function playMorph(item, closing, pan) {
 		if (morph && morph.anims[0].playState === 'running') {
 			if (morph.closing !== closing) {
 				morph.closing = closing;
@@ -570,7 +602,28 @@
 		}
 		stopMorph();
 		pop.classList.toggle('is-closing', closing); // a card on its way out lets clicks through to the map
-		const m = { item, closing, anims: morphFrames(item, from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		if (reduceQuery.matches) {
+			const m = { item, closing, anims: [pop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, direction: closing ? 'reverse' : 'normal', fill: 'both' })] };
+			m.anims[0].onfinish = () => (morph === m && (m.closing ? hideCard() : stopMorph()));
+			morph = m;
+			return;
+		}
+		const glyph = getComputedStyle(item.g.querySelector('.st-glyph'));
+		const card = getComputedStyle(pop);
+		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
+		const timing = { duration: MORPH_MS, direction: closing ? 'reverse' : 'normal', fill: 'both' };
+		const m = {
+			item,
+			closing,
+			pan,
+			anims: [popBody.animate(fade, timing), popClose.animate(fade, timing)],
+			from: { fill: channels(glyph.fill), stroke: channels(glyph.stroke), width: parseFloat(glyph.strokeWidth) * 1.22 * cam.k },
+			to: { fill: channels(card.backgroundColor), stroke: channels(card.borderTopColor) },
+		};
+		shownItem = item;
+		item.g.classList.add('is-card'); // the node's own shape is now the one on the move
+		pop.classList.add('is-morphing'); // the card is see-through until the shape has landed under it
+		morphSvg.classList.add('is-on');
 		m.anims[0].onfinish = () => {
 			if (morph !== m) {
 				return;
@@ -582,6 +635,7 @@
 			}
 		};
 		morph = m;
+		drawMorph(m);
 	}
 
 	function openStation(item, focusInside) {
@@ -607,13 +661,9 @@
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
 		const was = [cam.tx, cam.ty];
-		const from = toScreen(item.x, item.y);
 		panToFit(item);
 		const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
-		playMorph(item, false, panned && from);
-		if (panned) {
-			panWithMorph(morph, was, [cam.tx, cam.ty]);
-		}
+		playMorph(item, false, panned ? [was, [cam.tx, cam.ty]] : null);
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
 		}

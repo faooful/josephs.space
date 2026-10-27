@@ -211,6 +211,12 @@
 }
 .m-pop[hidden] { display: none; }
 .m-pop.is-closing { pointer-events: none; }
+/* while a shape becomes its card, the card is see-through and the shape, drawn on this layer, is what you see */
+.m-pop.is-morphing { background: transparent; border-color: transparent; box-shadow: none; }
+.m-morph { display: none; height: 100%; inset: 0; overflow: visible; pointer-events: none; position: fixed; width: 100%; z-index: 6; }
+.m-morph.is-on { display: block; }
+.m-morph path { stroke-linejoin: round; }
+.st.is-card .st-glyph { visibility: hidden; }
 .m-pop-sec { display: flex; flex-direction: column; gap: 4px; }
 .m-pop-sec + .m-pop-sec { border-top: 1px solid var(--home-border); margin-top: 8px; padding-top: 12px; }
 .m-pop-kicker {
