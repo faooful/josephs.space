@@ -20,7 +20,7 @@
 	// ---------- geometry (world units, octilinear only) ----------
 	// route: the solid part trains run on. stubs: dashed "coming soon" segments.
 	const LINES = {
-		case: { route: [[590, 450], [420, 450], [330, 540], [330, 750]], stubs: [[[708, 450], [590, 450]]], trains: 2 },
+		case: { route: [[590, 450], [420, 450], [330, 540], [330, 640], [400, 710], [620, 710]], stubs: [[[708, 450], [590, 450]]], trains: 3 },
 		side: { route: [[720, 450], [720, 230], [790, 160], [1230, 160], [1280, 210], [1280, 730]], stubs: [[[1280, 730], [1280, 800]]], trains: 3 },
 		write: { route: [[732, 450], [732, 360], [900, 360], [900, 60]], stubs: [], trains: 2 },
 		// Notes has no stations yet: a short dashed stub off the hub, no route, no trains.
@@ -32,7 +32,8 @@
 	// id: [x, y, label dx, label dy, anchor]
 	const PLACES = {
 		datadog: [630, 450, 0, -26, 'middle'], p44: [530, 450, 0, -26, 'middle'], spotify: [440, 450, 0, -26, 'middle'],
-		google: [375, 495, -22, 0, 'end'], ubuntu: [330, 610, -22, 0, 'end'], cell: [330, 700, -22, 0, 'end'],
+		hologram: [375, 495, -22, 0, 'end'], google: [330, 575, -22, 0, 'end'], slo: [330, 630, -22, 0, 'end'],
+		ubuntu: [450, 710, 0, 28, 'middle'], cell: [530, 710, 0, 28, 'middle'], 'all-cases': [620, 710, 0, 28, 'middle'],
 		drift: [726, 360, -26, 0, 'end'], prmap: [720, 280, -22, 0, 'end'], cli: [755, 195, -22, 0, 'end'],
 		obs: [900, 160, -14, -26, 'end'], workbench: [1000, 160, 0, 28, 'middle'], signals: [1090, 160, 0, -26, 'middle'],
 		mocking: [1180, 160, 0, 28, 'middle'],
