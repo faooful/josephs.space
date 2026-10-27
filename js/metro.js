@@ -434,11 +434,10 @@
 		return sec;
 	}
 
-	// ---------- every card is anchored to its shape: a corner of the card sits on the shape's outline ----------
+	// ---------- every card is centred on its shape, held on screen between the name and the dock ----------
 	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
 	const popFloor = () => dock.getBoundingClientRect().top - 8;
 	const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
-	let popDir = [1, 1]; // which way the card runs from its shape: right/down 1, left/up -1
 
 	// the shape's outline as drawn while open (scaled 1.22), around its centre in screen px: [left, top, right, bottom]
 	function shapeBox(item) {
@@ -453,39 +452,45 @@
 		return [-r, -r, r, r];
 	}
 
-	// one axis: the card runs on from the shape's near edge a, or back from its far edge b; the way with more room wins,
-	// unless only the other fits; shift is how far the map has to move for it to fit
-	function pickWay(a, b, len, lo, hi) {
-		const shift = (start) => (start < lo ? lo - start : start + len > hi ? hi - start - len : 0);
-		const ways = [{ dir: 1, shift: shift(a) }, { dir: -1, shift: shift(b - len) }];
-		if (a + b > lo + hi) {
-			ways.reverse();
-		}
-		return ways.find((w) => w.shift === 0) || (Math.abs(ways[0].shift) <= Math.abs(ways[1].shift) ? ways[0] : ways[1]);
-	}
-
-	// choose the card's corner and pan the map if that is the only way it fits on screen, between the name and the dock
-	function panToFit(item) {
-		const [sx, sy] = toScreen(item.x, item.y);
-		const [l, t, r, b] = shapeBox(item);
-		const x = pickWay(sx + l, sx + r, pop.offsetWidth, 16, vw - 16);
-		const y = pickWay(sy + t, sy + b, pop.offsetHeight, popRoof(), popFloor());
-		popDir = [x.dir, y.dir];
-		cam.tx += x.shift;
-		cam.ty += y.shift;
-		applyCam();
-	}
-
 	// ---------- the shape itself becomes the card ----------
-	// A copy of the station's own outline (same fill, same stroke) is drawn on a layer over the map and reshaped every frame:
-	// it moves and grows from the node to the card's box (a FLIP from the shape's first rect to the card's last), its outline
-	// going from circle, square, triangle or diamond to the card's rounded rectangle, its dark stroke thinning into the
-	// card's border and its fill becoming the card's. The real card stays see-through until the shape lands, then its
-	// content fades in over the last 150 ms. Closing is the exact reverse: text out first, then the shape back into the node.
+	// A copy of the station's own outline (same fill, same stroke) is drawn on a layer over the map and reshaped every frame.
+	// It grows out from the node's centre, its centre staying on the node's: size, outline (circle, square, triangle or
+	// diamond to the card's rounded rectangle), stroke (thinning into the card's border) and fill (becoming the card's) all
+	// move together on one expo-out curve. Only if the growing box would run off screen is it held inside, so any shift
+	// eases in as it grows. The real card stays see-through under it; its content fades in over the last 100 ms.
+	// Closing: the text fades in 60 ms while the shape starts to collapse back into the node, 220 ms in all.
 	// The layer is a plain SVG path redrawn from the clock, so it works the same in every browser (no CSS d, and a
-	// clip-path would cut a triangle's stroke off) and costs one small path paint a frame.
-	const MORPH_MS = 500;
-	const SETTLE = 0.7; // the shape lands at 70% (350 ms), then the content fades in
+	// clip-path would cut a triangle's stroke off). Each frame is arithmetic on values read once at the start: no layout reads.
+	const OPEN_MS = 300;
+	const CLOSE_MS = 220;
+	const SHOW_AT = 200 / OPEN_MS; // the content fades in from 200 ms to 300 ms
+	const HIDE_BY = 60 / CLOSE_MS; // and out in the first 60 ms of a close
+	const SHRINK_AT = 40; // the shape starts back 40 ms into a close
+	// cubic-bezier(0.16, 1, 0.3, 1), an expo-out, tabulated once so a frame only looks it up
+	const EASE = (() => {
+		const n = 256;
+		const xs = [];
+		const ys = [];
+		for (let i = 0; i <= n; i++) {
+			const t = i / n;
+			const u = 1 - t;
+			xs.push(3 * u * u * t * 0.16 + 3 * u * t * t * 0.3 + t * t * t);
+			ys.push(3 * u * u * t + 3 * u * t * t + t * t * t);
+		}
+		return (x) => {
+			if (x <= 0) {
+				return 0;
+			}
+			if (x >= 1) {
+				return 1;
+			}
+			let i = 1;
+			while (xs[i] < x) {
+				i++;
+			}
+			return ys[i - 1] + ((ys[i] - ys[i - 1]) * (x - xs[i - 1])) / (xs[i] - xs[i - 1]);
+		};
+	})();
 	const popClose = pop.querySelector('.m-pop-close');
 	const morphSvg = document.createElementNS(NS, 'svg');
 	morphSvg.setAttribute('class', 'm-morph');
@@ -533,40 +538,49 @@
 		return d + 'Z';
 	}
 
-	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border)
-	function morphD(item, e) {
+	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border), its centre on the node's,
+	// pushed back inside the screen only by as much as the box at this size would overflow
+	function morphD(m, e) {
+		const item = m.item;
 		const [sx, sy] = toScreen(item.x, item.y);
 		const [l, t, r, b] = shapeBox(item);
-		const x = mix(sx + l, popAt[0] + 0.5, e);
-		const y = mix(sy + t, popAt[1] + 0.5, e);
-		const W = mix(r - l, pop.offsetWidth - 1, e);
-		const H = mix(b - t, pop.offsetHeight - 1, e);
+		const W = mix(r - l, m.w, e);
+		const H = mix(b - t, m.h, e);
+		const cx = mix(sx + (l + r) / 2, sx, e);
+		const cy = mix(sy + (t + b) / 2, sy, e);
+		// centred on the node; only once the growing box would run off screen is it nudged inside, by as much
+		// as it is grown (so the shift eases in from nothing), and it arrives on the card's whole-pixel box
+		const hold = (v, lo, hi, end, at) => v + (clamp(v, lo, hi) - v) * e + (at - end) * e;
+		const x = hold(cx - W / 2, 16, vw - 16 - W, clamp(sx - m.w / 2, 16, vw - 16 - m.w), popAt[0]);
+		const y = hold(cy - H / 2, m.roof, m.floor - H, clamp(sy - m.h / 2, m.roof, m.floor - m.h), popAt[1]);
 		const poly = POLY[item.shape] || BOX;
-		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 11.5, e);
-		const pts = poly.map(([px, py], j) => [x + (W * mix(px, BOX[j][0], e)) / 100, y + (H * mix(py, BOX[j][1], e)) / 100]);
+		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 12, e) - 0.5 * e;
+		const iw = W - e; // drawn on the middle of the 1px border at the end
+		const ih = H - e;
+		const pts = poly.map(([px, py], j) => [x + 0.5 * e + (iw * mix(px, BOX[j][0], e)) / 100, y + 0.5 * e + (ih * mix(py, BOX[j][1], e)) / 100]);
 		return roundedPoly(pts, R);
 	}
 
-	// one frame: read the clock (the content's fade), pan the map along if this open needs room, redraw the shape
+	// where the shape is at time t (ms) into this open or close
+	function shapeAt(m, t) {
+		return m.closing ? m.e0 * (1 - EASE((t - SHRINK_AT) / (CLOSE_MS - SHRINK_AT))) : m.e0 + (1 - m.e0) * EASE(t / OPEN_MS);
+	}
+
+	// one frame: read the clock (the content's fade, linear), redraw the shape
 	function drawMorph(m) {
 		if (morph !== m) {
 			return;
 		}
-		const p = m.anims[0].effect.getComputedTiming().progress;
-		const e = smooth(Math.min(1, (p == null ? (m.closing ? 0 : 1) : p) / SETTLE));
-		if (m.pan) {
-			cam.tx = mix(m.pan[0][0], m.pan[1][0], e);
-			cam.ty = mix(m.pan[0][1], m.pan[1][1], e);
-			applyCam();
-		}
-		morphPath.setAttribute('d', morphD(m.item, e));
+		const a = m.anims[0];
+		const p = a.effect.getComputedTiming().progress;
+		const e = shapeAt(m, (p == null ? 1 : p) * m.ms);
+		m.e = e;
+		morphPath.setAttribute('d', morphD(m, e));
 		morphPath.style.fill = mixColour(m.from.fill, m.to.fill, e);
 		morphPath.style.stroke = mixColour(m.from.stroke, m.to.stroke, e);
 		morphPath.style.strokeWidth = mix(m.from.width, 1, e).toFixed(2) + 'px';
 		requestAnimationFrame(() => drawMorph(m));
 	}
-
-	const smooth = (p) => p * p * (3 - 2 * p); // ease in and out
 
 	function stopMorph() {
 		if (morph) {
@@ -590,15 +604,19 @@
 		}
 	}
 
-	// plays the morph open (closing false) or back into the shape (closing true); pan: the map's [from, to] for this open
-	function playMorph(item, closing, pan) {
-		if (morph && morph.anims[0].playState === 'running') {
-			if (morph.closing !== closing) {
-				morph.closing = closing;
-				pop.classList.toggle('is-closing', closing);
-				morph.anims.forEach((a) => a.reverse());
+	// plays the morph open (closing false) or back into the shape (closing true). Turned round part-way, it starts again
+	// from where the shape and the text are, so nothing jumps
+	function playMorph(item, closing) {
+		let e0 = closing ? 1 : 0;
+		let op0 = closing ? 1 : 0;
+		let colours = null;
+		if (morph && morph.item === item && morph.e != null && morph.anims[0].playState !== 'finished') {
+			if (morph.closing === closing) {
+				return;
 			}
-			return;
+			e0 = morph.e;
+			op0 = +getComputedStyle(popBody).opacity;
+			colours = [morph.from, morph.to];
 		}
 		stopMorph();
 		pop.classList.toggle('is-closing', closing); // a card on its way out lets clicks through to the map
@@ -608,17 +626,31 @@
 			morph = m;
 			return;
 		}
-		const glyph = getComputedStyle(item.g.querySelector('.st-glyph'));
-		const card = getComputedStyle(pop);
-		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
-		const timing = { duration: MORPH_MS, direction: closing ? 'reverse' : 'normal', fill: 'both' };
+		if (!colours) {
+			const glyph = getComputedStyle(item.g.querySelector('.st-glyph'));
+			const card = getComputedStyle(pop);
+			colours = [
+				{ fill: channels(glyph.fill), stroke: channels(glyph.stroke), width: parseFloat(glyph.strokeWidth) * 1.22 * cam.k },
+				{ fill: channels(card.backgroundColor), stroke: channels(card.borderTopColor) },
+			];
+		}
+		const ms = closing ? CLOSE_MS : OPEN_MS;
+		const fade = closing ? [{ opacity: op0 }, { opacity: 0, offset: HIDE_BY }, { opacity: 0 }] : [{ opacity: op0 }, { opacity: op0, offset: SHOW_AT }, { opacity: 1 }];
+		const timing = { duration: ms, fill: 'both' };
 		const m = {
 			item,
 			closing,
-			pan,
+			ms,
+			e0,
+			e: e0,
 			anims: [popBody.animate(fade, timing), popClose.animate(fade, timing)],
-			from: { fill: channels(glyph.fill), stroke: channels(glyph.stroke), width: parseFloat(glyph.strokeWidth) * 1.22 * cam.k },
-			to: { fill: channels(card.backgroundColor), stroke: channels(card.borderTopColor) },
+			from: colours[0],
+			to: colours[1],
+			// read once: the card's size and the room on screen, so no frame reads layout
+			w: pop.offsetWidth,
+			h: pop.offsetHeight,
+			roof: popRoof(),
+			floor: popFloor(),
 		};
 		shownItem = item;
 		item.g.classList.add('is-card'); // the node's own shape is now the one on the move
@@ -640,7 +672,7 @@
 
 	function openStation(item, focusInside) {
 		if (morph && morph.closing && morph.item === item) {
-			// reopened while it shrinks back: turn the same animation round, nothing jumps
+			// reopened while it shrinks back: grow again from where it is, nothing jumps
 			openItem = item;
 			item.g.classList.add('is-open');
 			item.g.setAttribute('aria-expanded', 'true');
@@ -660,10 +692,8 @@
 		item.g.setAttribute('aria-expanded', 'true');
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
-		const was = [cam.tx, cam.ty];
-		panToFit(item);
-		const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
-		playMorph(item, false, panned ? [was, [cam.tx, cam.ty]] : null);
+		placePop();
+		playMorph(item, false);
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
 		}
@@ -688,19 +718,18 @@
 		}
 	}
 
-	// the card keeps its corner on the shape as the map moves, held on screen between the name and the dock
+	// the card stays centred on its shape as the map moves, held on screen between the name and the dock
 	function placePop() {
 		if (!openItem) {
 			return;
 		}
 		const [sx, sy] = toScreen(openItem.x, openItem.y);
-		const [l, t, r, b] = shapeBox(openItem);
-		pop.style.maxHeight = Math.round(popFloor() - popRoof()) + 'px'; // a card taller than that scrolls
+		const roof = popRoof();
+		const floor = popFloor();
+		pop.style.maxHeight = Math.round(floor - roof) + 'px'; // a card taller than that scrolls
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
-		const left = popDir[0] > 0 ? sx + l : sx + r - w;
-		const top = popDir[1] > 0 ? sy + t : sy + b - h;
-		popAt = [Math.round(clamp(left, 16, vw - 16 - w)), Math.round(clamp(top, popRoof(), popFloor() - h))];
+		popAt = [Math.round(clamp(sx - w / 2, 16, vw - 16 - w)), Math.round(clamp(sy - h / 2, roof, floor - h))];
 		pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 	}
 
