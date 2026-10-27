@@ -1,0 +1,375 @@
+/* Home map: Mini Metro style radial hub (Dara's exploration A).
+   Text and surfaces reuse the --home-* tokens from main.css. The four line colours are
+   Mini Metro's red, navy and yellow plus the Online cursor's green. */
+.metro-page {
+	--line-case: #ec3523;
+	--line-side: #1b418c;
+	--line-write: #f7cc0b;
+	--line-notes: #45A329;
+	--map-station: #ffffff;
+	--map-river: #e5ecf0;
+	--map-park: #edf1e8;
+	--map-grid: rgba(22, 22, 22, 0.035);
+	--map-passenger: var(--home-primary);
+	--map-card: #ffffff;
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+}
+
+@media (prefers-color-scheme: dark) {
+	.metro-page {
+		--line-case: #ec3523;
+		--line-side: #4f78c9;
+		--line-write: #f7cc0b;
+		--line-notes: #45A329;
+		--map-station: var(--home-bg);
+		--map-river: #17201f;
+		--map-park: #151a13;
+		--map-grid: rgba(241, 241, 237, 0.03);
+		--map-passenger: var(--home-primary);
+		--map-card: #1a1a19;
+	}
+}
+
+/* ---------- map viewport ---------- */
+.metro-page .metro-view {
+	display: block;
+	height: 100%;
+	inset: 0;
+	overflow: hidden;
+	position: fixed;
+	touch-action: none;
+	width: 100%;
+	cursor: grab;
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+.metro-page .metro-view.is-dragging {
+	cursor: grabbing;
+}
+
+.metro-view:focus-visible {
+	outline: none;
+	box-shadow: inset 0 0 0 2px var(--home-focus);
+}
+
+.metro-svg {
+	display: block;
+	height: 100%;
+	inset: 0;
+	position: absolute;
+	width: 100%;
+}
+
+/* backdrop */
+.m-grid { stroke: var(--map-grid); stroke-width: 1; }
+.m-river { fill: none; stroke: var(--map-river); stroke-linecap: round; stroke-width: 40; }
+.m-park { fill: var(--map-park); }
+
+/* lines */
+.m-line { fill: none; stroke-linejoin: round; stroke-width: 10; }
+.m-cap { stroke-width: 10; }
+.m-stub { fill: none; stroke-dasharray: 8 8; stroke-width: 10; opacity: 0.55; }
+.m-case { stroke: var(--line-case); }
+.m-side { stroke: var(--line-side); }
+.m-write { stroke: var(--line-write); }
+.m-notes { stroke: var(--line-notes); }
+
+/* stations */
+.st { cursor: pointer; outline: none; }
+.st-glyph {
+	fill: var(--map-station);
+	stroke: var(--home-primary);
+	stroke-linejoin: round;
+	stroke-width: 3;
+	transform-box: fill-box;
+	transform-origin: center;
+	transition: transform 160ms ease;
+}
+.st-hit { fill: transparent; stroke: none; }
+.st--inter .st-glyph { stroke-width: 4.5; }
+.st--hub .st-glyph { stroke-width: 4.8; }
+.st--soon .st-glyph { stroke-dasharray: 4 3; stroke: var(--home-muted); }
+.st:hover .st-glyph,
+.st.is-hot .st-glyph,
+.st.is-open .st-glyph,
+.st:focus-visible .st-glyph { transform: scale(1.22); }
+.st:focus-visible .st-ring { opacity: 1; }
+.st-ring { fill: none; opacity: 0; stroke: var(--home-focus); stroke-width: 2; }
+
+/* labels (paint-order gives each one a halo in the page colour so lines never cut through) */
+.m-label,
+.m-label-sm,
+.m-label-hub {
+	font-family: 'Inter', sans-serif;
+	paint-order: stroke;
+	pointer-events: none;
+	stroke: var(--home-bg);
+	stroke-linejoin: round;
+	stroke-width: 4;
+}
+.m-label { fill: var(--home-primary); font-size: 14px; font-weight: 460; }
+.m-label-sm { fill: var(--home-secondary); font-size: 13px; font-weight: 400; }
+.m-label-hub { fill: var(--home-primary); font-size: 16px; font-weight: 560; }
+.metro-svg.is-far .m-label,
+.metro-svg.is-far .m-label-sm { opacity: 0; transition: opacity 160ms ease; }
+.metro-svg .m-label.is-hot,
+.metro-svg .m-label-sm.is-hot { font-weight: 600; opacity: 1; }
+
+/* live layer */
+.m-train { pointer-events: none; }
+.m-train rect { stroke: var(--home-bg); stroke-width: 2; }
+.m-pax { fill: var(--map-passenger); }
+.m-train .m-pax { fill: var(--map-station); }
+.m-pulse { fill: none; pointer-events: none; stroke-width: 2; }
+
+/* ---------- overlays ---------- */
+.metro-ident {
+	left: 40px;
+	pointer-events: none;
+	position: fixed;
+	top: 32px;
+	z-index: 4;
+}
+
+.metro-dock {
+	bottom: 32px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	left: 40px;
+	position: fixed;
+	z-index: 4;
+}
+
+.m-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 16px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.m-legend li {
+	align-items: center;
+	color: var(--home-secondary);
+	display: inline-flex;
+	font-size: 12px;
+	font-weight: 460;
+	gap: 8px;
+}
+
+.m-swatch {
+	display: inline-block;
+	flex: none;
+	height: 4px;
+	width: 16px;
+}
+.m-legend .m-swatch { height: 8px; width: 20px; }
+.m-swatch--case { background: var(--line-case); }
+.m-swatch--side { background: var(--line-side); }
+.m-swatch--write { background: var(--line-write); }
+.m-swatch--notes { background: var(--line-notes); }
+.m-swatch--soon {
+	background: repeating-linear-gradient(90deg, var(--home-muted) 0 4px, transparent 4px 8px);
+}
+
+.metro-hint {
+	color: var(--home-muted);
+	display: none;
+	font-size: 12px;
+	font-weight: 460;
+}
+
+/* "Back to the map" inside the list */
+.ml-close {
+	align-items: center;
+	background: var(--map-card);
+	border: 1px solid var(--home-border);
+	border-radius: 12px;
+	color: var(--home-primary);
+	cursor: pointer;
+	display: inline-flex;
+	font-family: 'Inter', sans-serif;
+	font-size: 12px;
+	font-weight: 460;
+	height: 40px;
+	justify-content: center;
+	min-width: 40px;
+	padding: 0 12px;
+}
+.ml-close:hover { background: var(--home-row-hover); }
+.ml-close:focus-visible { box-shadow: 0 0 0 2px var(--home-focus); outline: none; }
+
+/* popup: the same card vocabulary as the home rows */
+.m-pop {
+	background: var(--map-card);
+	border: 1px solid var(--home-border);
+	border-radius: 12px;
+	box-shadow: 0 1px 2px rgba(22, 22, 22, 0.045);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	left: 0;
+	max-width: calc(100vw - 32px);
+	padding: 12px 16px 16px;
+	position: fixed;
+	top: 0;
+	width: 296px;
+	z-index: 6;
+}
+.m-pop[hidden] { display: none; }
+.m-pop-sec { display: flex; flex-direction: column; gap: 4px; }
+.m-pop-sec + .m-pop-sec { border-top: 1px solid var(--home-border); margin-top: 8px; padding-top: 12px; }
+.m-pop-kicker {
+	align-items: center;
+	color: var(--home-secondary);
+	display: flex;
+	flex-wrap: wrap;
+	font-size: 12px;
+	font-weight: 460;
+	gap: 8px;
+	line-height: 1.3;
+	padding-right: 32px;
+}
+.m-pop .m-pop-title { color: var(--home-primary); font-size: 14px !important; font-weight: 560; line-height: 1.25; margin: 0; }
+.m-pop-img {
+	aspect-ratio: 280 / 175;
+	background: var(--home-row-hover);
+	border-radius: 8px;
+	display: block;
+	height: auto;
+	margin: 4px 0;
+	opacity: 0;
+	transition: opacity 0.24s ease-out;
+	width: 100%;
+}
+.m-pop-img.is-loaded { opacity: 1; }
+.m-pop-meta { color: var(--home-secondary); font-size: 14px; font-weight: 400; line-height: 1.45; margin: 0; }
+.m-pop a,
+.metro-list a {
+	color: var(--home-primary);
+	font-size: 14px;
+	font-weight: 460;
+	text-decoration: underline dotted 2px;
+	text-underline-offset: 4px;
+	width: fit-content;
+}
+.m-pop a:hover,
+.metro-list a:hover { color: var(--home-secondary); text-decoration-thickness: 3px; }
+.m-pop a:focus-visible,
+.metro-list a:focus-visible { border-radius: 4px; box-shadow: 0 0 0 2px var(--home-focus); outline: none; }
+.m-pop-close {
+	background: transparent;
+	border: 0;
+	border-radius: 8px;
+	color: var(--home-secondary);
+	cursor: pointer;
+	font-size: 20px;
+	height: 32px;
+	line-height: 1;
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	width: 32px;
+}
+.m-pop-close:hover { background: var(--home-row-hover); color: var(--home-primary); }
+.m-pop-close:focus-visible { box-shadow: 0 0 0 2px var(--home-focus); outline: none; }
+
+/* ---------- list fallback ---------- */
+.skip-link {
+	background: var(--map-card);
+	border: 1px solid var(--home-border);
+	border-radius: 8px;
+	color: var(--home-primary);
+	font-size: 14px;
+	left: 16px;
+	padding: 8px 12px;
+	position: fixed;
+	top: -80px;
+	z-index: 10;
+}
+.skip-link:focus { top: 16px; }
+
+.metro-page .metro-list {
+	background: var(--home-bg);
+	inset: 0;
+	overflow-y: auto;
+	position: fixed;
+	z-index: 8;
+}
+.metro-list-inner {
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	margin: 0 auto;
+	max-width: min(var(--home-shell-width), 100vw);
+	padding: 64px 24px 56px;
+}
+.metro-list h2 { color: var(--home-primary); font-size: 16px !important; font-weight: 560; }
+.metro-list h3 { align-items: center; color: var(--home-secondary); display: flex; font-size: 14px; font-weight: 460; gap: 8px; margin: 0 0 8px; }
+.metro-list ul { display: flex; flex-direction: column; gap: 12px; list-style: none; margin: 0; padding: 0; }
+.metro-list li { display: flex; flex-direction: column; gap: 2px; }
+.metro-list .ml-meta { color: var(--home-secondary); font-size: 14px; font-weight: 400; line-height: 1.45; }
+.metro-list .ml-title { color: var(--home-primary); font-size: 14px; font-weight: 460; }
+.metro-list .ml-kicker { color: var(--home-muted); font-size: 12px; font-weight: 460; }
+.metro-list .coming-soon-badge { align-self: flex-start; }
+.metro-list .bio-copy p { color: var(--home-secondary); font-size: 14px; line-height: 1.55; margin: 0 0 8px; }
+.ml-head { align-items: center; display: flex; justify-content: space-between; }
+
+/* With script running, the list sits off screen for screen readers and keyboard users,
+   and opens as a page when asked for or when focus moves into it. Without script it is the page. */
+.js .metro-list:not(.is-open):not(:focus-within) {
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	width: 1px;
+}
+.metro-page:not(.js) .metro-view,
+.metro-page:not(.js) .metro-dock,
+.metro-page:not(.js) .ml-close { display: none; }
+
+/* ---------- phone ---------- */
+@media (max-width: 640px) {
+	.metro-ident {
+		background: color-mix(in srgb, var(--home-bg) 92%, transparent);
+		border-radius: 12px;
+		left: 16px;
+		padding: 8px 12px 8px 8px;
+		top: 16px;
+	}
+	.metro-dock {
+		background: color-mix(in srgb, var(--home-bg) 92%, transparent);
+		border: 1px solid var(--home-border);
+		border-radius: 12px;
+		bottom: 16px;
+		left: 16px;
+		padding: 12px;
+		right: 16px;
+	}
+	.metro-hint { display: block; }
+	.ml-close { height: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.st-glyph,
+	.metro-svg.is-far .m-label { transition: none; }
+	.m-pop-img { opacity: 1; transition: none; }
+}
+
+/* trains take their line colour */
+.m-train--case rect { fill: var(--line-case); }
+.m-train--side rect { fill: var(--line-side); }
+.m-train--write rect { fill: var(--line-write); }
+.m-train--notes rect { fill: var(--line-notes); }
+.m-pulse--case { stroke: var(--line-case); }
+.m-pulse--side { stroke: var(--line-side); }
+.m-pulse--write { stroke: var(--line-write); }
+.m-pulse--notes { stroke: var(--line-notes); }
+.m-train--write .m-pax { fill: var(--home-primary); }
+.st--deco { cursor: default; }
+.metro-page .metro-list section { display: block; }
+.metro-list .ml-ident { color: var(--home-secondary); font-size: 14px; margin: 0; }

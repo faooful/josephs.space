@@ -7,6 +7,11 @@ function initCursorAnimation() {
         return;
     }
 
+    // Reduced motion: the cursor stays where the stylesheet puts it.
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
     let animationTimeout;
 
     function pinCurrentCursorPosition() {
@@ -40,14 +45,23 @@ function initCursorAnimation() {
         const maxLeft = Math.max(minLeft, headerWidth - cursorWidth - 4);
         const validTopRange = Math.max(0, maxTop - minTop);
         const validLeftRange = Math.max(0, maxLeft - minLeft);
-        const targetTop = validTopRange > 0 ? Math.random() * validTopRange + minTop : minTop;
-        const targetLeft = validLeftRange > 0 ? Math.random() * validLeftRange + minLeft : minLeft;
+        let targetTop = validTopRange > 0 ? Math.random() * validTopRange + minTop : minTop;
+        let targetLeft = validLeftRange > 0 ? Math.random() * validLeftRange + minLeft : minLeft;
+        let nextDelay = Math.random() * 10000;
+
+        // A page can steer the cursor (the home map sends it to a station and back).
+        // The hook returns { top, left, delay } inside the header, or null for a random point.
+        const steer = typeof window.homeCursorTarget === 'function' ? window.homeCursorTarget(cursorWidth, cursorHeight) : null;
+        if (steer) {
+            targetTop = Math.min(maxTop, Math.max(minTop, steer.top));
+            targetLeft = Math.min(maxLeft, Math.max(minLeft, steer.left));
+            nextDelay = steer.delay;
+        }
 
         cursorContainer.style.top = targetTop + 'px';
         cursorContainer.style.left = targetLeft + 'px';
         cursorContainer.style.right = 'auto';
 
-        const nextDelay = Math.random() * 10000;
         animationTimeout = setTimeout(moveCursor, nextDelay);
     }
 
