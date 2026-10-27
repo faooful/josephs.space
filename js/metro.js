@@ -239,7 +239,7 @@
 		const label = el('text', { x: x + dx, y: y + dy, 'text-anchor': anchor, 'dominant-baseline': 'middle', class: deco || st.soon ? 'm-label-sm' : 'm-label' }, gLabels);
 		label.textContent = st.label;
 		const along = hubDistance(st.lines[0], x, y);
-		const item = { st, g, label, x, y, along, line: st.lines[0], waiting: [] };
+		const item = { st, g, label, x, y, shape, size, along, line: st.lines[0], waiting: [] };
 		if (!deco) {
 			stationEls.set(st.id, item);
 			labelEls.set(st.id, label);
@@ -263,7 +263,7 @@
 	hubName.textContent = bioName;
 	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm m-hub-label', 'dominant-baseline': 'middle' }, gLabels);
 	hubRole.textContent = bioRole;
-	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1] };
+	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1], shape: 'circle', size: 40 };
 
 	// stops along each route, for trains
 	stationEls.forEach((item) => {
@@ -315,9 +315,13 @@
 		cam.ty = Math.min(vh - margin, Math.max(margin - h, cam.ty));
 	}
 
+	function drawCam() {
+		world.setAttribute('transform', 'translate(' + cam.tx.toFixed(2) + ' ' + cam.ty.toFixed(2) + ') scale(' + cam.k.toFixed(4) + ')');
+	}
+
 	function applyCam() {
 		clampCam();
-		world.setAttribute('transform', 'translate(' + cam.tx.toFixed(2) + ' ' + cam.ty.toFixed(2) + ') scale(' + cam.k.toFixed(4) + ')');
+		drawCam();
 		svg.classList.toggle('is-far', cam.k < 0.62);
 		placePop();
 	}
@@ -338,7 +342,7 @@
 	const ident = document.querySelector('.metro-ident');
 	const popBody = pop.querySelector('.m-pop-body');
 	let openItem = null;
-	let popAt = [0, 0]; // where the hub's card sits, for the morph
+	let popAt = [0, 0]; // where the open card sits, for the morph
 
 	// the line's colour with its station shape on it, standing in for the legend
 	function lineKey(line) {
@@ -402,7 +406,8 @@
 		return img;
 	}
 
-	// the hub's card: name, role, the bio's opening two sentences and the contact links, all cloned from the list
+	// the hub's card: name, role, the bio's opening two paragraphs and the contact links, all cloned from the list;
+	// the second is set as a quieter 'Currently' line, with its first word picked out (the words are unchanged)
 	function bioSection() {
 		const sec = document.createElement('div');
 		sec.className = 'm-pop-sec m-pop-bio';
@@ -414,9 +419,16 @@
 		role.className = 'm-pop-kicker';
 		role.textContent = bioRole;
 		sec.append(title, role);
-		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p) => {
+		list.querySelectorAll('.bio-copy p:nth-child(-n+2)').forEach((p, i) => {
 			const copy = p.cloneNode(true);
-			copy.className = 'm-pop-meta';
+			copy.className = i ? 'm-pop-bio-now' : 'm-pop-bio-lede';
+			const first = copy.firstChild;
+			if (i && first && first.nodeType === 3 && first.data.startsWith('Currently')) {
+				const lead = document.createElement('span');
+				lead.textContent = 'Currently';
+				first.data = first.data.slice(9);
+				copy.prepend(lead);
+			}
 			sec.append(copy);
 		});
 		const links = document.createElement('div');
@@ -426,171 +438,346 @@
 		return sec;
 	}
 
-	// the hub's card is centred on it, above or below; these are the screen edges it keeps inside
-	const hubGap = () => 28 * cam.k + 8;
+	// ---------- every card is centred on its shape: the map pans to make room, and a card bigger than the room (or on a dragged map) is held on screen ----------
 	const popRoof = () => ident.getBoundingClientRect().bottom + 8;
 	const popFloor = () => dock.getBoundingClientRect().top - 8;
+	const clamp = (v, lo, hi) => Math.max(lo, Math.min(v, hi));
 
-	// pan so the hub's card fits centred on the hub: horizontally, then above it, or else below
-	function panToHub() {
-		const [sx, sy] = toScreen(HUB[0], HUB[1]);
-		const w = pop.offsetWidth;
-		const need = pop.offsetHeight + hubGap();
-		const x = w + 32 > vw ? vw / 2 : Math.max(16 + w / 2, Math.min(sx, vw - 16 - w / 2));
-		let y = sy;
-		if (sy - need < popRoof() && sy + need > popFloor()) {
-			const above = popRoof() + need;
-			const below = popFloor() - need;
-			y = Math.abs(above - sy) <= Math.abs(below - sy) || below < popRoof() ? above : below;
+	// the shape's outline as drawn while open (scaled 1.22), around its centre in screen px: [left, top, right, bottom]
+	function shapeBox(item) {
+		const s = item.size * 1.22 * cam.k;
+		if (item.shape === 'square') {
+			return [-0.45 * s, -0.45 * s, 0.45 * s, 0.45 * s];
 		}
-		cam.tx += x - sx;
-		cam.ty += y - sy;
-		applyCam();
+		if (item.shape === 'triangle') {
+			return [-0.55 * s, -0.638 * s, 0.55 * s, 0.319 * s];
+		}
+		const r = item.shape === 'diamond' ? 0.575 * s : s / 2;
+		return [-r, -r, r, r];
 	}
 
-	// ---------- the hub's card grows out of the hub: a FLIP of transform and border-radius ----------
-	// one animation per element, the same length, so closing is the exact reverse and a reopen mid-way just turns it round
-	const MORPH_MS = 360;
-	const SETTLE = 0.7; // the shape settles at 70%, then the content fades in
-	const popClose = pop.querySelector('.m-pop-close');
-	let morph = null; // { anims, closing }
-
-	// from: where the hub is on screen when the morph starts, if the map is about to pan away from there
-	function morphFrames(from) {
-		if (reduceQuery.matches) {
-			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
+	// ---------- the shape itself becomes the card ----------
+	// A copy of the station's own outline (same fill, same stroke) is drawn on a layer over the map and reshaped every frame.
+	// It grows out from the node's centre, its centre staying on the node's: size, outline (circle, square, triangle or
+	// diamond to the card's rounded rectangle), stroke (thinning into the card's border) and fill (becoming the card's) all
+	// move together on one expo-out curve. Only if the growing box would run off screen is it held inside, so any shift
+	// eases in as it grows. The real card stays see-through under it; its content fades in over the last 100 ms.
+	// Closing: the text fades in 60 ms while the shape starts to collapse back into the node, 220 ms in all.
+	// The layer is a plain SVG path redrawn from the clock, so it works the same in every browser (no CSS d, and a
+	// clip-path would cut a triangle's stroke off). Each frame is arithmetic on values read once at the start: no layout reads.
+	const OPEN_MS = 300;
+	const CLOSE_MS = 220;
+	const SHOW_AT = 200 / OPEN_MS; // the content fades in from 200 ms to 300 ms
+	const HIDE_BY = 60 / CLOSE_MS; // and out in the first 60 ms of a close
+	const SHRINK_AT = 40; // the shape starts back 40 ms into a close
+	// cubic-bezier(0.16, 1, 0.3, 1), an expo-out, tabulated once so a frame only looks it up
+	const EASE = (() => {
+		const n = 256;
+		const xs = [];
+		const ys = [];
+		for (let i = 0; i <= n; i++) {
+			const t = i / n;
+			const u = 1 - t;
+			xs.push(3 * u * u * t * 0.16 + 3 * u * t * t * 0.3 + t * t * t);
+			ys.push(3 * u * u * t + 3 * u * t * t + t * t * t);
 		}
-		const [sx, sy] = from || toScreen(HUB[0], HUB[1]);
-		const w = pop.offsetWidth;
-		const h = pop.offsetHeight;
-		// starts as the white inside of the hub's ring, as drawn while it is open (r 20, stroke 4.8, scaled 1.22)
-		const r = 17.6 * 1.22 * cam.k;
-		const cx = popAt[0] + w / 2;
-		const cy = popAt[1] + h / 2;
-		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
-		const shape = [];
-		for (let i = 0; i <= 12; i++) {
-			const e = smooth(i / 12);
-			const W = 2 * r + (w - 2 * r) * e;
-			const H = 2 * r + (h - 2 * r) * e;
-			const R = r + (12 - r) * e;
-			const x = sx + (cx - sx) * e - W / 2;
-			const y = sy + (cy - sy) * e - H / 2;
-			shape.push({
-				transform: 'translate(' + x.toFixed(2) + 'px,' + y.toFixed(2) + 'px) scale(' + (W / w).toFixed(4) + ',' + (H / h).toFixed(4) + ')',
-				borderRadius: (R * w / W).toFixed(2) + 'px / ' + (R * h / H).toFixed(2) + 'px',
-				offset: (i / 12) * SETTLE,
-			});
-		}
-		shape.push({ ...shape[12], offset: 1 });
-		const fade = [{ opacity: 0 }, { opacity: 0, offset: SETTLE }, { opacity: 1 }];
-		return [[pop, shape, MORPH_MS], [popBody, fade, MORPH_MS], [popClose, fade, MORPH_MS]];
-	}
-
-	const smooth = (p) => p * p * (3 - 2 * p); // gentle in and out
-
-	// the map's pan to fit the card rides along with the shape, so nothing jumps at the start
-	function panWithMorph(m, from, to) {
-		const step = () => {
-			const t = m.anims[0].currentTime;
-			const done = morph !== m;
-			const e = done ? (m.closing ? 0 : 1) : smooth(Math.min(1, (t || 0) / (MORPH_MS * SETTLE)));
-			cam.tx = from[0] + (to[0] - from[0]) * e;
-			cam.ty = from[1] + (to[1] - from[1]) * e;
-			applyCam();
-			if (!done) {
-				requestAnimationFrame(step);
+		return (x) => {
+			if (x <= 0) {
+				return 0;
 			}
+			if (x >= 1) {
+				return 1;
+			}
+			let i = 1;
+			while (xs[i] < x) {
+				i++;
+			}
+			return ys[i - 1] + ((ys[i] - ys[i - 1]) * (x - xs[i - 1])) / (xs[i] - xs[i - 1]);
 		};
-		step();
+	})();
+	const popClose = pop.querySelector('.m-pop-close');
+	const morphSvg = document.createElementNS(NS, 'svg');
+	morphSvg.setAttribute('class', 'm-morph');
+	morphSvg.setAttribute('aria-hidden', 'true');
+	const morphPath = el('path', {}, morphSvg);
+	pop.before(morphSvg);
+	let morph = null; // { item, closing, anims, pan, from, to, w, h, roof, floor }
+
+	// Every outline is the same 8 points on a frame (in % of it), with round corners of radius R: a FLIP of the frame from the
+	// shape's box to the card's, while the points slide out to the box's corners and edges and R goes to the card's 12px.
+	// A circle is the box with R at half its size; triangles and diamonds start as their own polygon, with sharp corners.
+	const BOX = [[50, 0], [100, 0], [100, 50], [100, 100], [50, 100], [0, 100], [0, 50], [0, 0]];
+	const POLY = {
+		triangle: [[50, 0], [62.5, 25], [75, 50], [100, 100], [50, 100], [0, 100], [25, 50], [37.5, 25]],
+		diamond: [[50, 0], [75, 25], [100, 50], [75, 75], [50, 100], [25, 75], [0, 50], [25, 25]],
+	};
+	const KAPPA = 0.5523; // a cubic through a right-angled corner this way is a quarter circle
+
+	const mix = (a, b, e) => a + (b - a) * e;
+	const channels = (c) => (c.match(/[\d.]+/g) || [0, 0, 0]).map(Number).concat([1]).slice(0, 4);
+	const mixColour = (a, b, e) => 'rgba(' + a.map((v, i) => (i < 3 ? Math.round(mix(v, b[i], e)) : +mix(v, b[i], e).toFixed(3))).join(',') + ')';
+	const f2 = (v) => v.toFixed(2);
+
+	// a closed polygon of the 8 points, its 4 corner points (odd) rounded by up to R, never past their neighbours;
+	// the other 4 (the edges' middles at the end, a diamond's or triangle's tips at the start) stay sharp
+	function roundedPoly(pts, R) {
+		const n = pts.length;
+		let d = '';
+		for (let i = 0; i < n; i++) {
+			const [vx, vy] = pts[i];
+			const [ax, ay] = pts[(i + n - 1) % n];
+			const [bx, by] = pts[(i + 1) % n];
+			const la = Math.hypot(ax - vx, ay - vy) || 1;
+			const lb = Math.hypot(bx - vx, by - vy) || 1;
+			const c = i % 2 ? Math.max(0, Math.min(R, la, lb)) : 0;
+			const ix = vx + ((ax - vx) / la) * c;
+			const iy = vy + ((ay - vy) / la) * c;
+			const ox = vx + ((bx - vx) / lb) * c;
+			const oy = vy + ((by - vy) / lb) * c;
+			d += (i ? 'L' : 'M') + f2(ix) + ' ' + f2(iy);
+			if (c > 0.01) {
+				d += 'C' + f2(mix(ix, vx, KAPPA)) + ' ' + f2(mix(iy, vy, KAPPA)) + ' ' + f2(mix(ox, vx, KAPPA)) + ' ' + f2(mix(oy, vy, KAPPA)) + ' ' + f2(ox) + ' ' + f2(oy);
+			}
+		}
+		return d + 'Z';
+	}
+
+	// the morphing outline at e (0 the node as drawn while open, 1 the card's 1px border), its centre on the node's.
+	// The map pans so the card fits centred; only a card bigger than the room is held on screen, eased in with e
+	function morphD(m, e) {
+		const item = m.item;
+		const [sx, sy] = toScreen(item.x, item.y);
+		const [l, t, r, b] = shapeBox(item);
+		const W = mix(r - l, m.w, e);
+		const H = mix(b - t, m.h, e);
+		const cx = mix(sx + (l + r) / 2, sx, e);
+		const cy = mix(sy + (t + b) / 2, sy, e);
+		// it arrives on the card's whole-pixel box (and, for a card bigger than the room, its held place)
+		const [hx, hy] = m.pan ? m.pan.hold : [popAt[0] - (sx - m.w / 2), popAt[1] - (sy - m.h / 2)];
+		const x = cx - W / 2 + hx * e;
+		const y = cy - H / 2 + hy * e;
+		const poly = POLY[item.shape] || BOX;
+		const half = (m.from.width / 2) * e; // drawn on the middle of the card's border (the node's own outline) at the end
+		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 12, e) - half;
+		const iw = W - 2 * half;
+		const ih = H - 2 * half;
+		const pts = poly.map(([px, py], j) => [x + half + (iw * mix(px, BOX[j][0], e)) / 100, y + half + (ih * mix(py, BOX[j][1], e)) / 100]);
+		return roundedPoly(pts, R);
+	}
+
+	// where the shape is at time t (ms) into this open or close
+	function shapeAt(m, t) {
+		return m.closing ? m.e0 * (1 - EASE((t - SHRINK_AT) / (CLOSE_MS - SHRINK_AT))) : m.e0 + (1 - m.e0) * EASE(t / OPEN_MS);
+	}
+
+	// one frame: read the clock (the content's fade, linear), redraw the shape
+	function drawMorph(m) {
+		if (morph !== m) {
+			return;
+		}
+		const a = m.anims[0];
+		const p = a.effect.getComputedTiming().progress;
+		const e = shapeAt(m, (p == null ? 1 : p) * m.ms);
+		m.e = e;
+		if (m.pan) {
+			if (cam.tx !== m.pan.at[0] || cam.ty !== m.pan.at[1]) {
+				m.pan = null; // the map was dragged or zoomed: the pan gives way
+			} else {
+				const f = m.pan.e0 < 1 ? (e - m.pan.e0) / (1 - m.pan.e0) : 1; // the same curve as the shape
+				cam.tx = mix(m.pan.from[0], m.pan.to[0], f);
+				cam.ty = mix(m.pan.from[1], m.pan.to[1], f);
+				m.pan.at = [cam.tx, cam.ty];
+				drawCam();
+				placeFast(m);
+			}
+		}
+		morphPath.setAttribute('d', morphD(m, e));
+		morphPath.style.fill = mixColour(m.from.fill, m.to.fill, e);
+		requestAnimationFrame(() => drawMorph(m));
 	}
 
 	function stopMorph() {
 		if (morph) {
 			morph.anims.forEach((a) => a.cancel());
+			const panned = !!morph.pan;
 			morph = null;
+			if (panned) {
+				applyCam(); // a pan cut short (closed part-way) stays where it got to
+			}
+		}
+		morphSvg.classList.remove('is-on');
+		pop.classList.remove('is-morphing');
+	}
+
+	let shownItem = null; // whose shape has become the card, so its node is empty until the card goes back into it
+
+	function hideCard() {
+		stopMorph();
+		pop.hidden = true;
+		pop.classList.remove('is-closing');
+		svg.classList.remove('is-bio');
+		if (shownItem) {
+			shownItem.g.classList.remove('is-card');
+			shownItem = null;
 		}
 	}
 
-	function hideHubCard() {
+	// plays the morph open (closing false) or back into the shape (closing true). Turned round part-way, it starts again
+	// from where the shape and the text are, so nothing jumps
+	function playMorph(item, closing) {
+		let e0 = closing ? 1 : 0;
+		let op0 = closing ? 1 : 0;
+		let colours = null;
+		if (morph && morph.item === item && morph.e != null && morph.anims[0].playState !== 'finished') {
+			if (morph.closing === closing) {
+				return;
+			}
+			e0 = morph.e;
+			op0 = +getComputedStyle(popBody).opacity;
+			colours = [morph.from, morph.to];
+		}
 		stopMorph();
-		pop.hidden = true;
-		svg.classList.remove('is-bio');
-	}
-
-	// plays the morph open (closing false) or back into the hub (closing true)
-	function playMorph(closing, from) {
-		if (morph && morph.anims[0].playState === 'running') {
-			if (morph.closing !== closing) {
-				morph.closing = closing;
-				morph.anims.forEach((a) => a.reverse());
+		pop.classList.toggle('is-closing', closing); // a card on its way out lets clicks through to the map
+		if (reduceQuery.matches) {
+			const m = { item, closing, anims: [pop.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 200, direction: closing ? 'reverse' : 'normal', fill: 'both' })] };
+			m.anims[0].onfinish = () => (morph === m && (m.closing ? hideCard() : stopMorph()));
+			morph = m;
+			if (!closing) {
+				const to = panTo(item, pop.offsetWidth, pop.offsetHeight, popRoof(), popFloor());
+				if (to) {
+					cam.tx = to[0];
+					cam.ty = to[1];
+					applyCam(); // no motion: the map is simply where it needs to be
+				}
 			}
 			return;
 		}
-		stopMorph();
-		const m = { closing, anims: morphFrames(from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		if (!colours) {
+			// the node's outline stays as it is, colour and weight, and is the card's border; only the fill changes
+			const glyph = getComputedStyle(item.g.querySelector('.st-glyph'));
+			colours = [{ fill: channels(glyph.fill), stroke: edge.stroke, width: edge.width }, { fill: channels(getComputedStyle(pop).backgroundColor) }];
+		}
+		const ms = closing ? CLOSE_MS : OPEN_MS;
+		const fade = closing ? [{ opacity: op0 }, { opacity: 0, offset: HIDE_BY }, { opacity: 0 }] : [{ opacity: op0 }, { opacity: op0, offset: SHOW_AT }, { opacity: 1 }];
+		const timing = { duration: ms, fill: 'both' };
+		const m = {
+			item,
+			closing,
+			ms,
+			e0,
+			e: e0,
+			anims: [popBody.animate(fade, timing), popClose.animate(fade, timing)],
+			from: colours[0],
+			to: colours[1],
+			// read once: the card's size and the room on screen, so no frame reads layout
+			w: pop.offsetWidth,
+			h: pop.offsetHeight,
+			roof: popRoof(),
+			floor: popFloor(),
+		};
+		shownItem = item;
+		item.g.classList.add('is-card'); // the node's own shape is now the one on the move
+		pop.classList.add('is-morphing'); // the card is see-through until the shape has landed under it
+		morphSvg.classList.add('is-on');
 		m.anims[0].onfinish = () => {
 			if (morph !== m) {
 				return;
 			}
 			if (m.closing) {
-				hideHubCard();
+				hideCard();
 			} else {
+				if (m.pan) {
+					[cam.tx, cam.ty] = m.pan.to; // land exactly where the pan was going
+				}
 				stopMorph();
 			}
 		};
+		if (!closing) {
+			// opening never leaves the card off centre if the map can move to make room; closing leaves the map where it is
+			const to = panTo(item, m.w, m.h, m.roof, m.floor);
+			if (to) {
+				// where the card will be held once the map is there (only its whole-pixel rounding, unless it is bigger than the room)
+				const [tx, ty] = [item.x * cam.k + to[0], item.y * cam.k + to[1]];
+				const hold = [Math.round(clamp(tx - m.w / 2, 16, vw - 16 - m.w)) - (tx - m.w / 2), Math.round(clamp(ty - m.h / 2, m.roof, m.floor - m.h)) - (ty - m.h / 2)];
+				m.pan = { from: [cam.tx, cam.ty], to, at: [cam.tx, cam.ty], e0, hold };
+			}
+		}
 		morph = m;
+		morphPath.style.stroke = m.from.stroke;
+		morphPath.style.strokeWidth = m.from.width.toFixed(2) + 'px';
+		drawMorph(m);
+	}
+
+	// where the map would have to be for a w x h card to sit centred on the item, inside the room; null if it already fits.
+	// On an axis where the card is bigger than the room, the item goes to the room's middle and placePop holds the card
+	function panTo(item, w, h, roof, floor) {
+		const [sx, sy] = toScreen(item.x, item.y);
+		const need = (s, size, lo, hi) => (hi - lo >= size ? clamp(s, lo + size / 2, hi - size / 2) - s : (lo + hi) / 2 - s);
+		const dx = need(sx, w, 16, vw - 16);
+		const dy = need(sy, h, roof, floor);
+		if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+			return null;
+		}
+		const save = [cam.tx, cam.ty];
+		cam.tx += dx;
+		cam.ty += dy;
+		clampCam(); // never past the map's own limits
+		const to = [cam.tx, cam.ty];
+		[cam.tx, cam.ty] = save;
+		return to[0] === save[0] && to[1] === save[1] ? null : to;
+	}
+
+	// placePop from the sizes read when the morph began, for frames that must not read layout
+	function placeFast(m) {
+		const [sx, sy] = toScreen(m.item.x, m.item.y);
+		popAt = [Math.round(clamp(sx - m.w / 2, 16, vw - 16 - m.w)), Math.round(clamp(sy - m.h / 2, m.roof, m.floor - m.h))];
+		pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 	}
 
 	function openStation(item, focusInside) {
-		if (item.bio && morph && morph.closing) {
-			// reopened while it shrinks back: turn the same animation round, nothing jumps
+		if (morph && morph.closing && morph.item === item) {
+			// reopened while it shrinks back: grow again from where it is, nothing jumps
 			openItem = item;
 			item.g.classList.add('is-open');
 			item.g.setAttribute('aria-expanded', 'true');
-			playMorph(false);
+			playMorph(item, false);
 			if (focusInside) {
 				(pop.querySelector('a') || popClose).focus();
 			}
 			return;
 		}
 		closePop(false, true);
-		hideHubCard();
+		hideCard(); // also ends a card still shrinking back
 		openItem = item;
 		popBody.replaceChildren(...(item.bio ? [bioSection()] : item.st.entries.map(section)));
+		pop.classList.toggle('m-pop--bio', !!item.bio);
 		pop.hidden = false;
 		item.g.classList.add('is-open');
 		item.g.setAttribute('aria-expanded', 'true');
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
-		const was = [cam.tx, cam.ty];
-		const hubWas = toScreen(HUB[0], HUB[1]);
-		if (item.bio) {
-			panToHub();
-		} else if (small()) {
-			// the card takes the right of the screen; pan so the station sits just left of it,
-			// below the name and above the dock (a card too tall for that gap scrolls)
-			const [sx, sy] = toScreen(item.x, item.y);
-			const minY = ident.getBoundingClientRect().bottom + 8 + 24;
-			const maxY = Math.max(minY, dock.getBoundingClientRect().top - 8 - pop.offsetHeight + 24);
-			cam.tx += vw - pop.offsetWidth - 16 - 24 - sx;
-			cam.ty += Math.min(maxY, Math.max(minY, sy)) - sy;
-			applyCam();
-		}
+		setEdge(item);
 		placePop();
-		if (item.bio) {
-			const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
-			playMorph(false, panned && hubWas);
-			if (panned) {
-				panWithMorph(morph, was, [cam.tx, cam.ty]);
-			}
-		}
+		playMorph(item, false);
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
 		}
 	}
 
-	// instant skips the hub's morph, for when another card takes its place
+	// the card's border is the outline of the node it came from: its colour, at the weight it is drawn on screen (a dashed
+	// 'soon' node's card gets the solid outline the other nodes have)
+	let edge = { stroke: '', width: 1 };
+	function setEdge(item) {
+		const soon = item.g.classList.contains('st--soon');
+		const glyph = getComputedStyle((soon ? document.querySelector('.st:not(.st--soon) .st-glyph') : null) || item.g.querySelector('.st-glyph'));
+		// whole pixels, as browsers draw borders, so the moving outline and the card's border are the same weight
+		const width = Math.max(1, Math.round(parseFloat(getComputedStyle(item.g.querySelector('.st-glyph')).strokeWidth) * 1.22 * cam.k));
+		edge = { stroke: glyph.stroke, width };
+		pop.style.setProperty('--map-card-edge', edge.stroke);
+		pop.style.setProperty('--map-card-edge-w', width + 'px');
+	}
+
+	// instant skips the morph, for when another card takes its place
 	function closePop(returnFocus, instant) {
 		if (!openItem) {
 			return;
@@ -599,41 +786,29 @@
 		openItem = null;
 		item.g.classList.remove('is-open');
 		item.g.setAttribute('aria-expanded', 'false');
-		if (item.bio && !instant) {
-			playMorph(true);
+		if (!instant) {
+			playMorph(item, true);
 		} else {
-			hideHubCard();
+			hideCard();
 		}
 		if (returnFocus) {
 			item.g.focus({ preventScroll: true });
 		}
 	}
 
+	// the card stays centred on its shape as the map moves, held on screen between the name and the dock
 	function placePop() {
 		if (!openItem) {
 			return;
 		}
 		const [sx, sy] = toScreen(openItem.x, openItem.y);
-		pop.style.maxHeight = '';
+		const roof = popRoof();
+		const floor = popFloor();
+		pop.style.maxHeight = Math.round(floor - roof) + 'px'; // a card taller than that scrolls
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
-		if (openItem.bio) {
-			const above = sy - hubGap() - h;
-			const top = above >= popRoof() || sy + hubGap() + h > popFloor() ? above : sy + hubGap();
-			popAt = [Math.round(sx - w / 2), Math.round(top)];
-			pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
-			return;
-		}
-		const gap = 24 * Math.max(0.8, cam.k);
-		let left = sx > vw / 2 && !small() ? sx - w - gap : sx + gap;
-		let top = sy - 24;
-		left = Math.max(16, Math.min(left, vw - w - 16));
-		// stay clear of the dock (hint and contact links) where the card would sit over it
-		const d = dock.getBoundingClientRect();
-		const bottom = left < d.right && left + w > d.left ? d.top - 8 : vh - 16;
-		pop.style.maxHeight = Math.round(bottom - 16) + 'px';
-		top = Math.max(16, Math.min(top, bottom - Math.min(h, bottom - 16)));
-		pop.style.transform = 'translate(' + Math.round(left) + 'px,' + Math.round(top) + 'px)';
+		popAt = [Math.round(clamp(sx - w / 2, 16, vw - 16 - w)), Math.round(clamp(sy - h / 2, roof, floor - h))];
+		pop.style.transform = 'translate(' + popAt[0] + 'px,' + popAt[1] + 'px)';
 	}
 
 	popClose.addEventListener('click', () => closePop(true));

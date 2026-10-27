@@ -12,6 +12,8 @@
 	--map-grid: rgba(22, 22, 22, 0.035);
 	--map-passenger: var(--home-primary);
 	--map-card: #ffffff;
+	--map-card-edge: var(--home-border);
+	--map-card-edge-w: 1px;
 	height: 100vh;
 	height: 100dvh;
 	overflow: hidden;
@@ -193,7 +195,8 @@
 /* popup: the same card vocabulary as the home rows */
 .m-pop {
 	background: var(--map-card);
-	border: 1px solid var(--home-border);
+	border: 1px solid var(--map-card-edge); /* the outline of the node it opened from (metro.js sets the colour and weight) */
+	border-width: var(--map-card-edge-w);
 	border-radius: 12px;
 	box-shadow: 0 1px 2px rgba(22, 22, 22, 0.045);
 	display: flex;
@@ -210,6 +213,13 @@
 	z-index: 6;
 }
 .m-pop[hidden] { display: none; }
+.m-pop.is-closing { pointer-events: none; }
+/* while a shape becomes its card, the card is see-through and the shape, drawn on this layer, is what you see */
+.m-pop.is-morphing { background: transparent; border-color: transparent; box-shadow: none; }
+.m-morph { display: none; height: 100%; inset: 0; overflow: visible; pointer-events: none; position: fixed; width: 100%; z-index: 6; }
+.m-morph.is-on { display: block; }
+.m-morph path { stroke-linejoin: round; }
+.st.is-card .st-glyph { visibility: hidden; }
 .m-pop-sec { display: flex; flex-direction: column; gap: 4px; }
 .m-pop-sec + .m-pop-sec { border-top: 1px solid var(--home-border); margin-top: 8px; padding-top: 12px; }
 .m-pop-kicker {
@@ -237,6 +247,11 @@
 }
 .m-pop-img.is-loaded { opacity: 1; }
 .is-bio .m-hub-label { visibility: hidden; }
+.m-pop--bio { width: 392px; }
+.m-pop-bio .m-pop-kicker { margin-bottom: 4px; }
+.m-pop-bio-lede { color: var(--home-primary); font-size: 14px; line-height: 1.55; margin: 0; max-width: 56ch; text-wrap: pretty; }
+.m-pop-bio-now { border-top: 1px solid var(--home-border); color: var(--home-secondary); font-size: 13px; line-height: 1.5; margin: 8px 0 0; max-width: 56ch; padding-top: 8px; text-wrap: pretty; }
+.m-pop-bio-now span { color: var(--home-primary); font-weight: 560; }
 .m-pop-links { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 8px; }
 .m-pop-meta { color: var(--home-secondary); font-size: 14px; font-weight: 400; line-height: 1.45; margin: 0; }
 .m-pop a,
