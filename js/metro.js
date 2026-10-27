@@ -247,13 +247,18 @@
 	decoItems.forEach((d) => {
 		fadeIns.push(d.g, d.label);
 	});
-	// hub
-	const hub = el('g', { class: 'st st--hub st--deco', 'aria-hidden': 'true' }, gStations);
+	// hub: opens the bio from the list, so the words live in one place. First in tab order.
+	const [bioName, bioRole] = textOf(list, '.ml-ident').split(' · ');
+	const hub = el('g', { class: 'st st--hub', tabindex: '0', role: 'button', 'aria-haspopup': 'dialog', 'aria-expanded': 'false', 'data-id': 'hub', 'aria-label': bioName + ', ' + bioRole + ', about' }, gStations);
+	gStations.prepend(hub);
+	el('circle', { cx: HUB[0], cy: HUB[1], r: 30, class: 'st-hit' }, hub);
+	el('circle', { cx: HUB[0], cy: HUB[1], r: 28, class: 'st-ring' }, hub);
 	el('path', { d: glyphPath('circle', HUB[0], HUB[1], 40), class: 'st-glyph' }, hub);
 	const hubName = el('text', { x: HUB[0] + 30, y: HUB[1] + 32, class: 'm-label-hub', 'dominant-baseline': 'middle' }, gLabels);
-	hubName.textContent = 'Joseph Korol';
+	hubName.textContent = bioName;
 	const hubRole = el('text', { x: HUB[0] + 30, y: HUB[1] + 52, class: 'm-label-sm', 'dominant-baseline': 'middle' }, gLabels);
-	hubRole.textContent = 'Product Designer';
+	hubRole.textContent = bioRole;
+	const hubItem = { bio: true, g: hub, label: hubName, x: HUB[0], y: HUB[1] };
 
 	// stops along each route, for trains
 	stationEls.forEach((item) => {
@@ -380,10 +385,30 @@
 		return img;
 	}
 
+	// the hub's card: name, role and the bio paragraphs cloned from the list
+	function bioSection() {
+		const sec = document.createElement('div');
+		sec.className = 'm-pop-sec m-pop-bio';
+		const title = document.createElement('h2');
+		title.className = 'm-pop-title';
+		title.id = 'metro-pop-title';
+		title.textContent = bioName;
+		const role = document.createElement('div');
+		role.className = 'm-pop-kicker';
+		role.textContent = bioRole;
+		sec.append(title, role);
+		list.querySelectorAll('.bio-copy p').forEach((p) => {
+			const copy = p.cloneNode(true);
+			copy.className = 'm-pop-meta';
+			sec.append(copy);
+		});
+		return sec;
+	}
+
 	function openStation(item, focusInside) {
 		closePop(false);
 		openItem = item;
-		popBody.replaceChildren(...item.st.entries.map(section));
+		popBody.replaceChildren(...(item.bio ? [bioSection()] : item.st.entries.map(section)));
 		pop.hidden = false;
 		item.g.classList.add('is-open');
 		item.g.setAttribute('aria-expanded', 'true');
@@ -740,7 +765,10 @@
 
 	function stationFrom(target) {
 		const g = target && target.closest ? target.closest('.st[data-id]') : null;
-		return g ? stationEls.get(g.dataset.id) : null;
+		if (!g) {
+			return null;
+		}
+		return g === hub ? hubItem : stationEls.get(g.dataset.id);
 	}
 
 	view.addEventListener('pointerdown', (e) => {
@@ -938,5 +966,5 @@
 	startLoop();
 
 	// test hook: a read-only view of state for the checks in the PR package
-	window.__metro = { cam, stations: stationEls, open: (id) => openStation(stationEls.get(id), false), endIntro, restView, intro, trains };
+	window.__metro = { cam, stations: stationEls, open: (id) => openStation(id === 'hub' ? hubItem : stationEls.get(id), false), endIntro, restView, intro, trains };
 })();
