@@ -246,6 +246,7 @@
 	width: 100%;
 }
 .m-pop-img.is-loaded { opacity: 1; }
+.m-pop-img--note { object-fit: cover; }
 .is-bio .m-hub-label { visibility: hidden; }
 .m-pop--bio { width: 392px; }
 .m-pop-bio .m-pop-kicker { margin-bottom: 4px; }

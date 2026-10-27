@@ -1,0 +1,16 @@
+---
+layout: null
+---
+{%- comment -%}
+  The notes feed. GitHub Pages builds this site with Jekyll, which fills this file in from every
+  notes/*.md on each push, so there is nothing to run. js/notes.js reads it for the map and /notes.
+  Quotes stay as typed: kramdown's curly quotes are turned back into straight ones
+  (so a curly quote typed on purpose comes out straight too).
+  Served as a plain file (no Jekyll), it is not valid JSON and the site shows no notes.
+{%- endcomment -%}
+{%- assign notes = site.pages | where_exp: "p", "p.dir == '/notes/'" | where_exp: "p", "p.path contains '.md'" -%}
+[
+{%- for p in notes %}
+  {"slug": {{ p.name | remove: ".md" | jsonify }}, "date": {% if p.date %}{{ p.date | date: "%Y-%m-%d" | jsonify }}{% else %}{{ p.name | slice: 0, 10 | jsonify }}{% endif %}, "title": {{ p.title | jsonify }}, "project": {{ p.project | jsonify }}, "image": {{ p.image | jsonify }}, "alt": {{ p.alt | jsonify }}, "html": {{ p.content | markdownify | replace: "‘", "'" | replace: "’", "'" | replace: "“", '"' | replace: "”", '"' | strip | jsonify }}}{% unless forloop.last %},{% endunless %}
+{%- endfor %}
+]

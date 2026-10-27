@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Notes - Joseph Korol</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../img/favicon-32x32.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/project-style.css?v=redesign">
+    <link rel="stylesheet" href="../css/notes.css">
+    <script src="../js/notes.js" defer></script>
+  </head>
+  <body class="writing-page writing-index-page notes-page">
+    <div class="container">
+      <header class="writing-hero">
+        <span><a href="../" class="pill-link">Back home</a></span>
+        <p class="writing-kicker">Notes</p>
+        <h1>Short notes on what I'm making, newest first.</h1>
+      </header>
+
+      <main>
+        <section>
+          <div class="section-col1"></div>
+          <div class="section-col2">
+            <!-- Filled from notes/index.json by js/notes.js. To add a note, see the README. -->
+            <ol class="notes-feed" id="notes-feed" aria-label="Notes, newest first" aria-busy="true"></ol>
+            <p class="notes-empty" id="notes-empty" hidden>No notes yet.</p>
+            <noscript><p class="notes-empty">The notes need JavaScript to show.</p></noscript>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -2,7 +2,8 @@
 // The list in index.html (#metro-list) is the source of truth for stations; this file adds geometry,
 // drawing, pan and zoom, popups, the intro, and one requestAnimationFrame loop for trains,
 // passengers and pulses. Reduced motion skips the intro and freezes the live layer.
-(function () {
+// The Notes line comes from the notes feed (js/notes.js), so the map waits for it and draws once.
+(window.siteNotes ? window.siteNotes.ready : Promise.resolve([])).then(function (notes) {
 	'use strict';
 
 	const body = document.body;
@@ -23,7 +24,7 @@
 		case: { route: [[590, 450], [420, 450], [330, 540], [330, 640], [400, 710], [620, 710]], stubs: [[[708, 450], [590, 450]]], trains: 3 },
 		side: { route: [[720, 450], [720, 230], [790, 160], [1230, 160], [1280, 210], [1280, 730]], stubs: [[[1280, 730], [1280, 800]]], trains: 3 },
 		write: { route: [[732, 450], [732, 360], [900, 360], [900, 60]], stubs: [], trains: 2 },
-		// Notes has no stations yet: a short dashed stub off the hub, no route, no trains.
+		// Notes with no notes yet: a short dashed stub off the hub, no route, no trains (see the notes feed below)
 		notes: { route: null, stubs: [[[720, 450], [720, 560]]], trains: 0 }
 	};
 	const LINE_NAMES = { case: 'Case Studies', side: 'Side Projects', write: 'Writing', notes: 'Notes' };
@@ -46,8 +47,58 @@
 	// The few places where waiting passengers would sit on a line or a label.
 	const PAX_SIDE = { drift: [-1, 1], obs: [1, 1], postcards: [0, -1], 'writing-index': [-1, 0], taste: [-1, 0] };
 
-	// ---------- read stations from the list ----------
+	// ---------- the notes feed ----------
+	// The 5 newest notes and an 'All notes' terminus go into the list's Notes section, so they are stations like
+	// any other. They run down from the hub and then east, one slot each; with no notes the stub stays.
 	const list = document.getElementById('metro-list');
+	const NOTE_STOPS = 5;
+	const NOTE_SLOTS = [[720, 545, -22, 0, 'end'], [830, 630, 0, 28, 'middle'], [920, 630, 0, -26, 'middle'], [1010, 630, 0, 28, 'middle'], [1100, 630, 0, -26, 'middle'], [1190, 630, 0, 28, 'middle']];
+	const shortLabel = (t) => (t.length > 18 ? t.slice(0, 17).trimEnd() + '\u2026' : t);
+
+	function noteLi(id, kicker, label, href, cta, title, meta, image, alt) {
+		const li = document.createElement('li');
+		li.dataset.station = id;
+		li.dataset.label = label;
+		if (kicker) {
+			li.dataset.kicker = kicker;
+			const k = document.createElement('span');
+			k.className = 'ml-kicker';
+			k.textContent = kicker;
+			li.append(k);
+		}
+		if (image) {
+			li.dataset.image = image;
+			li.dataset.previewAlt = alt;
+		}
+		const a = document.createElement('a');
+		a.href = href;
+		a.dataset.cta = cta;
+		a.textContent = title;
+		li.append(a);
+		if (meta) {
+			const m = document.createElement('span');
+			m.className = 'ml-meta';
+			m.textContent = meta;
+			li.append(m);
+		}
+		return li;
+	}
+
+	const noteList = list.querySelector('section[data-line="notes"] ul');
+	const newest = notes.slice(0, NOTE_STOPS);
+	if (newest.length && noteList) {
+		noteList.replaceChildren(...newest.map((n) => noteLi('note-' + n.slug, [n.when, n.project].filter(Boolean).join(' \u00b7 '),
+			shortLabel(n.title || n.project || n.whenShort), 'notes/#' + n.slug, 'Open on the notes page', n.title || n.text, n.title ? n.text : '', n.image, n.alt)),
+		noteLi('all-notes', '', 'All notes', 'notes/', 'Read all notes', 'All notes', 'Every note, newest first.', '', ''));
+		const stops = NOTE_SLOTS.slice(0, newest.length + 1);
+		stops.forEach((slot, i) => {
+			PLACES[i < newest.length ? 'note-' + newest[i].slug : 'all-notes'] = slot;
+		});
+		const end = stops[stops.length - 1];
+		LINES.notes = { route: [HUB, [720, 560], [790, 630], [end[0], 630]], stubs: [], trains: 1 };
+	}
+
+	// ---------- read stations from the list ----------
 	const stations = new Map();
 
 	function textOf(el, sel) {
@@ -66,6 +117,7 @@
 			cta: link ? (link.dataset.cta || 'Open') : '',
 			soon: li.hasAttribute('data-soon'),
 			preview: li.dataset.preview || '',
+			image: li.dataset.image || '',
 			previewAlt: li.dataset.previewAlt || ''
 		};
 	}
@@ -374,7 +426,7 @@
 		}
 		title.textContent = entry.title;
 		sec.append(kicker, title);
-		if (entry.preview) {
+		if (entry.preview || entry.image) {
 			sec.append(previewImg(entry));
 		}
 		if (entry.meta) {
@@ -401,6 +453,11 @@
 		img.decoding = 'async';
 		img.alt = entry.previewAlt;
 		img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+		if (entry.image) {
+			img.classList.add('m-pop-img--note'); // a note's own image, any size: cropped to the card's frame
+			img.src = entry.image;
+			return img;
+		}
 		img.srcset = entry.preview + '-560.webp 2x';
 		img.src = entry.preview + '-280.webp';
 		return img;
@@ -1322,4 +1379,4 @@
 
 	// test hook: a read-only view of state for the checks in the PR package
 	window.__metro = { cam, stations: stationEls, open: (id) => openStation(id === 'hub' ? hubItem : stationEls.get(id), false), endIntro, restView, intro, trains };
-})();
+});

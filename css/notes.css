@@ -1,0 +1,74 @@
+/* /notes: the writing index's type and rhythm (project-style.css), as one column of short notes. */
+.notes-feed {
+	display: grid;
+	gap: 24px;
+	list-style: none;
+	margin: 0;
+	max-width: 720px;
+	padding: 0;
+}
+
+.notes-item {
+	display: grid;
+	gap: 8px;
+	position: relative;
+}
+
+.notes-item + .notes-item {
+	padding-top: 24px;
+}
+
+.notes-item + .notes-item::before {
+	background: var(--project-border);
+	content: "";
+	height: 1px;
+	left: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+.notes-item:target .writing-list-date {
+	color: var(--project-secondary);
+}
+
+.notes-text {
+	max-width: 62ch;
+}
+
+.notes-page .notes-text p,
+.notes-page .notes-empty {
+	margin: 0 !important;
+	max-width: none;
+	padding: 0 !important;
+}
+
+.notes-page .notes-text p + p {
+	margin-top: 8px !important;
+}
+
+.notes-text a {
+	color: var(--project-primary);
+	text-decoration: underline;
+	text-decoration-color: var(--project-border);
+	text-underline-offset: 3px;
+}
+
+.notes-text a:hover {
+	text-decoration-color: var(--project-primary);
+}
+
+.notes-img {
+	border: 1px solid var(--project-border);
+	border-radius: 8px;
+	box-sizing: border-box;
+	display: block;
+	height: auto;
+	margin-top: 4px;
+	max-width: 100%;
+	width: 480px;
+}
+
+.notes-page .notes-empty {
+	color: var(--project-secondary) !important;
+}
