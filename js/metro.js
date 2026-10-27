@@ -455,11 +455,12 @@
 	const popClose = pop.querySelector('.m-pop-close');
 	let morph = null; // { anims, closing }
 
-	function morphFrames() {
+	// from: where the hub is on screen when the morph starts, if the map is about to pan away from there
+	function morphFrames(from) {
 		if (reduceQuery.matches) {
 			return [[pop, [{ opacity: 0 }, { opacity: 1 }], 200]];
 		}
-		const [sx, sy] = toScreen(HUB[0], HUB[1]);
+		const [sx, sy] = from || toScreen(HUB[0], HUB[1]);
 		const w = pop.offsetWidth;
 		const h = pop.offsetHeight;
 		// starts as the white inside of the hub's ring, as drawn while it is open (r 20, stroke 4.8, scaled 1.22)
@@ -469,8 +470,7 @@
 		// sampled so the corners stay round while the box scales unevenly: each frame's radius is divided by its scale
 		const shape = [];
 		for (let i = 0; i <= 12; i++) {
-			const p = i / 12;
-			const e = p * p * (3 - 2 * p); // gentle in and out
+			const e = smooth(i / 12);
 			const W = 2 * r + (w - 2 * r) * e;
 			const H = 2 * r + (h - 2 * r) * e;
 			const R = r + (12 - r) * e;
@@ -487,6 +487,24 @@
 		return [[pop, shape, MORPH_MS], [popBody, fade, MORPH_MS], [popClose, fade, MORPH_MS]];
 	}
 
+	const smooth = (p) => p * p * (3 - 2 * p); // gentle in and out
+
+	// the map's pan to fit the card rides along with the shape, so nothing jumps at the start
+	function panWithMorph(m, from, to) {
+		const step = () => {
+			const t = m.anims[0].currentTime;
+			const done = morph !== m;
+			const e = done ? (m.closing ? 0 : 1) : smooth(Math.min(1, (t || 0) / (MORPH_MS * SETTLE)));
+			cam.tx = from[0] + (to[0] - from[0]) * e;
+			cam.ty = from[1] + (to[1] - from[1]) * e;
+			applyCam();
+			if (!done) {
+				requestAnimationFrame(step);
+			}
+		};
+		step();
+	}
+
 	function stopMorph() {
 		if (morph) {
 			morph.anims.forEach((a) => a.cancel());
@@ -501,7 +519,7 @@
 	}
 
 	// plays the morph open (closing false) or back into the hub (closing true)
-	function playMorph(closing) {
+	function playMorph(closing, from) {
 		if (morph && morph.anims[0].playState === 'running') {
 			if (morph.closing !== closing) {
 				morph.closing = closing;
@@ -510,7 +528,7 @@
 			return;
 		}
 		stopMorph();
-		const m = { closing, anims: morphFrames().map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
+		const m = { closing, anims: morphFrames(from).map(([node, frames, duration]) => node.animate(frames, { duration, direction: closing ? 'reverse' : 'normal', fill: 'both' })) };
 		m.anims[0].onfinish = () => {
 			if (morph !== m) {
 				return;
@@ -545,6 +563,8 @@
 		item.g.setAttribute('aria-expanded', 'true');
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
+		const was = [cam.tx, cam.ty];
+		const hubWas = toScreen(HUB[0], HUB[1]);
 		if (item.bio) {
 			panToHub();
 		} else if (small()) {
@@ -559,7 +579,11 @@
 		}
 		placePop();
 		if (item.bio) {
-			playMorph(false);
+			const panned = !reduceQuery.matches && (was[0] !== cam.tx || was[1] !== cam.ty);
+			playMorph(false, panned && hubWas);
+			if (panned) {
+				panWithMorph(morph, was, [cam.tx, cam.ty]);
+			}
 		}
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
