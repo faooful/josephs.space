@@ -12,6 +12,8 @@
 	--map-grid: rgba(22, 22, 22, 0.035);
 	--map-passenger: var(--home-primary);
 	--map-card: #ffffff;
+	--map-card-edge: var(--home-border);
+	--map-card-edge-w: 1px;
 	height: 100vh;
 	height: 100dvh;
 	overflow: hidden;
@@ -193,7 +195,8 @@
 /* popup: the same card vocabulary as the home rows */
 .m-pop {
 	background: var(--map-card);
-	border: 1px solid var(--home-border);
+	border: 1px solid var(--map-card-edge); /* the outline of the node it opened from (metro.js sets the colour and weight) */
+	border-width: var(--map-card-edge-w);
 	border-radius: 12px;
 	box-shadow: 0 1px 2px rgba(22, 22, 22, 0.045);
 	display: flex;

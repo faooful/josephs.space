@@ -557,10 +557,11 @@
 		const x = cx - W / 2 + hx * e;
 		const y = cy - H / 2 + hy * e;
 		const poly = POLY[item.shape] || BOX;
-		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 12, e) - 0.5 * e;
-		const iw = W - e; // drawn on the middle of the 1px border at the end
-		const ih = H - e;
-		const pts = poly.map(([px, py], j) => [x + 0.5 * e + (iw * mix(px, BOX[j][0], e)) / 100, y + 0.5 * e + (ih * mix(py, BOX[j][1], e)) / 100]);
+		const half = (m.from.width / 2) * e; // drawn on the middle of the card's border (the node's own outline) at the end
+		const R = mix(item.shape === 'circle' ? (r - l) / 2 : 0, 12, e) - half;
+		const iw = W - 2 * half;
+		const ih = H - 2 * half;
+		const pts = poly.map(([px, py], j) => [x + half + (iw * mix(px, BOX[j][0], e)) / 100, y + half + (ih * mix(py, BOX[j][1], e)) / 100]);
 		return roundedPoly(pts, R);
 	}
 
@@ -592,8 +593,6 @@
 		}
 		morphPath.setAttribute('d', morphD(m, e));
 		morphPath.style.fill = mixColour(m.from.fill, m.to.fill, e);
-		morphPath.style.stroke = mixColour(m.from.stroke, m.to.stroke, e);
-		morphPath.style.strokeWidth = mix(m.from.width, 1, e).toFixed(2) + 'px';
 		requestAnimationFrame(() => drawMorph(m));
 	}
 
@@ -654,12 +653,9 @@
 			return;
 		}
 		if (!colours) {
+			// the node's outline stays as it is, colour and weight, and is the card's border; only the fill changes
 			const glyph = getComputedStyle(item.g.querySelector('.st-glyph'));
-			const card = getComputedStyle(pop);
-			colours = [
-				{ fill: channels(glyph.fill), stroke: channels(glyph.stroke), width: parseFloat(glyph.strokeWidth) * 1.22 * cam.k },
-				{ fill: channels(card.backgroundColor), stroke: channels(card.borderTopColor) },
-			];
+			colours = [{ fill: channels(glyph.fill), stroke: edge.stroke, width: edge.width }, { fill: channels(getComputedStyle(pop).backgroundColor) }];
 		}
 		const ms = closing ? CLOSE_MS : OPEN_MS;
 		const fade = closing ? [{ opacity: op0 }, { opacity: 0, offset: HIDE_BY }, { opacity: 0 }] : [{ opacity: op0 }, { opacity: op0, offset: SHOW_AT }, { opacity: 1 }];
@@ -707,6 +703,8 @@
 			}
 		}
 		morph = m;
+		morphPath.style.stroke = m.from.stroke;
+		morphPath.style.strokeWidth = m.from.width.toFixed(2) + 'px';
 		drawMorph(m);
 	}
 
@@ -758,11 +756,25 @@
 		item.g.setAttribute('aria-expanded', 'true');
 		// the bio card repeats the name and role, so the hub's own labels step aside for it
 		svg.classList.toggle('is-bio', !!item.bio);
+		setEdge(item);
 		placePop();
 		playMorph(item, false);
 		if (focusInside) {
 			(pop.querySelector('a') || popClose).focus();
 		}
+	}
+
+	// the card's border is the outline of the node it came from: its colour, at the weight it is drawn on screen (a dashed
+	// 'soon' node's card gets the solid outline the other nodes have)
+	let edge = { stroke: '', width: 1 };
+	function setEdge(item) {
+		const soon = item.g.classList.contains('st--soon');
+		const glyph = getComputedStyle((soon ? document.querySelector('.st:not(.st--soon) .st-glyph') : null) || item.g.querySelector('.st-glyph'));
+		// whole pixels, as browsers draw borders, so the moving outline and the card's border are the same weight
+		const width = Math.max(1, Math.round(parseFloat(getComputedStyle(item.g.querySelector('.st-glyph')).strokeWidth) * 1.22 * cam.k));
+		edge = { stroke: glyph.stroke, width };
+		pop.style.setProperty('--map-card-edge', edge.stroke);
+		pop.style.setProperty('--map-card-edge-w', width + 'px');
 	}
 
 	// instant skips the morph, for when another card takes its place
