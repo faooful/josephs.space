@@ -236,6 +236,18 @@
 	padding-right: 32px;
 }
 .m-pop .m-pop-title { color: var(--home-primary); font-size: 14px !important; font-weight: 560; line-height: 1.25; margin: 0; }
+.m-pop-img {
+	aspect-ratio: 280 / 175;
+	background: var(--home-row-hover);
+	border-radius: 8px;
+	display: block;
+	height: auto;
+	margin: 4px 0;
+	opacity: 0;
+	transition: opacity 0.24s ease-out;
+	width: 100%;
+}
+.m-pop-img.is-loaded { opacity: 1; }
 .m-pop-meta { color: var(--home-secondary); font-size: 14px; font-weight: 400; line-height: 1.45; margin: 0; }
 .m-pop a,
 .metro-list a {
@@ -345,6 +357,7 @@
 @media (prefers-reduced-motion: reduce) {
 	.st-glyph,
 	.metro-svg.is-far .m-label { transition: none; }
+	.m-pop-img { opacity: 1; transition: none; }
 }
 
 /* trains take their line colour */

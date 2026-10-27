@@ -64,7 +64,9 @@
 			kicker: li.dataset.kicker || '',
 			link,
 			cta: link ? (link.dataset.cta || 'Open') : '',
-			soon: li.hasAttribute('data-soon')
+			soon: li.hasAttribute('data-soon'),
+			preview: li.dataset.preview || '',
+			previewAlt: li.dataset.previewAlt || ''
 		};
 	}
 
@@ -346,6 +348,9 @@
 		}
 		title.textContent = entry.title;
 		sec.append(kicker, title);
+		if (entry.preview) {
+			sec.append(previewImg(entry));
+		}
 		if (entry.meta) {
 			const meta = document.createElement('p');
 			meta.className = 'm-pop-meta';
@@ -359,6 +364,20 @@
 			sec.append(a);
 		}
 		return sec;
+	}
+
+	// built only when a card opens, so nothing is fetched until then; fixed size so the card never shifts
+	function previewImg(entry) {
+		const img = document.createElement('img');
+		img.className = 'm-pop-img';
+		img.width = 280;
+		img.height = 175;
+		img.decoding = 'async';
+		img.alt = entry.previewAlt;
+		img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+		img.srcset = entry.preview + '-560.webp 2x';
+		img.src = entry.preview + '-280.webp';
+		return img;
 	}
 
 	function openStation(item, focusInside) {
