@@ -1,6 +1,7 @@
 ---
 date: 2026-10-27
 project: farm
+label: Wizard lantern
 image: img/notes/2026-10-27-wizard-lantern.webp
 alt: The wizard at dawn on a dark hex map, lit by a wide pale-gold circle of lantern light
 ---

@@ -1,6 +1,7 @@
 ---
 date: 2026-11-01
 project: farm
+label: Lantern 3D
 image: img/notes/2026-11-01-farm-paused.webp
 video: img/notes/2026-11-01-farm-paused.mp4
 alt: The wizard walking a lantern-lit 3D forest at night, picking up a gourd on the way back towards camp

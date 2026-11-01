@@ -1,6 +1,7 @@
 ---
 date: 2026-10-27
 project: drift
+label: Empty repo
 image: img/notes/2026-10-27-drift-empty-repo.webp
 alt: Drift's design system page for an empty repo, reading "Nothing drifts. 0 open"
 ---
