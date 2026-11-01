@@ -32,6 +32,7 @@
 			slug,
 			date,
 			title: raw.title ? String(raw.title).trim() : '',
+			label: raw.label ? String(raw.label).trim() : '', // the map station's name; the map falls back to title, then project
 			project: raw.project ? String(raw.project).trim() : '',
 			html,
 			text: asText(html),

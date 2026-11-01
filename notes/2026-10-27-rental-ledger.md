@@ -1,6 +1,7 @@
 ---
 date: 2026-10-27
 project: property-management
+label: Rental ledger
 image: img/notes/2026-10-27-rental-ledger.webp
 alt: The rental app's overview page, with ruled ledger rows of dummy properties and tenancies
 ---

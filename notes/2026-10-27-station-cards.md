@@ -1,6 +1,7 @@
 ---
 date: 2026-10-27
 project: josephs.space
+label: Station cards
 image: img/notes/2026-10-27-station-cards.webp
 alt: The homepage map with the hub's card open, outlined in white like the circle it grew from
 ---

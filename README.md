@@ -12,6 +12,7 @@ Notes are short posts (one to three sentences, with an optional image). They sho
    ---
    date: 2026-10-27
    title: Optional title
+   label: First note
    project: Drift
    image: img/notes/2026-10-27-first-note.webp
    alt: What the image shows
@@ -19,7 +20,7 @@ Notes are short posts (one to three sentences, with an optional image). They sho
    One to three sentences. Markdown works, including [links](https://example.com).
    ```
 
-   Only the text is needed. `date` falls back to the date in the file name; `title`, `project`, `image` and `alt` are optional. A note without a title is labelled on the map by its project, or by its date if it has no project either. Put any image under `img/notes/`, and give its path from the site root. For a short clip, add `video: img/notes/….mp4` as well: /notes plays it muted on a loop, with `image` as its poster (the map keeps showing the image). Keep clips small: H.264, no audio, `-movflags +faststart`, a few MB at most.
+   Only the text is needed. `label` is the station's name on the map: one to three words, so two notes on the same project don't both read as the project name. It shows only on the map (not on /notes) and falls back to the title, then the project. `date` falls back to the date in the file name; `title`, `label`, `project`, `image` and `alt` are optional. A note with neither a label nor a title is labelled on the map by its project, or by its date if it has no project either. Put any image under `img/notes/`, and give its path from the site root. For a short clip, add `video: img/notes/….mp4` as well: /notes plays it muted on a loop, with `image` as its poster (the map keeps showing the image). Keep clips small: H.264, no audio, `-movflags +faststart`, a few MB at most.
 
 2. Commit and push to `master`. That's all: GitHub Pages rebuilds the site and `notes/index.json` (the feed the map and /notes read) lists the new note a minute or so later.
 
