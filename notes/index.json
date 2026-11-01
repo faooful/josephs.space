@@ -11,6 +11,6 @@ layout: null
 {%- assign notes = site.pages | where_exp: "p", "p.dir == '/notes/'" | where_exp: "p", "p.path contains '.md'" -%}
 [
 {%- for p in notes %}
-  {"slug": {{ p.name | remove: ".md" | jsonify }}, "date": {% if p.date %}{{ p.date | date: "%Y-%m-%d" | jsonify }}{% else %}{{ p.name | slice: 0, 10 | jsonify }}{% endif %}, "title": {{ p.title | jsonify }}, "project": {{ p.project | jsonify }}, "image": {{ p.image | jsonify }}, "alt": {{ p.alt | jsonify }}, "html": {{ p.content | markdownify | replace: "‘", "'" | replace: "’", "'" | replace: "“", '"' | replace: "”", '"' | strip | jsonify }}}{% unless forloop.last %},{% endunless %}
+  {"slug": {{ p.name | remove: ".md" | jsonify }}, "date": {% if p.date %}{{ p.date | date: "%Y-%m-%d" | jsonify }}{% else %}{{ p.name | slice: 0, 10 | jsonify }}{% endif %}, "title": {{ p.title | jsonify }}, "project": {{ p.project | jsonify }}, "image": {{ p.image | jsonify }}, "video": {{ p.video | jsonify }}, "alt": {{ p.alt | jsonify }}, "html": {{ p.content | markdownify | replace: "‘", "'" | replace: "’", "'" | replace: "“", '"' | replace: "”", '"' | strip | jsonify }}}{% unless forloop.last %},{% endunless %}
 {%- endfor %}
 ]
