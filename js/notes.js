@@ -27,6 +27,7 @@
 		}
 		const html = String(raw.html || '').trim();
 		const image = raw.image ? new URL(String(raw.image).replace(/^\/+/, ''), root).href : '';
+		const video = raw.video ? new URL(String(raw.video).replace(/^\/+/, ''), root).href : '';
 		return {
 			slug,
 			date,
@@ -35,6 +36,7 @@
 			html,
 			text: asText(html),
 			image,
+			video,
 			alt: raw.alt ? String(raw.alt) : '',
 			when: formatDate(date, false),
 			whenShort: formatDate(date, true)
@@ -93,7 +95,22 @@
 		text.className = 'notes-text';
 		text.innerHTML = n.html; // the note's own Markdown, rendered by the site build from a file in this repo
 		li.append(text);
-		if (n.image) {
+		if (n.video) {
+			// a short clip: plays muted on a loop like a gif, with the note's image as its poster
+			const video = document.createElement('video');
+			video.className = 'notes-img';
+			video.src = n.video;
+			if (n.image) {
+				video.poster = n.image;
+			}
+			video.muted = true;
+			video.autoplay = true;
+			video.loop = true;
+			video.playsInline = true;
+			video.preload = 'metadata';
+			video.setAttribute('aria-label', n.alt);
+			li.append(video);
+		} else if (n.image) {
 			const img = document.createElement('img');
 			img.className = 'notes-img';
 			img.src = n.image;
